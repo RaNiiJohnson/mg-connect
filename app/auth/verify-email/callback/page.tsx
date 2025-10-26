@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 
-export default function VerifyEmailCallbackPage() {
+function VerifyEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
@@ -63,8 +63,8 @@ export default function VerifyEmailCallbackPage() {
                 status === "loading"
                   ? "bg-blue-100"
                   : status === "success"
-                  ? "bg-green-100"
-                  : "bg-red-100"
+                    ? "bg-green-100"
+                    : "bg-red-100"
               }`}
             >
               {status === "loading" && (
@@ -113,5 +113,35 @@ export default function VerifyEmailCallbackPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function VerifyEmailCallbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <Card className="w-full max-w-md shadow-xl border-0">
+            <CardHeader className="space-y-4 pb-8 text-center">
+              <div className="flex justify-center">
+                <div className="p-3 rounded-full bg-blue-100">
+                  <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <CardTitle className="text-2xl font-bold">
+                  Chargement...
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Préparation de la vérification
+                </p>
+              </div>
+            </CardHeader>
+          </Card>
+        </div>
+      }
+    >
+      <VerifyEmailContent />
+    </Suspense>
   );
 }
