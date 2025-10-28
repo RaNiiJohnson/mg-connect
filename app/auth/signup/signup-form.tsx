@@ -22,13 +22,13 @@ import { authClient } from "@/lib/auth-client";
 
 const SignupFormSchema = z.object({
   name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+    message: "Le nom doit contenir au moins 2 caractères.",
   }),
   email: z.email({
-    message: "Invalid email address.",
+    message: "Adresse email invalide.",
   }),
   password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+    message: "Le mot de passe doit contenir au moins 8 caractères.",
   }),
 });
 
@@ -86,11 +86,11 @@ export function SignupForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Nom</FormLabel>
                 <FormControl>
                   <Input
                     type="text"
-                    placeholder="Johnson "
+                    placeholder="Dupont"
                     className="h-11"
                     {...field}
                   />
@@ -108,7 +108,7 @@ export function SignupForm() {
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="name@example.com"
+                    placeholder="nom@exemple.com"
                     className="h-11"
                     {...field}
                   />
@@ -122,11 +122,11 @@ export function SignupForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Mot de passe</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder="Entrez votre mot de passe"
                     className="h-11"
                     {...field}
                   />
@@ -139,10 +139,10 @@ export function SignupForm() {
             {isLoading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                Creating account...
+                Création du compte...
               </>
             ) : (
-              "Create account"
+              "Créer un compte"
             )}
           </Button>
         </form>

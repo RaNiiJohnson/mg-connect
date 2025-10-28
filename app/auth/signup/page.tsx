@@ -25,10 +25,11 @@ export default async function SignupPage() {
           </div>
           <div className="space-y-2">
             <CardTitle className="text-2xl font-bold">
-              Get started free
+              Créez votre compte
             </CardTitle>
             <p className="text-sm text-muted-foreground">
-              Create your Plume account in seconds
+              Rejoignez notre communauté et accédez à toutes les ressources pour
+              les Malagasy en Allemagne
             </p>
           </div>
         </CardHeader>
@@ -36,12 +37,12 @@ export default async function SignupPage() {
           <SignupForm />
           <div className="text-center">
             <p className="text-sm text-muted-foreground">
-              Already have an account?{" "}
+              Vous avez déjà un compte ?{" "}
               <Link
                 href="/auth/signin"
                 className="font-medium text-primary hover:underline"
               >
-                Sign in
+                Se connecter
               </Link>
             </p>
           </div>

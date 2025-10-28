@@ -22,10 +22,10 @@ import { authClient } from "@/lib/auth-client";
 
 const SignInFormSchema = z.object({
   email: z.email({
-    message: "Invalid email address.",
+    message: "Adresse e-mail invalide.",
   }),
   password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+    message: "Le mot de passe doit contenir au moins 8 caractères.",
   }),
 });
 
@@ -55,7 +55,7 @@ export function SigninForm() {
         },
         onError: (ctx) => {
           if (ctx.error.status === 403) {
-            alert("Please verify your email address");
+            alert("Veuillez vérifier votre adresse e-mail");
           }
           toast.error(ctx.error.message);
         },
@@ -77,7 +77,7 @@ export function SigninForm() {
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="name@example.com"
+                    placeholder="nom@exemple.com"
                     className="h-11"
                     {...field}
                   />
@@ -92,18 +92,18 @@ export function SigninForm() {
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center justify-between">
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Mot de passe</FormLabel>
                   <Link
                     className="text-sm text-primary hover:underline"
                     href="/auth/forget-password"
                   >
-                    Forgot password?
+                    Mot de passe oublié ?
                   </Link>
                 </div>
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder="Entrez votre mot de passe"
                     className="h-11"
                     {...field}
                   />
@@ -116,10 +116,10 @@ export function SigninForm() {
             {isLoading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                Signing in...
+                Connexion en cours...
               </>
             ) : (
-              "Sign in"
+              "Se connecter"
             )}
           </Button>
         </form>

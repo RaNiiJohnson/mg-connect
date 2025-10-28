@@ -14,9 +14,9 @@ export default async function SigninPage() {
             </div>
           </div>
           <div className="space-y-2">
-            <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+            <CardTitle className="text-2xl font-bold">Bon retour</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Sign in to your Plume account
+              Connectez-vous à votre compte
             </p>
           </div>
         </CardHeader>
@@ -24,12 +24,12 @@ export default async function SigninPage() {
           <SigninForm />
           <div className="text-center">
             <p className="text-sm text-muted-foreground">
-              Don&apos;t have an account?{" "}
+              Vous n&apos;avez pas de compte ?{" "}
               <Link
                 href="/auth/signup"
                 className="font-medium text-primary hover:underline"
               >
-                Sign up for free
+                Inscrivez-vous
               </Link>
             </p>
           </div>
