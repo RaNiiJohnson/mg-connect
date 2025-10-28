@@ -13,8 +13,8 @@ export default function Home() {
       /> */}
 
       {/* Contenu centré */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center gap-4">
-        <h1 className="text-7xl font-bold mb-2 drop-shadow-lg text-primary">
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 gap-4">
+        <h1 className="sm:text-7xl text-5xl font-bold mb-2 drop-shadow-lg text-primary">
           Halo Halo
         </h1>
         <p className="text-xl drop-shadow-md max-w-5xl">

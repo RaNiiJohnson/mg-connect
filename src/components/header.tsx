@@ -12,11 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { LogOut } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import { ButtonGroup } from "./ui/button-group";
+import { useState } from "react";
 
 export default function Header() {
   const { data: session, isPending } = authClient.useSession();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSignOut = async () => {
     await authClient.signOut();
@@ -31,36 +33,49 @@ export default function Header() {
         >
           Hallo
         </Link>
-        <nav className="flex items-center gap-4">
+        {/* Navigation Desktop */}
+        <nav className="hidden md:flex items-center gap-4">
           <Link
             href="/"
-            className=" font-medium hover:text-primary transition-colors"
+            className="font-medium hover:text-primary transition-colors"
           >
             Accueil
           </Link>
           <Link
             href="/actualites"
-            className=" font-medium hover:text-primary transition-colors"
+            className="font-medium hover:text-primary transition-colors"
           >
             Actualités
           </Link>
           <Link
             href="/evenements"
-            className=" font-medium hover:text-primary transition-colors"
+            className="font-medium hover:text-primary transition-colors"
           >
             Événements
           </Link>
-        </nav>
+        </nav>{" "}
+        {/* Bouton hamburger mobile */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? (
+            <X className="h-5 w-5" />
+          ) : (
+            <Menu className="h-5 w-5" />
+          )}
+        </Button>
         <span className="flex-1" />
-
-        <div className="flex items-center gap-4 ">
+        <div className="flex items-center gap-4">
           {isPending ? (
             <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
           ) : session?.user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   className="relative h-8 w-8 rounded-full"
                 >
                   <Avatar className="h-8 w-8">
@@ -98,7 +113,7 @@ export default function Header() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <ButtonGroup>
+              <ButtonGroup className="hidden sm:flex">
                 <Button asChild>
                   <Link href="/auth/signup">S&apos;inscrire</Link>
                 </Button>
@@ -106,12 +121,44 @@ export default function Header() {
                   <Link href="/auth/signin">Se connecter</Link>
                 </Button>
               </ButtonGroup>
+              <Button asChild className="sm:hidden" size="sm">
+                <Link href="/auth/signin">Connexion</Link>
+              </Button>
             </div>
           )}
 
           <ThemeToggle />
         </div>
       </div>
+
+      {/* Menu mobile */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t">
+          <nav className="flex flex-col p-4 gap-2">
+            <Link
+              href="/"
+              className="font-medium transition-colors p-2 hover:bg-accent rounded-md"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Accueil
+            </Link>
+            <Link
+              href="/actualites"
+              className="font-medium transition-colors p-2 hover:bg-accent rounded-md"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Actualités
+            </Link>
+            <Link
+              href="/evenements"
+              className="font-medium transition-colors p-2 hover:bg-accent rounded-md"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Événements
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
