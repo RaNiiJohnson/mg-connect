@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { LogOut } from "lucide-react";
+import { ButtonGroup } from "./ui/button-group";
 
 export default function Header() {
   const { data: session, isPending } = authClient.useSession();
@@ -23,16 +24,36 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur">
-      <div className="mx-auto flex items-center gap-4 p-4">
+      <div className="mx-auto flex gap-4 items-center p-4">
         <Link
           href="/"
           className="text-2xl text-primary font-bold hover:opacity-80 transition"
         >
-          Plume
+          Hallo
         </Link>
+        <nav className="flex items-center gap-4">
+          <Link
+            href="/"
+            className=" font-medium hover:text-primary transition-colors"
+          >
+            Accueil
+          </Link>
+          <Link
+            href="/actualites"
+            className=" font-medium hover:text-primary transition-colors"
+          >
+            Actualités
+          </Link>
+          <Link
+            href="/evenements"
+            className=" font-medium hover:text-primary transition-colors"
+          >
+            Événements
+          </Link>
+        </nav>
         <span className="flex-1" />
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4 ">
           {isPending ? (
             <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
           ) : session?.user ? (
@@ -77,12 +98,14 @@ export default function Header() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" asChild>
-                <Link href="/auth/signin">Se connecter</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/auth/signup">S&apos;inscrire</Link>
-              </Button>
+              <ButtonGroup>
+                <Button asChild>
+                  <Link href="/auth/signup">S&apos;inscrire</Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link href="/auth/signin">Se connecter</Link>
+                </Button>
+              </ButtonGroup>
             </div>
           )}
 
