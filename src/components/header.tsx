@@ -42,16 +42,22 @@ export default function Header() {
             Accueil
           </Link>
           <Link
-            href="/actualites"
+            href="/communaute"
             className="font-medium hover:text-primary transition-colors"
           >
-            Actualités
+            Communauté
           </Link>
           <Link
-            href="/evenements"
+            href="/emplois"
             className="font-medium hover:text-primary transition-colors"
           >
-            Événements
+            Emplois
+          </Link>
+          <Link
+            href="/immobilier"
+            className="font-medium hover:text-primary transition-colors"
+          >
+            Immobilier
           </Link>
         </nav>{" "}
         {/* Bouton hamburger mobile */}
@@ -143,18 +149,25 @@ export default function Header() {
               Accueil
             </Link>
             <Link
-              href="/actualites"
+              href="/communaute"
               className="font-medium transition-colors p-2 hover:bg-accent rounded-md"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Actualités
+              Communauté
             </Link>
             <Link
-              href="/evenements"
+              href="/emplois"
               className="font-medium transition-colors p-2 hover:bg-accent rounded-md"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Événements
+              Emplois
+            </Link>
+            <Link
+              href="/immobilier"
+              className="font-medium transition-colors p-2 hover:bg-accent rounded-md"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Immobilier
             </Link>
           </nav>
         </div>
