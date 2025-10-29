@@ -10,8 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   MapPin,
-  Home,
-  Users,
   Euro,
   Search,
   Filter,
@@ -37,7 +35,9 @@ const annonces = [
     sallesBain: 1,
     etage: "2ème étage",
     animaux: false,
-    photos: ["/api/placeholder/400/300"],
+    photos: [
+      "https://images.unsplash.com/photo-1558036117-15d82a90b9b1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470",
+    ],
     description:
       "Belle chambre meublée dans un appartement de 3 pièces. Colocation avec 2 autres personnes. Proche des transports.",
     extras: ["Jardin", "Balcon", "Internet inclus"],
@@ -57,7 +57,9 @@ const annonces = [
     sallesBain: 1,
     etage: "Rez-de-chaussée",
     animaux: true,
-    photos: ["/api/placeholder/400/300"],
+    photos: [
+      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470",
+    ],
     description:
       "Studio entièrement meublé et équipé. Idéal pour étudiant ou jeune professionnel. Toutes charges comprises.",
     extras: ["Garage", "Meublé", "Charges incluses"],
@@ -77,7 +79,9 @@ const annonces = [
     sallesBain: 1,
     etage: "3ème étage",
     animaux: false,
-    photos: ["/api/placeholder/400/300"],
+    photos: [
+      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470",
+    ],
     description:
       "Appartement cosy pour vos weekends à Hamburg. Proche du port et des attractions touristiques.",
     extras: ["Vue sur le port", "Cuisine équipée"],
