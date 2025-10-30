@@ -27,13 +27,16 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  photo       String?
-  bio         String?
-  city        String?
-  arrivalDate String?
-  status      String?
-  field       String?
-  company     String[]
+  photo              String?
+  bio                String?
+  city               String?
+  arrivalDate        String?
+  status             String?
+  field              String?
+  company            String?
+  journey            String[]
+  jobOffers          JobOffer[]          @relation("JobOffers")
+  realEstateListings RealEstateListing[] @relation("RealEstateListings")
 
   @@map("user")
 }
@@ -91,4 +94,51 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model JobOffer {
+  id           String   @id @default(cuid())
+  title        String
+  type         String
+  contractType String
+  city         String
+  duration     String
+  startDate    String
+  company      String
+  description  String
+  certificates String[]
+  salary       String
+  contact      String
+  authorId     String
+  author       User     @relation("JobOffers", fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("job_offer")
+}
+
+model RealEstateListing {
+  id          String   @id @default(cuid())
+  title       String
+  type        String
+  city        String
+  district    String
+  price       Int
+  deposit     Int
+  area        Int
+  bedrooms    Int
+  bathrooms   Int
+  floor       String
+  pets        Boolean  @default(false)
+  photos      String[]
+  description String
+  extras      String[]
+  contact     String
+  available   String
+  authorId    String
+  author      User     @relation("RealEstateListings", fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("real_estate_listing")
 }

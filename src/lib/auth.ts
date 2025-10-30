@@ -19,7 +19,8 @@ export const auth = betterAuth({
       arrivalDate: { type: "string", required: false },
       status: { type: "string", required: false },
       field: { type: "string", required: false },
-      company: { type: "string[]", required: false },
+      company: { type: "string", required: false },
+      journey: { type: "string[]", required: false },
     },
   },
   emailVerification: {
