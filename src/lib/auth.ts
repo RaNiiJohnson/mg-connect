@@ -11,6 +11,17 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
   },
+  user: {
+    additionalFields: {
+      photo: { type: "string", required: false },
+      bio: { type: "string", required: false },
+      city: { type: "string", required: false },
+      arrivalDate: { type: "string", required: false },
+      status: { type: "string", required: false },
+      field: { type: "string", required: false },
+      company: { type: "string[]", required: false },
+    },
+  },
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,

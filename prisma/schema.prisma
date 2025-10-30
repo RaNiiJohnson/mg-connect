@@ -27,6 +27,14 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
+  photo       String?
+  bio         String?
+  city        String?
+  arrivalDate String?
+  status      String?
+  field       String?
+  company     String[]
+
   @@map("user")
 }
 
