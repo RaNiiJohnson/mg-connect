@@ -16,7 +16,8 @@ const membres = [
   {
     id: 1,
     nom: "Ravo Andriamampianina",
-    photo: "/api/placeholder/150/150",
+    photo:
+      "https://images.unsplash.com/photo-1729824186684-eaff43f7d1d9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1074",
     bio: "Développeur web passionné, j'aide les nouveaux arrivants à s'intégrer dans le secteur tech allemand.",
     ville: "Berlin",
     dateArrivee: "2020",
@@ -28,7 +29,8 @@ const membres = [
   {
     id: 2,
     nom: "Hery Rakotomalala",
-    photo: "/api/placeholder/150/150",
+    photo:
+      "https://images.unsplash.com/photo-1749003659356-1d1a4451a49d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=627",
     bio: "Infirmier en formation, je partage mon expérience de l'Ausbildung dans le secteur médical.",
     ville: "Munich",
     dateArrivee: "2022",
@@ -40,7 +42,8 @@ const membres = [
   {
     id: 3,
     nom: "Naina Razafy",
-    photo: "/api/placeholder/150/150",
+    photo:
+      "https://images.unsplash.com/photo-1662195725820-6dae903b8457?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=780",
     bio: "Au pair depuis 2 ans, je prépare maintenant mes études en Allemagne.",
     ville: "Hamburg",
     dateArrivee: "2023",
@@ -124,7 +127,11 @@ export default function CommunautePage() {
             <Card key={membre.id} className="hover:shadow-lg transition-shadow">
               <CardHeader className="text-center">
                 <Avatar className="w-20 h-20 mx-auto mb-4">
-                  <AvatarImage src={membre.photo} alt={membre.nom} />
+                  <AvatarImage
+                    src={membre.photo}
+                    alt={membre.nom}
+                    className="object-cover"
+                  />
                   <AvatarFallback>
                     {membre.nom
                       .split(" ")
@@ -136,7 +143,7 @@ export default function CommunautePage() {
                 <Badge variant="secondary">{membre.statut}</Badge>
               </CardHeader>
 
-              <CardContent className="space-y-4">
+              <CardContent className="flex flex-col flex-1 space-y-4">
                 <CardDescription className="text-center">
                   {membre.bio}
                 </CardDescription>
@@ -172,9 +179,11 @@ export default function CommunautePage() {
                   </div>
                 </div>
 
-                <Button variant="outline" className="w-full">
-                  Voir le profil
-                </Button>
+                <div className="mt-auto">
+                  <Button variant="outline" className="w-full">
+                    Voir le profil
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}

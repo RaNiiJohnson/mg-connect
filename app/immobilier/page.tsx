@@ -186,7 +186,7 @@ export default function ImmobilierPage() {
                 </div>
               </CardHeader>
 
-              <CardContent className="space-y-4">
+              <CardContent className="flex flex-col flex-1 space-y-4">
                 <CardDescription className="line-clamp-3">
                   {annonce.description}
                 </CardDescription>
@@ -252,7 +252,7 @@ export default function ImmobilierPage() {
                   </div>
                 )}
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 mt-auto">
                   <Button className="flex-1">Contacter</Button>
                   <Button variant="outline">Détails</Button>
                 </div>
