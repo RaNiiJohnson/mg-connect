@@ -19,78 +19,11 @@ import {
   Square,
 } from "lucide-react";
 import Image from "next/image";
+import { getAllRealEstateListings } from "@/lib/database";
 
-// Sample data for real estate listings
-const annonces = [
-  {
-    id: 1,
-    title: "Chambre dans colocation sympa - Berlin Mitte",
-    type: "Colocation",
-    city: "Berlin",
-    district: "Mitte",
-    price: 450,
-    deposit: 900,
-    area: 15,
-    bedrooms: 1,
-    bathrooms: 1,
-    floor: "2ème étage",
-    pets: false,
-    photos: [
-      "https://images.unsplash.com/photo-1558036117-15d82a90b9b1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470",
-    ],
-    description:
-      "Belle chambre meublée dans un appartement de 3 pièces. Colocation avec 2 autres personnes. Proche des transports.",
-    extras: ["Jardin", "Balcon", "Internet inclus"],
-    contact: "marie.berlin@email.de",
-    available: "Mars 2025",
-  },
-  {
-    id: 2,
-    title: "Studio meublé - Munich centre",
-    type: "Location",
-    city: "Munich",
-    district: "Schwabing",
-    price: 800,
-    deposit: 1600,
-    area: 25,
-    bedrooms: 1,
-    bathrooms: 1,
-    floor: "Rez-de-chaussée",
-    pets: true,
-    photos: [
-      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470",
-    ],
-    description:
-      "Studio entièrement meublé et équipé. Idéal pour étudiant ou jeune professionnel. Toutes charges comprises.",
-    extras: ["Garage", "Meublé", "Charges incluses"],
-    contact: "studio.munich@email.de",
-    available: "Avril 2025",
-  },
-  {
-    id: 3,
-    title: "Appartement weekend - Hamburg",
-    type: "Weekend",
-    city: "Hamburg",
-    district: "St. Pauli",
-    price: 60,
-    deposit: 100,
-    area: 40,
-    bedrooms: 2,
-    bathrooms: 1,
-    floor: "3ème étage",
-    pets: false,
-    photos: [
-      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470",
-    ],
-    description:
-      "Appartement cosy pour vos weekends à Hamburg. Proche du port et des attractions touristiques.",
-    extras: ["Vue sur le port", "Cuisine équipée"],
-    contact: "weekend.hamburg@email.de",
-    available: "Disponible",
-  },
-];
+export default async function ImmobilierPage() {
+  const annonces = await getAllRealEstateListings();
 
-export default function ImmobilierPage() {
   return (
     <div className="min-h-screen p-4">
       <div className="max-w-6xl mx-auto">
@@ -163,7 +96,7 @@ export default function ImmobilierPage() {
               {/* Image */}
               <div className="relative h-48 w-full">
                 <Image
-                  src={annonce.photos[0]}
+                  src={annonce.photos[0] || "/placeholder-image.jpg"}
                   alt={annonce.title}
                   fill
                   className="object-cover"

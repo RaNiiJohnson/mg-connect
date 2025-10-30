@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Users, Briefcase, Home, Heart, Globe, HandHeart } from "lucide-react";
+import { ProfileForm } from "@/components/profile-form";
 
 export default function HomePage() {
   return (

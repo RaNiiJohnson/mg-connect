@@ -17,57 +17,11 @@ import {
   Filter,
   Plus,
 } from "lucide-react";
+import { getAllJobOffers } from "@/lib/database";
 
-// Sample data for job offers
-const offres = [
-  {
-    id: 1,
-    title: "Au Pair - Famille accueillante à Berlin",
-    type: "Au pair",
-    contractType: "12 mois",
-    city: "Berlin",
-    duration: "Temps plein",
-    startDate: "Mars 2025",
-    company: "Familie Müller",
-    description:
-      "Famille avec 2 enfants (5 et 8 ans) cherche au pair motivé(e). Expérience avec enfants requise.",
-    certificates: ["Allemand A2", "Permis de conduire"],
-    salary: "280€/mois + logement",
-    contact: "familie.muller@email.de",
-  },
-  {
-    id: 2,
-    title: "Ausbildung - Développeur d'applications",
-    type: "Ausbildung",
-    contractType: "3 ans",
-    city: "Munich",
-    duration: "Temps plein",
-    startDate: "Septembre 2025",
-    company: "TechStart GmbH",
-    description:
-      "Formation complète en développement d'applications. Accompagnement personnalisé pour les candidats internationaux.",
-    certificates: ["Allemand B1", "Baccalauréat"],
-    salary: "650-950€/mois",
-    contact: "hr@techstart.de",
-  },
-  {
-    id: 3,
-    title: "FSJ - Service civique en hôpital",
-    type: "FSJ",
-    contractType: "12 mois",
-    city: "Hamburg",
-    duration: "Temps plein",
-    startDate: "Août 2025",
-    company: "Universitätsklinikum Hamburg",
-    description:
-      "Opportunité d'acquérir de l'expérience dans le secteur médical tout en perfectionnant l'allemand.",
-    certificates: ["Allemand A2", "Certificat médical"],
-    salary: "423€/mois",
-    contact: "fsj@uke.de",
-  },
-];
+export default async function EmploisPage() {
+  const offres = await getAllJobOffers();
 
-export default function EmploisPage() {
   return (
     <div className="min-h-screen p-4">
       <div className="max-w-6xl mx-auto">
