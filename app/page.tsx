@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,10 +9,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Users, Briefcase, Home, Heart, Globe, HandHeart } from "lucide-react";
-import { ProfileForm } from "@/components/profile-form";
+import {
+  Users,
+  Briefcase,
+  Home,
+  Heart,
+  Globe,
+  HandHeart,
+  User,
+} from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 export default function HomePage() {
+  const { data: session } = authClient.useSession();
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -25,9 +37,41 @@ export default function HomePage() {
             partage pour favoriser l&apos;entraide entre les jeunes expats de
             Madagascar.
           </p>
-          <Button asChild size="lg" className="text-lg px-8 py-6">
-            <Link href="/auth/signup">S&apos;inscrire</Link>
-          </Button>
+
+          {session?.user ? (
+            <div className="space-y-4">
+              <p className="text-lg text-muted-foreground">
+                Salut {session.user.name || session.user.email}! 👋
+              </p>
+              <p className="text-base text-muted-foreground">
+                Prêt à explorer la communauté et découvrir de nouvelles
+                opportunités ?
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button asChild size="lg" className="text-lg px-8 py-6">
+                  <Link href="/communaute">
+                    <Users className="mr-2 h-5 w-5" />
+                    Voir la communauté
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="text-lg px-8 py-6"
+                >
+                  <Link href="/profile">
+                    <User className="mr-2 h-5 w-5" />
+                    Mon profil
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Button asChild size="lg" className="text-lg px-8 py-6">
+              <Link href="/auth/signup">S&apos;inscrire</Link>
+            </Button>
+          )}
         </div>
       </section>
 
