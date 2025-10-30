@@ -20,21 +20,21 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 
-// Données d'exemple pour les annonces immobilières
+// Sample data for real estate listings
 const annonces = [
   {
     id: 1,
-    titre: "Chambre dans colocation sympa - Berlin Mitte",
+    title: "Chambre dans colocation sympa - Berlin Mitte",
     type: "Colocation",
-    ville: "Berlin",
-    quartier: "Mitte",
-    prix: 450,
-    caution: 900,
-    surface: 15,
-    chambres: 1,
-    sallesBain: 1,
-    etage: "2ème étage",
-    animaux: false,
+    city: "Berlin",
+    district: "Mitte",
+    price: 450,
+    deposit: 900,
+    area: 15,
+    bedrooms: 1,
+    bathrooms: 1,
+    floor: "2ème étage",
+    pets: false,
     photos: [
       "https://images.unsplash.com/photo-1558036117-15d82a90b9b1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470",
     ],
@@ -42,21 +42,21 @@ const annonces = [
       "Belle chambre meublée dans un appartement de 3 pièces. Colocation avec 2 autres personnes. Proche des transports.",
     extras: ["Jardin", "Balcon", "Internet inclus"],
     contact: "marie.berlin@email.de",
-    disponible: "Mars 2025",
+    available: "Mars 2025",
   },
   {
     id: 2,
-    titre: "Studio meublé - Munich centre",
+    title: "Studio meublé - Munich centre",
     type: "Location",
-    ville: "Munich",
-    quartier: "Schwabing",
-    prix: 800,
-    caution: 1600,
-    surface: 25,
-    chambres: 1,
-    sallesBain: 1,
-    etage: "Rez-de-chaussée",
-    animaux: true,
+    city: "Munich",
+    district: "Schwabing",
+    price: 800,
+    deposit: 1600,
+    area: 25,
+    bedrooms: 1,
+    bathrooms: 1,
+    floor: "Rez-de-chaussée",
+    pets: true,
     photos: [
       "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470",
     ],
@@ -64,21 +64,21 @@ const annonces = [
       "Studio entièrement meublé et équipé. Idéal pour étudiant ou jeune professionnel. Toutes charges comprises.",
     extras: ["Garage", "Meublé", "Charges incluses"],
     contact: "studio.munich@email.de",
-    disponible: "Avril 2025",
+    available: "Avril 2025",
   },
   {
     id: 3,
-    titre: "Appartement weekend - Hamburg",
+    title: "Appartement weekend - Hamburg",
     type: "Weekend",
-    ville: "Hamburg",
-    quartier: "St. Pauli",
-    prix: 60,
-    caution: 100,
-    surface: 40,
-    chambres: 2,
-    sallesBain: 1,
-    etage: "3ème étage",
-    animaux: false,
+    city: "Hamburg",
+    district: "St. Pauli",
+    price: 60,
+    deposit: 100,
+    area: 40,
+    bedrooms: 2,
+    bathrooms: 1,
+    floor: "3ème étage",
+    pets: false,
     photos: [
       "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470",
     ],
@@ -86,7 +86,7 @@ const annonces = [
       "Appartement cosy pour vos weekends à Hamburg. Proche du port et des attractions touristiques.",
     extras: ["Vue sur le port", "Cuisine équipée"],
     contact: "weekend.hamburg@email.de",
-    disponible: "Disponible",
+    available: "Disponible",
   },
 ];
 
@@ -164,24 +164,24 @@ export default function ImmobilierPage() {
               <div className="relative h-48 w-full">
                 <Image
                   src={annonce.photos[0]}
-                  alt={annonce.titre}
+                  alt={annonce.title}
                   fill
                   className="object-cover"
                 />
                 <Badge className="absolute top-2 left-2">{annonce.type}</Badge>
                 <Badge variant="secondary" className="absolute top-2 right-2">
-                  {annonce.disponible}
+                  {annonce.available}
                 </Badge>
               </div>
 
               <CardHeader>
                 <CardTitle className="text-lg line-clamp-2">
-                  {annonce.titre}
+                  {annonce.title}
                 </CardTitle>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <MapPin className="h-4 w-4" />
                   <span>
-                    {annonce.ville} - {annonce.quartier}
+                    {annonce.city} - {annonce.district}
                   </span>
                 </div>
               </CardHeader>
@@ -196,14 +196,14 @@ export default function ImmobilierPage() {
                   <div className="flex items-center gap-1">
                     <Euro className="h-4 w-4 text-primary" />
                     <span className="text-2xl font-bold text-primary">
-                      {annonce.prix}€
+                      {annonce.price}€
                     </span>
                     <span className="text-sm text-muted-foreground">
                       /{annonce.type === "Weekend" ? "nuit" : "mois"}
                     </span>
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    Caution: {annonce.caution}€
+                    Caution: {annonce.deposit}€
                   </div>
                 </div>
 
@@ -211,26 +211,26 @@ export default function ImmobilierPage() {
                 <div className="grid grid-cols-3 gap-2 text-sm">
                   <div className="flex items-center gap-1">
                     <Square className="h-4 w-4 text-muted-foreground" />
-                    <span>{annonce.surface}m²</span>
+                    <span>{annonce.area}m²</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Bed className="h-4 w-4 text-muted-foreground" />
-                    <span>{annonce.chambres} ch.</span>
+                    <span>{annonce.bedrooms} ch.</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Bath className="h-4 w-4 text-muted-foreground" />
-                    <span>{annonce.sallesBain} sdb</span>
+                    <span>{annonce.bathrooms} sdb</span>
                   </div>
                 </div>
 
                 {/* Détails supplémentaires */}
                 <div className="space-y-2 text-sm">
                   <div>
-                    <span className="font-medium">Étage:</span> {annonce.etage}
+                    <span className="font-medium">Étage:</span> {annonce.floor}
                   </div>
                   <div>
                     <span className="font-medium">Animaux:</span>{" "}
-                    {annonce.animaux ? "Acceptés" : "Non acceptés"}
+                    {annonce.pets ? "Acceptés" : "Non acceptés"}
                   </div>
                 </div>
 

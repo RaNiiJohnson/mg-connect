@@ -18,51 +18,51 @@ import {
   Plus,
 } from "lucide-react";
 
-// Données d'exemple pour les offres d'emploi
+// Sample data for job offers
 const offres = [
   {
     id: 1,
-    titre: "Au Pair - Famille accueillante à Berlin",
+    title: "Au Pair - Famille accueillante à Berlin",
     type: "Au pair",
-    typeContrat: "12 mois",
-    ville: "Berlin",
-    duree: "Temps plein",
-    debut: "Mars 2025",
-    entreprise: "Familie Müller",
+    contractType: "12 mois",
+    city: "Berlin",
+    duration: "Temps plein",
+    startDate: "Mars 2025",
+    company: "Familie Müller",
     description:
       "Famille avec 2 enfants (5 et 8 ans) cherche au pair motivé(e). Expérience avec enfants requise.",
-    certificats: ["Allemand A2", "Permis de conduire"],
-    salaire: "280€/mois + logement",
+    certificates: ["Allemand A2", "Permis de conduire"],
+    salary: "280€/mois + logement",
     contact: "familie.muller@email.de",
   },
   {
     id: 2,
-    titre: "Ausbildung - Développeur d'applications",
+    title: "Ausbildung - Développeur d'applications",
     type: "Ausbildung",
-    typeContrat: "3 ans",
-    ville: "Munich",
-    duree: "Temps plein",
-    debut: "Septembre 2025",
-    entreprise: "TechStart GmbH",
+    contractType: "3 ans",
+    city: "Munich",
+    duration: "Temps plein",
+    startDate: "Septembre 2025",
+    company: "TechStart GmbH",
     description:
       "Formation complète en développement d'applications. Accompagnement personnalisé pour les candidats internationaux.",
-    certificats: ["Allemand B1", "Baccalauréat"],
-    salaire: "650-950€/mois",
+    certificates: ["Allemand B1", "Baccalauréat"],
+    salary: "650-950€/mois",
     contact: "hr@techstart.de",
   },
   {
     id: 3,
-    titre: "FSJ - Service civique en hôpital",
+    title: "FSJ - Service civique en hôpital",
     type: "FSJ",
-    typeContrat: "12 mois",
-    ville: "Hamburg",
-    duree: "Temps plein",
-    debut: "Août 2025",
-    entreprise: "Universitätsklinikum Hamburg",
+    contractType: "12 mois",
+    city: "Hamburg",
+    duration: "Temps plein",
+    startDate: "Août 2025",
+    company: "Universitätsklinikum Hamburg",
     description:
       "Opportunité d'acquérir de l'expérience dans le secteur médical tout en perfectionnant l'allemand.",
-    certificats: ["Allemand A2", "Certificat médical"],
-    salaire: "423€/mois",
+    certificates: ["Allemand A2", "Certificat médical"],
+    salary: "423€/mois",
     contact: "fsj@uke.de",
   },
 ];
@@ -145,7 +145,7 @@ export default function EmploisPage() {
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <CardTitle className="text-xl">{offre.titre}</CardTitle>
+                      <CardTitle className="text-xl">{offre.title}</CardTitle>
                       <Badge variant="secondary">{offre.type}</Badge>
                     </div>
                     <CardDescription className="text-base mb-4">
@@ -159,22 +159,22 @@ export default function EmploisPage() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                   <div className="flex items-center gap-2 text-sm">
                     <Building className="h-4 w-4 text-muted-foreground" />
-                    <span>{offre.entreprise}</span>
+                    <span>{offre.company}</span>
                   </div>
 
                   <div className="flex items-center gap-2 text-sm">
                     <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span>{offre.ville}</span>
+                    <span>{offre.city}</span>
                   </div>
 
                   <div className="flex items-center gap-2 text-sm">
                     <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span>{offre.duree}</span>
+                    <span>{offre.duration}</span>
                   </div>
 
                   <div className="flex items-center gap-2 text-sm">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span>Début: {offre.debut}</span>
+                    <span>Début: {offre.startDate}</span>
                   </div>
                 </div>
 
@@ -183,8 +183,8 @@ export default function EmploisPage() {
                   <div>
                     <h4 className="font-semibold mb-2">Détails du poste :</h4>
                     <ul className="text-sm space-y-1 text-muted-foreground">
-                      <li>• Type de contrat: {offre.typeContrat}</li>
-                      <li>• Rémunération: {offre.salaire}</li>
+                      <li>• Type de contrat: {offre.contractType}</li>
+                      <li>• Rémunération: {offre.salary}</li>
                       <li>• Contact: {offre.contact}</li>
                     </ul>
                   </div>
@@ -193,7 +193,7 @@ export default function EmploisPage() {
                   <div>
                     <h4 className="font-semibold mb-2">Certificats requis :</h4>
                     <div className="flex flex-wrap gap-1">
-                      {offre.certificats.map((cert, index) => (
+                      {offre.certificates.map((cert, index) => (
                         <Badge
                           key={index}
                           variant="outline"

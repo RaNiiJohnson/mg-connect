@@ -11,46 +11,46 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Briefcase, Calendar, Search, Filter } from "lucide-react";
 
-// Données d'exemple pour les membres
+// Sample data for members
 const membres = [
   {
     id: 1,
-    nom: "Ravo Andriamampianina",
+    name: "Ravo Andriamampianina",
     photo:
       "https://images.unsplash.com/photo-1729824186684-eaff43f7d1d9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1074",
     bio: "Développeur web passionné, j'aide les nouveaux arrivants à s'intégrer dans le secteur tech allemand.",
-    ville: "Berlin",
-    dateArrivee: "2020",
-    statut: "Fachkraft",
-    domaine: "Informatique",
-    entreprise: "Tech Solutions GmbH",
-    parcours: ["Goethe Institut", "Startup Incubator", "Tech Solutions GmbH"],
+    city: "Berlin",
+    arrivalDate: "2020",
+    status: "Fachkraft",
+    field: "Informatique",
+    company: "Tech Solutions GmbH",
+    journey: ["Goethe Institut", "Startup Incubator", "Tech Solutions GmbH"],
   },
   {
     id: 2,
-    nom: "Hery Rakotomalala",
+    name: "Hery Rakotomalala",
     photo:
       "https://images.unsplash.com/photo-1749003659356-1d1a4451a49d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=627",
     bio: "Infirmier en formation, je partage mon expérience de l'Ausbildung dans le secteur médical.",
-    ville: "Munich",
-    dateArrivee: "2022",
-    statut: "Ausbildung",
-    domaine: "Santé",
-    entreprise: "Klinikum München",
-    parcours: ["Sprachschule München", "Klinikum München"],
+    city: "Munich",
+    arrivalDate: "2022",
+    status: "Ausbildung",
+    field: "Santé",
+    company: "Klinikum München",
+    journey: ["Sprachschule München", "Klinikum München"],
   },
   {
     id: 3,
-    nom: "Naina Razafy",
+    name: "Naina Razafy",
     photo:
       "https://images.unsplash.com/photo-1662195725820-6dae903b8457?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=780",
     bio: "Au pair depuis 2 ans, je prépare maintenant mes études en Allemagne.",
-    ville: "Hamburg",
-    dateArrivee: "2023",
-    statut: "Au pair",
-    domaine: "Éducation",
-    entreprise: "Familie Schmidt",
-    parcours: ["Agentur Hamburg", "Familie Schmidt"],
+    city: "Hamburg",
+    arrivalDate: "2023",
+    status: "Au pair",
+    field: "Éducation",
+    company: "Familie Schmidt",
+    journey: ["Agentur Hamburg", "Familie Schmidt"],
   },
 ];
 
@@ -129,18 +129,18 @@ export default function CommunautePage() {
                 <Avatar className="w-20 h-20 mx-auto mb-4">
                   <AvatarImage
                     src={membre.photo}
-                    alt={membre.nom}
+                    alt={membre.name}
                     className="object-cover"
                   />
                   <AvatarFallback>
-                    {membre.nom
+                    {membre.name
                       .split(" ")
                       .map((n) => n[0])
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
-                <CardTitle className="text-xl">{membre.nom}</CardTitle>
-                <Badge variant="secondary">{membre.statut}</Badge>
+                <CardTitle className="text-xl">{membre.name}</CardTitle>
+                <Badge variant="secondary">{membre.status}</Badge>
               </CardHeader>
 
               <CardContent className="flex flex-col flex-1 space-y-4">
@@ -151,27 +151,27 @@ export default function CommunautePage() {
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span>{membre.ville}</span>
+                    <span>{membre.city}</span>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span>Arrivé en {membre.dateArrivee}</span>
+                    <span>Arrivé en {membre.arrivalDate}</span>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <Briefcase className="h-4 w-4 text-muted-foreground" />
                     <span>
-                      {membre.domaine} - {membre.entreprise}
+                      {membre.field} - {membre.company}
                     </span>
                   </div>
                 </div>
 
-                {/* Parcours */}
+                {/* Journey */}
                 <div>
                   <h4 className="font-semibold text-sm mb-2">Parcours :</h4>
                   <div className="flex flex-wrap gap-1">
-                    {membre.parcours.map((etape, index) => (
+                    {membre.journey.map((etape, index) => (
                       <Badge key={index} variant="outline" className="text-xs">
                         {etape}
                       </Badge>
