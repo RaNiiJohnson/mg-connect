@@ -17,7 +17,7 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useState } from "react";
+
 import { authClient } from "@/lib/auth-client";
 
 const SignInFormSchema = z.object({
@@ -31,7 +31,6 @@ const SignInFormSchema = z.object({
 
 export function SigninForm() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof SignInFormSchema>>({
     resolver: zodResolver(SignInFormSchema),
@@ -40,9 +39,11 @@ export function SigninForm() {
       password: "",
     },
   });
+  const {
+    formState: { isSubmitting },
+  } = form;
 
   async function onSubmit(values: z.infer<typeof SignInFormSchema>) {
-    setIsLoading(true);
     await authClient.signIn.email(
       {
         email: values.email,
@@ -61,7 +62,6 @@ export function SigninForm() {
         },
       }
     );
-    setIsLoading(false);
   }
 
   return (
@@ -112,8 +112,8 @@ export function SigninForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full h-11" disabled={isLoading}>
-            {isLoading ? (
+          <Button type="submit" className="w-full h-11" disabled={isSubmitting}>
+            {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
                 Connexion en cours...

@@ -16,7 +16,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 
@@ -34,7 +33,6 @@ const SignupFormSchema = z.object({
 
 export function SignupForm() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof SignupFormSchema>>({
     resolver: zodResolver(SignupFormSchema),
     defaultValues: {
@@ -43,10 +41,12 @@ export function SignupForm() {
       password: "",
     },
   });
+  const {
+    formState: { isSubmitting },
+  } = form;
 
   async function onSubmit(values: z.infer<typeof SignupFormSchema>) {
-    setIsLoading(true);
-    authClient.signUp.email(
+    await authClient.signUp.email(
       {
         name: values.name,
         email: values.email,
@@ -74,7 +74,6 @@ export function SignupForm() {
         },
       }
     );
-    setIsLoading(false);
   }
 
   return (
@@ -135,8 +134,8 @@ export function SignupForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full h-11" disabled={isLoading}>
-            {isLoading ? (
+          <Button type="submit" className="w-full h-11" disabled={isSubmitting}>
+            {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
                 Création du compte...
