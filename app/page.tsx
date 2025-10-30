@@ -86,7 +86,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">Nos Services</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-lg transition-shadow flex flex-col">
               <CardHeader>
                 <Users className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Communauté</CardTitle>
@@ -94,14 +94,14 @@ export default function HomePage() {
                   Connectez-vous avec d&apos;autres Malagasy en Allemagne
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-1 flex items-end">
                 <Button asChild variant="outline" className="w-full">
                   <Link href="/communaute">Découvrir</Link>
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-lg transition-shadow flex flex-col">
               <CardHeader>
                 <Briefcase className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Emplois</CardTitle>
@@ -109,14 +109,14 @@ export default function HomePage() {
                   Trouvez des opportunités d&apos;emploi et de formation
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-1 flex items-end">
                 <Button asChild variant="outline" className="w-full">
                   <Link href="/emplois">Explorer</Link>
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-lg transition-shadow flex flex-col">
               <CardHeader>
                 <Home className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Immobilier</CardTitle>
@@ -124,7 +124,7 @@ export default function HomePage() {
                   Partagez et trouvez des logements
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-1 flex items-end">
                 <Button asChild variant="outline" className="w-full">
                   <Link href="/immobilier">Voir les annonces</Link>
                 </Button>
