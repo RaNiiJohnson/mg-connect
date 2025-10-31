@@ -56,8 +56,8 @@ export default function Header() {
                 >
                   <Link
                     href={item.href}
-                    className={`font-medium transition-colors relative z-10 ${
-                      isActive ? "text-primary" : "hover:text-primary"
+                    className={`text-accent-foreground/60 font-medium transition-colors relative z-10 ${
+                      isActive ? "text-foreground" : "hover:text-foreground"
                     }`}
                   >
                     {item.label}
