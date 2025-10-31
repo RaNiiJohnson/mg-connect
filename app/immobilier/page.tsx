@@ -29,31 +29,36 @@ export default async function ImmobilierPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h1 className="text-4xl font-bold mb-4">Immobilier</h1>
-              <p className="text-lg text-muted-foreground">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
+            <div className="flex-1">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-4">
+                Immobilier
+              </h1>
+              <p className="text-base sm:text-lg text-muted-foreground">
                 Trouvez votre logement ou partagez le vôtre avec la communauté
               </p>
             </div>
-            <Button className="flex items-center gap-2">
+            <Button className="flex items-center gap-2 w-full sm:w-auto">
               <Plus className="h-4 w-4" />
-              Publier une annonce
+              <span className="sm:inline">Publier une annonce</span>
             </Button>
           </div>
 
           {/* Barre de recherche et filtres */}
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div className="flex gap-4 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Rechercher par ville, quartier..."
                 className="pl-10"
               />
             </div>
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 shrink-0"
+            >
               <Filter className="h-4 w-4" />
-              Filtres
+              <span className="hidden sm:inline">Filtres</span>
             </Button>
           </div>
 

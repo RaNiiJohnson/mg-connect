@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Briefcase, Calendar, Search, Filter } from "lucide-react";
 import { getAllCommunityMembers } from "@/lib/database";
+import { InputGroup } from "@/components/ui/input-group";
 
 export default async function CommunautePage() {
   const membres = await getAllCommunityMembers();
@@ -26,18 +27,22 @@ export default async function CommunautePage() {
           </p>
 
           {/* Barre de recherche et filtres */}
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div className="flex gap-4 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Rechercher par nom, ville, domaine..."
                 className="pl-10"
               />
             </div>
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 shrink-0"
+            >
               <Filter className="h-4 w-4" />
-              Filtres
+              <span className="hidden sm:inline">Filtres</span>
             </Button>
+            {/* </InputGroup> */}
           </div>
 
           {/* Filtres rapides */}
