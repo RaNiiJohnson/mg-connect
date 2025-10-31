@@ -86,11 +86,29 @@ export default function Header() {
             className="md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? (
-              <X size={24} strokeWidth={3.5} />
-            ) : (
-              <Menu size={24} strokeWidth={3.5} />
-            )}
+            <AnimatePresence mode="wait">
+              {mobileMenuOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ opacity: 0, rotate: -90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 90 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                >
+                  <X size={24} strokeWidth={3.5} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="menu"
+                  initial={{ opacity: 0, rotate: 90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: -90 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                >
+                  <Menu size={24} strokeWidth={3.5} />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </Button>
           <span className="flex-1" />
           <div className="flex items-center sm:gap-4 gap-2">
@@ -189,22 +207,43 @@ export default function Header() {
                   { href: "/communaute", label: "Communauté" },
                   { href: "/emplois", label: "Emplois" },
                   { href: "/immobilier", label: "Immobilier" },
-                ].map((item, index) => (
-                  <motion.div
-                    key={item.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
-                  >
-                    <Link
-                      href={item.href}
-                      className="font-medium transition-colors p-2 hover:bg-accent rounded-md block"
-                      onClick={() => setMobileMenuOpen(false)}
+                ].map((item, index) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <motion.div
+                      key={item.href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
+                      className="relative"
                     >
-                      {item.label}
-                    </Link>
-                  </motion.div>
-                ))}
+                      <Link
+                        href={item.href}
+                        className={`text-accent-foreground/60 font-medium transition-colors p-2 rounded-md block relative z-10 ${
+                          isActive
+                            ? "text-foreground bg-accent"
+                            : "hover:text-foreground hover:bg-accent"
+                        }`}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                      {isActive && (
+                        <motion.div
+                          className="absolute left-0 top-0 bottom-0 w-1 rounded-r-lg"
+                          layoutId="activeMobileTab"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 30,
+                          }}
+                        />
+                      )}
+                    </motion.div>
+                  );
+                })}
               </motion.nav>
             </motion.div>
           )}
