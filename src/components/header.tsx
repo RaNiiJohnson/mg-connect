@@ -16,10 +16,12 @@ import { LogOut, Menu, X } from "lucide-react";
 import { ButtonGroup } from "./ui/button-group";
 import { Suspense, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const { data: session, isPending } = authClient.useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const handleSignOut = async () => {
     await authClient.signOut();
@@ -36,31 +38,46 @@ export default function Header() {
             Hallo
           </Link>
           {/* Navigation Desktop */}
-          <nav className="hidden md:flex gap-4">
-            <Link
-              href="/"
-              className="font-medium hover:text-primary transition-colors"
-            >
-              Accueil
-            </Link>
-            <Link
-              href="/communaute"
-              className="font-medium hover:text-primary transition-colors"
-            >
-              Communauté
-            </Link>
-            <Link
-              href="/emplois"
-              className="font-medium hover:text-primary transition-colors"
-            >
-              Emplois
-            </Link>
-            <Link
-              href="/immobilier"
-              className="font-medium hover:text-primary transition-colors"
-            >
-              Immobilier
-            </Link>
+          <nav className="hidden md:flex gap-4 relative">
+            {[
+              { href: "/", label: "Accueil" },
+              { href: "/communaute", label: "Communauté" },
+              { href: "/emplois", label: "Emplois" },
+              { href: "/immobilier", label: "Immobilier" },
+            ].map((item, index) => {
+              const isActive = pathname === item.href;
+              return (
+                <motion.div
+                  key={item.href}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
+                  className="relative"
+                >
+                  <Link
+                    href={item.href}
+                    className={`font-medium transition-colors relative z-10 ${
+                      isActive ? "text-primary" : "hover:text-primary"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                  {isActive && (
+                    <motion.div
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                      layoutId="activeTab"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                </motion.div>
+              );
+            })}
           </nav>{" "}
           {/* Bouton hamburger mobile */}
           <Button
