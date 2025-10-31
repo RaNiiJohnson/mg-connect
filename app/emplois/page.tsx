@@ -197,7 +197,7 @@ async function EmploisPageContent() {
         )}
 
         {/* Call to action */}
-        <div className="text-center mt-12 p-8 bg-muted/30 rounded-lg">
+        <div className="text-center mt-12 p-8  bg-linear-to-br from-accent to-accent/0 rounded-lg">
           <h3 className="text-2xl font-bold mb-4">
             Vous avez une opportunité à partager ?
           </h3>
@@ -298,7 +298,7 @@ function EmploisPageSkeleton() {
         </div>
 
         {/* CTA skeleton */}
-        <div className="text-center mt-12 p-8 bg-muted/30 rounded-lg">
+        <div className="text-center mt-12 p-8  bg-linear-to-br from-accent to-accent/0 rounded-lg">
           <div className="h-8 bg-muted rounded mb-4 w-80 mx-auto"></div>
           <div className="h-4 bg-muted rounded mb-6 w-96 mx-auto"></div>
           <div className="h-12 bg-muted rounded w-48 mx-auto"></div>
