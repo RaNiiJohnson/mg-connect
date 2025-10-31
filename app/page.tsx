@@ -40,13 +40,6 @@ export default function HomePage() {
 
           {session?.user ? (
             <div className="space-y-4">
-              <p className="text-lg text-muted-foreground">
-                Salut {session.user.name || session.user.email}! 👋
-              </p>
-              <p className="text-base text-muted-foreground">
-                Prêt à explorer la communauté et découvrir de nouvelles
-                opportunités ?
-              </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild size="lg" className="text-lg px-8 py-6">
                   <Link href="/communaute">
