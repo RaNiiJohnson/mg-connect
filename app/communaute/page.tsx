@@ -9,11 +9,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, Briefcase, Calendar, Search, Filter } from "lucide-react";
+import {
+  MapPin,
+  Briefcase,
+  Calendar,
+  Search,
+  Filter,
+  MessageCircle,
+  Plus,
+} from "lucide-react";
 import { getAllCommunityMembers } from "@/lib/database";
-import { InputGroup } from "@/components/ui/input-group";
+import { getUser } from "@/lib/auth-server";
+import { Suspense } from "react";
 
-export default async function CommunautePage() {
+async function CommunautePageContent() {
+  const user = await getUser();
   const membres = await getAllCommunityMembers();
 
   return (
@@ -21,10 +31,22 @@ export default async function CommunautePage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4">Notre Communauté</h1>
-          <p className="text-lg text-muted-foreground mb-6">
-            Découvrez les membres de notre communauté Malagasy en Allemagne
-          </p>
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
+            <div className="flex-1">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-4">
+                Communauté
+              </h1>
+              <p className="text-base sm:text-lg text-muted-foreground">
+                Connectez-vous avec d&apos;autres Malagasy en Allemagne
+              </p>
+            </div>
+            {user && (
+              <Button className="flex items-center gap-2 w-full sm:w-auto">
+                <Plus className="h-4 w-4" />
+                <span className="sm:inline">Rejoindre un groupe</span>
+              </Button>
+            )}
+          </div>
 
           {/* Barre de recherche et filtres */}
           <div className="flex gap-4 mb-6">
@@ -42,7 +64,6 @@ export default async function CommunautePage() {
               <Filter className="h-4 w-4" />
               <span className="hidden sm:inline">Filtres</span>
             </Button>
-            {/* </InputGroup> */}
           </div>
 
           {/* Filtres rapides */}
@@ -157,9 +178,13 @@ export default async function CommunautePage() {
                   </div>
                 )}
 
-                <div className="mt-auto">
-                  <Button variant="outline" className="w-full">
-                    Voir le profil
+                <div className="flex gap-2 mt-auto">
+                  <Button className="flex-1" size="sm">
+                    <MessageCircle className="h-4 w-4 mr-2" />
+                    Contacter
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    Profil
                   </Button>
                 </div>
               </CardContent>
@@ -173,12 +198,105 @@ export default async function CommunautePage() {
             Rejoignez notre communauté !
           </h3>
           <p className="text-muted-foreground mb-6">
-            Créez votre profil et connectez-vous avec d&apos;autres Malagasy en
-            Allemagne
+            Connectez-vous avec d&apos;autres Malagasy, partagez vos expériences
+            et créez des liens durables
           </p>
-          <Button size="lg">Créer mon profil</Button>
+          {!user ? (
+            <Button size="lg">S&apos;inscrire maintenant</Button>
+          ) : (
+            <Button size="lg">Inviter des amis</Button>
+          )}
         </div>
       </div>
     </div>
+  );
+}
+
+function CommunautePageSkeleton() {
+  return (
+    <div className="min-h-screen p-4 animate-pulse">
+      <div className="max-w-6xl mx-auto">
+        {/* Header Skeleton */}
+        <div className="mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
+            <div className="flex-1">
+              <div className="h-10 bg-muted rounded-lg mb-4 w-64"></div>
+              <div className="h-6 bg-muted rounded w-96"></div>
+            </div>
+            <div className="h-10 bg-muted rounded w-48"></div>
+          </div>
+
+          {/* Search and filters skeleton */}
+          <div className="flex gap-4 mb-6">
+            <div className="h-10 bg-muted rounded flex-1"></div>
+            <div className="h-10 bg-muted rounded w-24"></div>
+          </div>
+
+          {/* Filter badges skeleton */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="h-6 bg-muted rounded-full w-16"></div>
+            ))}
+          </div>
+        </div>
+
+        {/* Members grid skeleton */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <Card key={i}>
+              <CardHeader className="text-center">
+                <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4"></div>
+                <div className="h-6 bg-muted rounded mb-2 w-32 mx-auto"></div>
+                <div className="h-5 bg-muted rounded-full w-20 mx-auto"></div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2 text-center">
+                  <div className="h-4 bg-muted rounded w-full"></div>
+                  <div className="h-4 bg-muted rounded w-4/5 mx-auto"></div>
+                </div>
+                <div className="space-y-2">
+                  {[1, 2, 3].map((j) => (
+                    <div key={j} className="flex items-center gap-2">
+                      <div className="h-4 w-4 bg-muted rounded"></div>
+                      <div className="h-4 bg-muted rounded flex-1"></div>
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <div className="h-4 bg-muted rounded mb-2 w-16"></div>
+                  <div className="flex flex-wrap gap-1">
+                    {[1, 2, 3].map((k) => (
+                      <div
+                        key={k}
+                        className="h-5 bg-muted rounded-full w-12"
+                      ></div>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <div className="h-8 bg-muted rounded flex-1"></div>
+                  <div className="h-8 bg-muted rounded w-16"></div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* CTA skeleton */}
+        <div className="text-center mt-12 p-8 bg-muted/30 rounded-lg">
+          <div className="h-8 bg-muted rounded mb-4 w-80 mx-auto"></div>
+          <div className="h-4 bg-muted rounded mb-6 w-96 mx-auto"></div>
+          <div className="h-12 bg-muted rounded w-48 mx-auto"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function CommunautePage() {
+  return (
+    <Suspense fallback={<CommunautePageSkeleton />}>
+      <CommunautePageContent />
+    </Suspense>
   );
 }

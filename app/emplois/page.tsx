@@ -9,18 +9,23 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
-  MapPin,
-  Clock,
-  Building,
-  Calendar,
+  Briefcase,
   Search,
   Filter,
+  MapPin,
+  Calendar,
+  Euro,
+  Clock,
+  Building,
   Plus,
 } from "lucide-react";
+import { getUser } from "@/lib/auth-server";
 import { getAllJobOffers } from "@/lib/database";
+import { Suspense } from "react";
 
-export default async function EmploisPage() {
-  const offres = await getAllJobOffers();
+async function EmploisPageContent() {
+  const user = await getUser();
+  const jobOffers = await getAllJobOffers();
 
   return (
     <div className="min-h-screen p-4">
@@ -29,18 +34,18 @@ export default async function EmploisPage() {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
             <div className="flex-1">
-              <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-                Offres d&apos;Emploi
-              </h1>
+              <h1 className="text-3xl sm:text-4xl font-bold mb-4">Emplois</h1>
               <p className="text-base sm:text-lg text-muted-foreground">
-                Découvrez les opportunités d&apos;emploi et de formation en
-                Allemagne
+                Découvrez les opportunités d&apos;emploi partagées par la
+                communauté
               </p>
             </div>
-            <Button className="flex items-center gap-2 w-full sm:w-auto">
-              <Plus className="h-4 w-4" />
-              <span className="sm:inline">Publier une offre</span>
-            </Button>
+            {user && (
+              <Button className="flex items-center gap-2 w-full sm:w-auto">
+                <Plus className="h-4 w-4" />
+                <span className="sm:inline">Publier une offre</span>
+              </Button>
+            )}
           </div>
 
           {/* Barre de recherche et filtres */}
@@ -87,72 +92,73 @@ export default async function EmploisPage() {
             >
               FSJ/FOJ
             </Badge>
-            <Badge
-              variant="outline"
-              className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-            >
-              Travail
-            </Badge>
           </div>
         </div>
 
         {/* Liste des offres */}
         <div className="space-y-6">
-          {offres.map((offre) => (
-            <Card key={offre.id} className="hover:shadow-lg transition-shadow">
+          {jobOffers.map((job) => (
+            <Card key={job.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
-                <div className="flex justify-between items-start">
+                <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <CardTitle className="text-xl">{offre.title}</CardTitle>
-                      <Badge variant="secondary">{offre.type}</Badge>
+                      <Badge variant="outline">{job.type}</Badge>
+                      <Badge variant="secondary">{job.contractType}</Badge>
                     </div>
-                    <CardDescription className="text-base mb-4">
-                      {offre.description}
-                    </CardDescription>
+                    <CardTitle className="text-xl mb-2">{job.title}</CardTitle>
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <Building className="h-4 w-4" />
+                        <span>{job.company}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <MapPin className="h-4 w-4" />
+                        <span>{job.city}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        <span>
+                          Début:{" "}
+                          {new Date(job.startDate).toLocaleDateString("fr-FR")}
+                        </span>
+                      </div>
+                      {job.duration && (
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          <span>{job.duration}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    {job.salary && (
+                      <div className="flex items-center gap-1 text-lg font-semibold text-primary">
+                        <Euro className="h-5 w-5" />
+                        <span>{job.salary}</span>
+                      </div>
+                    )}
+                    <div className="text-sm text-muted-foreground mt-1">
+                      Publié le{" "}
+                      {new Date(job.createdAt).toLocaleDateString("fr-FR")}
+                    </div>
                   </div>
                 </div>
               </CardHeader>
 
-              <CardContent>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Building className="h-4 w-4 text-muted-foreground" />
-                    <span>{offre.company}</span>
-                  </div>
+              <CardContent className="space-y-4">
+                <CardDescription className="text-base">
+                  {job.description}
+                </CardDescription>
 
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span>{offre.city}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-sm">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span>{offre.duration}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-sm">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span>Début: {offre.startDate}</span>
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
-                  {/* Détails du poste */}
+                {/* Certificats requis */}
+                {job.certificates.length > 0 && (
                   <div>
-                    <h4 className="font-semibold mb-2">Détails du poste :</h4>
-                    <ul className="text-sm space-y-1 text-muted-foreground">
-                      <li>• Type de contrat: {offre.contractType}</li>
-                      <li>• Rémunération: {offre.salary}</li>
-                      <li>• Contact: {offre.contact}</li>
-                    </ul>
-                  </div>
-
-                  {/* Certificats requis */}
-                  <div>
-                    <h4 className="font-semibold mb-2">Certificats requis :</h4>
+                    <h4 className="font-semibold text-sm mb-2">
+                      Certificats requis :
+                    </h4>
                     <div className="flex flex-wrap gap-1">
-                      {offre.certificates.map((cert, index) => (
+                      {job.certificates.map((cert, index) => (
                         <Badge
                           key={index}
                           variant="outline"
@@ -163,27 +169,149 @@ export default async function EmploisPage() {
                       ))}
                     </div>
                   </div>
-                </div>
+                )}
 
-                <div className="flex gap-2">
-                  <Button>Postuler</Button>
-                  <Button variant="outline">Plus d&apos;infos</Button>
+                {/* Actions */}
+                <div className="flex gap-2 pt-4 border-t">
+                  <Button size="sm">Postuler</Button>
+                  <Button variant="outline" size="sm">
+                    Détails
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
 
+        {jobOffers.length === 0 && (
+          <div className="text-center py-12">
+            <Briefcase className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2">
+              Aucune offre d&apos;emploi
+            </h3>
+            <p className="text-muted-foreground mb-6">
+              Soyez le premier à partager une opportunité avec la communauté
+            </p>
+            {user && <Button>Publier une offre</Button>}
+          </div>
+        )}
+
         {/* Call to action */}
         <div className="text-center mt-12 p-8 bg-muted/30 rounded-lg">
-          <h3 className="text-2xl font-bold mb-4">Vous recrutez ?</h3>
+          <h3 className="text-2xl font-bold mb-4">
+            Vous avez une opportunité à partager ?
+          </h3>
           <p className="text-muted-foreground mb-6">
-            Publiez vos offres d&apos;emploi et trouvez les meilleurs talents de
-            la communauté Malagasy
+            Aidez la communauté en partageant des offres d&apos;emploi, de stage
+            ou de formation
           </p>
-          <Button size="lg">Publier une offre</Button>
+          {user ? (
+            <Button size="lg">Publier une offre</Button>
+          ) : (
+            <Button size="lg">S&apos;inscrire pour publier</Button>
+          )}
         </div>
       </div>
     </div>
+  );
+}
+
+function EmploisPageSkeleton() {
+  return (
+    <div className="min-h-screen p-4 animate-pulse">
+      <div className="max-w-6xl mx-auto">
+        {/* Header Skeleton */}
+        <div className="mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
+            <div className="flex-1">
+              <div className="h-10 bg-muted rounded-lg mb-4 w-32"></div>
+              <div className="h-6 bg-muted rounded w-96"></div>
+            </div>
+            <div className="h-10 bg-muted rounded w-48"></div>
+          </div>
+
+          {/* Search and filters skeleton */}
+          <div className="flex gap-4 mb-6">
+            <div className="h-10 bg-muted rounded flex-1"></div>
+            <div className="h-10 bg-muted rounded w-24"></div>
+          </div>
+
+          {/* Filter badges skeleton */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="h-6 bg-muted rounded-full w-16"></div>
+            ))}
+          </div>
+        </div>
+
+        {/* Job offers skeleton */}
+        <div className="space-y-6">
+          {[1, 2, 3].map((i) => (
+            <Card key={i}>
+              <CardHeader>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="h-5 bg-muted rounded-full w-16"></div>
+                      <div className="h-5 bg-muted rounded-full w-12"></div>
+                    </div>
+                    <div className="h-7 bg-muted rounded mb-2 w-64"></div>
+                    <div className="flex flex-wrap items-center gap-4">
+                      {[1, 2, 3, 4].map((j) => (
+                        <div
+                          key={j}
+                          className="h-4 bg-muted rounded w-20"
+                        ></div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="h-6 bg-muted rounded mb-1 w-20"></div>
+                    <div className="h-4 bg-muted rounded w-24"></div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <div className="h-4 bg-muted rounded w-full"></div>
+                  <div className="h-4 bg-muted rounded w-4/5"></div>
+                  <div className="h-4 bg-muted rounded w-3/5"></div>
+                </div>
+                <div>
+                  <div className="h-4 bg-muted rounded mb-2 w-32"></div>
+                  <div className="flex flex-wrap gap-1">
+                    {[1, 2, 3].map((k) => (
+                      <div
+                        key={k}
+                        className="h-5 bg-muted rounded-full w-16"
+                      ></div>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex gap-2 pt-4 border-t">
+                  <div className="h-8 bg-muted rounded w-20"></div>
+                  <div className="h-8 bg-muted rounded w-16"></div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* CTA skeleton */}
+        <div className="text-center mt-12 p-8 bg-muted/30 rounded-lg">
+          <div className="h-8 bg-muted rounded mb-4 w-80 mx-auto"></div>
+          <div className="h-4 bg-muted rounded mb-6 w-96 mx-auto"></div>
+          <div className="h-12 bg-muted rounded w-48 mx-auto"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function EmploisPage() {
+  return (
+    <Suspense fallback={<EmploisPageSkeleton />}>
+      <EmploisPageContent />
+    </Suspense>
   );
 }
