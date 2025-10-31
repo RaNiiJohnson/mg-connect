@@ -56,14 +56,13 @@ export function SignupForm() {
         onSuccess: async (ctx) => {
           // Si l'email verification est requise, l'utilisateur ne sera pas connecté automatiquement
           if (ctx.data.user && !ctx.data.user.emailVerified) {
-            toast.success(
-              "Compte créé ! Vérifiez votre email pour activer votre compte.",
-              {
-                duration: 6000,
-              }
+            console.log(
+              "Compte créé ! Vérifiez votre email pour activer votre compte."
             );
             // Rediriger vers une page de vérification ou rester sur la page
-            router.push("/auth/verify-email");
+            // router.push("/auth/verify-email");
+            toast.success("Bienvenue ! Votre compte a été créé avec succès.");
+            router.push("/");
           } else {
             // Si pas de vérification requise, rediriger normalement
             router.push("/");
