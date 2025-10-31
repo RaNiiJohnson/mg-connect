@@ -14,7 +14,8 @@ import {
 } from "./ui/dropdown-menu";
 import { LogOut, Menu, X } from "lucide-react";
 import { ButtonGroup } from "./ui/button-group";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function Header() {
   const { data: session, isPending } = authClient.useSession();
@@ -27,7 +28,7 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur">
-        <div className="mx-auto flex sm:gap-4 gap-2 items-center p-4 relative">
+        <div className="mx-auto flex sm:gap-10 gap-2 items-center p-4 relative">
           <Link
             href="/"
             className="text-2xl text-primary font-bold hover:opacity-80 transition"
@@ -35,7 +36,7 @@ export default function Header() {
             Hallo
           </Link>
           {/* Navigation Desktop */}
-          <nav className="hidden md:flex items-center gap-4">
+          <nav className="hidden md:flex gap-4">
             <Link
               href="/"
               className="font-medium hover:text-primary transition-colors"
@@ -77,28 +78,33 @@ export default function Header() {
           <span className="flex-1" />
           <div className="flex items-center sm:gap-4 gap-2">
             {isPending ? (
-              <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
+              <div className="flex items-center sm:space-x-2 rounded-lg sm:py-2 sm:px-4">
+                <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
+                <div className="hidden sm:block w-20 h-4 bg-muted animate-pulse rounded" />
+              </div>
             ) : session?.user ? (
               <div className="flex items-center gap-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <div className="flex items-center sm:space-x-2 hover:bg-accent/50 rounded-lg sm:py-2 sm:px-4 transition-colors cursor-pointer">
-                      <Button
-                        variant="outline"
-                        className="relative h-8 w-8 rounded-full"
-                      >
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage
-                            src={session.user.image || ""}
-                            alt={session.user.name || ""}
-                          />
-                          <AvatarFallback>
-                            {session.user.name?.charAt(0)?.toUpperCase() ||
-                              session.user.email?.charAt(0)?.toUpperCase() ||
-                              "U"}
-                          </AvatarFallback>
-                        </Avatar>
-                      </Button>
+                    <div className="flex items-center sm:space-x-2 hover:bg-accent rounded-lg sm:py-2 sm:px-4 transition-colors cursor-pointer">
+                      <Suspense>
+                        <Button
+                          variant="outline"
+                          className="relative h-8 w-8 rounded-full"
+                        >
+                          <Avatar className="h-8 w-8">
+                            <AvatarImage
+                              src={session.user.image || ""}
+                              alt={session.user.name || ""}
+                            />
+                            <AvatarFallback>
+                              {session.user.name?.charAt(0)?.toUpperCase() ||
+                                session.user.email?.charAt(0)?.toUpperCase() ||
+                                "U"}
+                            </AvatarFallback>
+                          </Avatar>
+                        </Button>
+                      </Suspense>
                       <span className="hidden sm:block text-sm font-medium">
                         {session.user.name || session.user.email}
                       </span>
@@ -140,55 +146,67 @@ export default function Header() {
                 </Button>
               </div>
             )}
-
             <ThemeToggle />
           </div>
         </div>
 
         {/* Menu mobile */}
-        {mobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 md:hidden border-t bg-background/95 backdrop-blur-sm shadow-lg z-40">
-            <nav className="flex flex-col p-4 gap-2">
-              <Link
-                href="/"
-                className="font-medium transition-colors p-2 hover:bg-accent rounded-md"
-                onClick={() => setMobileMenuOpen(false)}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              className="absolute top-full left-0 right-0 md:hidden border-t bg-background/95 backdrop-blur-sm shadow-lg z-40"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              <motion.nav
+                className="flex flex-col p-4 gap-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, delay: 0.1 }}
               >
-                Accueil
-              </Link>
-              <Link
-                href="/communaute"
-                className="font-medium transition-colors p-2 hover:bg-accent rounded-md"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Communauté
-              </Link>
-              <Link
-                href="/emplois"
-                className="font-medium transition-colors p-2 hover:bg-accent rounded-md"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Emplois
-              </Link>
-              <Link
-                href="/immobilier"
-                className="font-medium transition-colors p-2 hover:bg-accent rounded-md"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Immobilier
-              </Link>
-            </nav>
-          </div>
-        )}
+                {[
+                  { href: "/", label: "Accueil" },
+                  { href: "/communaute", label: "Communauté" },
+                  { href: "/emplois", label: "Emplois" },
+                  { href: "/immobilier", label: "Immobilier" },
+                ].map((item, index) => (
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
+                  >
+                    <Link
+                      href={item.href}
+                      className="font-medium transition-colors p-2 hover:bg-accent rounded-md block"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* Overlay pour fermer le menu en cliquant ailleurs */}
-      {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-40 md:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="fixed inset-0 z-40 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }
