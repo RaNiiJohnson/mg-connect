@@ -26,7 +26,7 @@ async function HomePageContent() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[80vh] w-full flex items-center justify-center">
+      <section className="relative h-[91vh] w-full flex items-center justify-center">
         <div className="text-center p-4 max-w-4xl mx-auto">
           <h1 className="text-6xl md:text-7xl font-bold mb-6 text-primary">
             Hallo Hallo
@@ -70,7 +70,7 @@ async function HomePageContent() {
       </section>
 
       {/* À propos Section */}
-      <section className="py-16 px-4 bg-muted/30">
+      <section className="py-16 px-4 bg-linear-to-br from-accent to-accent/0">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">
             À propos de nous
