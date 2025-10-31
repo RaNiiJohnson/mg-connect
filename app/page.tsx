@@ -1,5 +1,4 @@
-"use client";
-
+// app/page.tsx
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,10 +17,11 @@ import {
   HandHeart,
   User,
 } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
+import { getUser } from "@/lib/auth-server";
+import { Suspense } from "react";
 
-export default function HomePage() {
-  const { data: session } = authClient.useSession();
+async function HomePageContent() {
+  const user = await getUser();
 
   return (
     <div className="min-h-screen">
@@ -38,7 +38,8 @@ export default function HomePage() {
             Madagascar.
           </p>
 
-          {session?.user ? (
+          {/* Plus besoin de isPending - la session est déjà résolue ! */}
+          {user ? (
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild size="lg" className="text-lg px-8 py-6">
@@ -172,5 +173,83 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+  );
+}
+
+function HomePageSkeleton() {
+  return (
+    <div className="min-h-screen animate-pulse">
+      {/* Hero Section Skeleton */}
+      <section className="relative h-[80vh] w-full flex items-center justify-center">
+        <div className="text-center p-4 max-w-4xl mx-auto">
+          <div className="h-20 md:h-24 bg-muted rounded-lg mb-6 w-3/4 mx-auto"></div>
+          <div className="space-y-3 mb-8">
+            <div className="h-6 bg-muted rounded w-full"></div>
+            <div className="h-6 bg-muted rounded w-5/6 mx-auto"></div>
+            <div className="h-6 bg-muted rounded w-4/5 mx-auto"></div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="h-14 bg-muted rounded-lg w-48"></div>
+            <div className="h-14 bg-muted rounded-lg w-48"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* À propos Section Skeleton */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="max-w-6xl mx-auto">
+          <div className="h-12 bg-muted rounded-lg mb-12 w-80 mx-auto"></div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <div className="h-12 w-12 bg-muted rounded mb-4"></div>
+                  <div className="h-6 bg-muted rounded w-3/4"></div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="h-4 bg-muted rounded w-full"></div>
+                    <div className="h-4 bg-muted rounded w-5/6"></div>
+                    <div className="h-4 bg-muted rounded w-4/5"></div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section Skeleton */}
+      <section className="py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="h-12 bg-muted rounded-lg mb-12 w-64 mx-auto"></div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="flex flex-col">
+                <CardHeader>
+                  <div className="h-12 w-12 bg-muted rounded mb-4"></div>
+                  <div className="h-6 bg-muted rounded w-2/3"></div>
+                  <div className="space-y-2 mt-2">
+                    <div className="h-4 bg-muted rounded w-full"></div>
+                    <div className="h-4 bg-muted rounded w-4/5"></div>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-1 flex items-end">
+                  <div className="h-10 bg-muted rounded w-full"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<HomePageSkeleton />}>
+      <HomePageContent />
+    </Suspense>
   );
 }
