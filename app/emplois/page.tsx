@@ -96,7 +96,7 @@ async function EmploisPageContent() {
         <div className="space-y-4">
           {jobOffers.map((job) => (
             <Card key={job.id} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
+              <CardContent className="px-2 sm:px-6  ">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-3">
