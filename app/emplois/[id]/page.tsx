@@ -11,7 +11,6 @@ import {
   ArrowLeft,
   MapPin,
   Calendar,
-  Euro,
   Clock,
   Building,
   Mail,
@@ -63,7 +62,7 @@ export default async function JobDetailsPage(props: Pageprops) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center gap-2">
                     <Building className="h-4 w-4 text-muted-foreground" />
-                    <span>{jobOffer.company}</span>
+                    <span>Entreprise : {jobOffer.company}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-muted-foreground" />
@@ -86,17 +85,30 @@ export default async function JobDetailsPage(props: Pageprops) {
                   {jobOffer.duration && (
                     <div className="flex items-center gap-2">
                       <Clock className="h-4 w-4 text-muted-foreground" />
-                      <span>{jobOffer.duration}</span>
+                      <span>Durée: {jobOffer.duration}</span>
                     </div>
                   )}
+                  {jobOffer.salary && (
+                    <div className="flex items-center gap-2">
+                      <Building className="h-4 w-4 text-muted-foreground" />
+                      <span>Salaire: {jobOffer.salary}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <span>Contrat: {jobOffer.contractType}</span>
+                  </div>
                 </div>
               </div>
 
               <div className="text-right">
                 {jobOffer.salary && (
-                  <span className="text-xl font-semibold text-primary">
-                    {jobOffer.salary}
-                  </span>
+                  <>
+                    Salaire :{" "}
+                    <span className="text-xl font-semibold text-primary">
+                      {jobOffer.salary}
+                    </span>
+                  </>
                 )}
                 <div className="text-sm text-muted-foreground mt-1">
                   Publié le{" "}
