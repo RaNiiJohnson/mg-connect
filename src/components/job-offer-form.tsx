@@ -1,10 +1,33 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
+
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field";
+
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "@/components/ui/input-group";
+
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -12,28 +35,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { X, Plus } from "lucide-react";
-import { Label } from "@/components/ui/label";
-
-interface JobOfferFormData {
-  title: string;
-  type: string;
-  contractType: string;
-  city: string;
-  duration: string;
-  startDate: string;
-  company: string;
-  description: string;
-  certificates: string[];
-  salary: string;
-  contact: string;
-}
-
-interface JobOfferFormProps {
-  onSubmit: (data: JobOfferFormData) => Promise<void>;
-  isLoading?: boolean;
-}
+import { ChevronLeft, ChevronRight, XIcon } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { createJobOfferAction } from "@/lib/job-actions";
 
 const jobTypes = [
   "Au pair",
@@ -53,244 +57,494 @@ const contractTypes = [
   "Temps partiel",
 ];
 
-export function JobOfferForm({ onSubmit, isLoading }: JobOfferFormProps) {
-  const [certificates, setCertificates] = useState<string[]>([]);
-  const [newCertificate, setNewCertificate] = useState("");
+const formSchema = z.object({
+  title: z.string().min(1, "Le titre est requis"),
+  type: z.string().min(1, "Le type d'offre est requis"),
+  contractType: z.string().min(1, "Le type de contrat est requis"),
+  city: z.string().min(1, "La ville est requise"),
+  duration: z.string().min(1, "La durée est requise"),
+  startDate: z.string().min(1, "La date de début est requise"),
+  company: z.string().min(1, "L'entreprise est requise"),
+  description: z
+    .string()
+    .min(10, "La description doit contenir au moins 10 caractères"),
+  certificates: z
+    .array(
+      z.object({
+        certificate: z.string(),
+      })
+    )
+    .min(1, "Ajoutez au moins un certificat.")
+    .max(5, "Vous pouvez ajouter jusqu'à 5 certificats."),
+  salary: z.string().min(1, "Le salaire est requis"),
+  contact: z.string().min(1, "Les informations de contact sont requises"),
+});
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<JobOfferFormData>({
+interface JobOfferFormProps {
+  onSuccess?: () => void;
+}
+
+export function JobOfferForm({ onSuccess }: JobOfferFormProps) {
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      certificates: [],
+      title: "",
+      type: "",
+      contractType: "",
+      city: "",
+      duration: "",
+      startDate: "",
+      company: "",
+      description: "",
+      certificates: [{ certificate: "" }],
+      salary: "",
+      contact: "",
     },
   });
 
-  const watchedType = watch("type");
-  const watchedContractType = watch("contractType");
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "certificates",
+  });
 
-  const addCertificate = () => {
-    if (
-      newCertificate.trim() &&
-      !certificates.includes(newCertificate.trim())
-    ) {
-      const updatedCertificates = [...certificates, newCertificate.trim()];
-      setCertificates(updatedCertificates);
-      setValue("certificates", updatedCertificates);
-      setNewCertificate("");
+  const totalSteps = 4;
+  const progress = (currentStep / totalSteps) * 100;
+
+  const stepTitles = [
+    "Informations de base",
+    "Détails du poste",
+    "Description et contact",
+    "Critères supplémentaires",
+  ];
+
+  const nextStep = async () => {
+    let fieldsToValidate: (keyof z.infer<typeof formSchema>)[] = [];
+
+    switch (currentStep) {
+      case 1:
+        fieldsToValidate = ["title", "company", "type"];
+        break;
+      case 2:
+        fieldsToValidate = [
+          "contractType",
+          "city",
+          "startDate",
+          "salary",
+          "duration",
+        ];
+        break;
+      case 3:
+        fieldsToValidate = ["description", "contact"];
+        break;
+      case 4:
+        fieldsToValidate = ["certificates"];
+        break;
+    }
+
+    const isValid = await form.trigger(fieldsToValidate);
+    if (isValid && currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
     }
   };
 
-  const removeCertificate = (index: number) => {
-    const updatedCertificates = certificates.filter((_, i) => i !== index);
-    setCertificates(updatedCertificates);
-    setValue("certificates", updatedCertificates);
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
   };
 
-  const onFormSubmit = async (data: JobOfferFormData) => {
-    await onSubmit({ ...data, certificates });
-  };
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const result = await createJobOfferAction({
+      ...data,
+      certificates:
+        data.certificates
+          ?.map((cert) => cert.certificate)
+          .filter((cert) => cert.trim() !== "") || [],
+    });
+
+    if (result.success) {
+      toast.success(result.message);
+      form.reset();
+      onSuccess?.();
+    } else {
+      toast.error(result.message);
+    }
+  }
 
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="title">Titre de l&apos;offre *</Label>
-          <Input
-            id="title"
-            {...register("title", { required: "Le titre est requis" })}
-            placeholder="Ex: Développeur Frontend React"
-          />
-          {errors.title && (
-            <p className="text-sm text-red-500 mt-1">{errors.title.message}</p>
-          )}
+    <div className="space-y-6">
+      {/* Progress Bar */}
+      <div className="space-y-2">
+        <div className="flex justify-between text-sm text-muted-foreground">
+          <span>
+            Étape {currentStep} sur {totalSteps}
+          </span>
+          <span>{Math.round(progress)}% complété</span>
         </div>
-
-        <div>
-          <Label htmlFor="company">Entreprise *</Label>
-          <Input
-            id="company"
-            {...register("company", { required: "L'entreprise est requise" })}
-            placeholder="Nom de l'entreprise"
-          />
-          {errors.company && (
-            <p className="text-sm text-red-500 mt-1">
-              {errors.company.message}
-            </p>
-          )}
-        </div>
+        <Progress value={progress} className="w-full" />
+        <h3 className="text-lg font-medium">{stepTitles[currentStep - 1]}</h3>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="type">Type d&apos;offre *</Label>
-          <Select
-            value={watchedType}
-            onValueChange={(value) => setValue("type", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Sélectionnez le type" />
-            </SelectTrigger>
-            <SelectContent>
-              {jobTypes.map((type) => (
-                <SelectItem key={type} value={type}>
-                  {type}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.type && (
-            <p className="text-sm text-red-500 mt-1">{errors.type.message}</p>
-          )}
-        </div>
-
-        <div>
-          <Label htmlFor="contractType">Type de contrat *</Label>
-          <Select
-            value={watchedContractType}
-            onValueChange={(value) => setValue("contractType", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Sélectionnez le contrat" />
-            </SelectTrigger>
-            <SelectContent>
-              {contractTypes.map((contract) => (
-                <SelectItem key={contract} value={contract}>
-                  {contract}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.contractType && (
-            <p className="text-sm text-red-500 mt-1">
-              {errors.contractType.message}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="city">Ville *</Label>
-          <Input
-            id="city"
-            {...register("city", { required: "La ville est requise" })}
-            placeholder="Berlin, Munich, Hamburg..."
+      <form
+        id="job-offer-form"
+        onSubmit={form.handleSubmit(onSubmit)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && e.target instanceof HTMLInputElement) {
+            e.preventDefault();
+          }
+        }}
+      >
+        {/* Step 1 */}
+        <FieldGroup
+          className={`space-y-4 ${currentStep !== 1 ? "hidden" : ""}`}
+        >
+          <Controller
+            name="title"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="job-title">
+                  Titre de l&apos;offre *
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="job-title"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Ex: Développeur Frontend React"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-          {errors.city && (
-            <p className="text-sm text-red-500 mt-1">{errors.city.message}</p>
-          )}
-        </div>
 
-        <div>
-          <Label htmlFor="salary">Salaire</Label>
-          <Input
-            id="salary"
-            {...register("salary")}
-            placeholder="Ex: 2500€/mois, À négocier"
+          <Controller
+            name="company"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="job-company">Entreprise *</FieldLabel>
+                <Input
+                  {...field}
+                  id="job-company"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Nom de l'entreprise"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-        </div>
-      </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="startDate">Date de début *</Label>
-          <Input
-            id="startDate"
-            type="date"
-            {...register("startDate", {
-              required: "La date de début est requise",
-            })}
+          <Controller
+            name="type"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="job-type">Type d&apos;offre *</FieldLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger
+                    id="job-type"
+                    aria-invalid={fieldState.invalid}
+                  >
+                    <SelectValue placeholder="Sélectionnez le type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {jobTypes.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-          {errors.startDate && (
-            <p className="text-sm text-red-500 mt-1">
-              {errors.startDate.message}
-            </p>
-          )}
-        </div>
+        </FieldGroup>
 
-        <div>
-          <Label htmlFor="duration">Durée</Label>
-          <Input
-            id="duration"
-            {...register("duration")}
-            placeholder="Ex: 6 mois, 2 ans, Indéterminée"
+        {/* Step 2 */}
+        <FieldGroup
+          className={`space-y-4 ${currentStep !== 2 ? "hidden" : ""}`}
+        >
+          <Controller
+            name="contractType"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="job-contract">
+                  Type de contrat *
+                </FieldLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger
+                    id="job-contract"
+                    aria-invalid={fieldState.invalid}
+                  >
+                    <SelectValue placeholder="Sélectionnez le contrat" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {contractTypes.map((contract) => (
+                      <SelectItem key={contract} value={contract}>
+                        {contract}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-        </div>
-      </div>
 
-      <div>
-        <Label htmlFor="description">Description *</Label>
-        <Textarea
-          id="description"
-          {...register("description", {
-            required: "La description est requise",
-          })}
-          placeholder="Décrivez le poste, les missions, les compétences requises..."
-          rows={4}
-        />
-        {errors.description && (
-          <p className="text-sm text-red-500 mt-1">
-            {errors.description.message}
-          </p>
-        )}
-      </div>
-
-      <div>
-        <Label htmlFor="certificates">Certificats requis</Label>
-        <div className="flex gap-2 mb-2">
-          <Input
-            value={newCertificate}
-            onChange={(e) => setNewCertificate(e.target.value)}
-            placeholder="Ex: Permis B, Allemand B2..."
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                addCertificate();
-              }
-            }}
+          <Controller
+            name="city"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="job-city">Ville *</FieldLabel>
+                <Input
+                  {...field}
+                  id="job-city"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Berlin, Munich, Hamburg..."
+                  autoComplete="off"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-          <Button type="button" onClick={addCertificate} size="sm">
-            <Plus className="h-4 w-4" />
-          </Button>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {certificates.map((cert, index) => (
-            <Badge
-              key={index}
-              variant="secondary"
-              className="flex items-center gap-1"
-            >
-              {cert}
-              <X
-                className="h-3 w-3 cursor-pointer"
-                onClick={() => removeCertificate(index)}
+
+          <Controller
+            name="startDate"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="job-start-date">
+                  Date de début *
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="job-start-date"
+                  type="date"
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="salary"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="job-salary">Salaire *</FieldLabel>
+                <Input
+                  {...field}
+                  id="job-salary"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Ex: 2500€/mois, À négocier"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="duration"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="job-duration">Durée *</FieldLabel>
+                <Input
+                  {...field}
+                  id="job-duration"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Ex: 6 mois, 2 ans, Indéterminée"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </FieldGroup>
+
+        {/* Step 3 */}
+        <FieldGroup
+          className={`space-y-4 ${currentStep !== 3 ? "hidden" : ""}`}
+        >
+          <Controller
+            name="description"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="job-description">Description *</FieldLabel>
+                <InputGroup>
+                  <InputGroupTextarea
+                    {...field}
+                    id="job-description"
+                    placeholder="Décrivez le poste, les missions, les compétences requises..."
+                    rows={6}
+                    className="min-h-32 resize-none"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  <InputGroupAddon align="block-end">
+                    <InputGroupText className="tabular-nums">
+                      {field.value.length} caractères
+                    </InputGroupText>
+                  </InputGroupAddon>
+                </InputGroup>
+                <FieldDescription>
+                  Décrivez le poste, les missions et les compétences requises
+                </FieldDescription>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="contact"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="job-contact">Contact *</FieldLabel>
+                <InputGroup>
+                  <InputGroupTextarea
+                    {...field}
+                    id="job-contact"
+                    placeholder="Email, téléphone, ou autres informations de contact..."
+                    rows={3}
+                    className="min-h-20 resize-none"
+                    aria-invalid={fieldState.invalid}
+                  />
+                </InputGroup>
+                <FieldDescription>
+                  Indiquez comment les candidats peuvent vous contacter
+                </FieldDescription>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </FieldGroup>
+
+        {/* Step 4 */}
+        <FieldSet className={`gap-4 ${currentStep !== 4 ? "hidden" : ""}`}>
+          <FieldLegend variant="label">Certificats requis</FieldLegend>
+          <FieldDescription>
+            Ajoutez jusqu&apos;à 5 certificats requis pour ce poste (optionnel).
+          </FieldDescription>
+          <FieldGroup className="gap-4">
+            {fields.map((field, index) => (
+              <Controller
+                key={field.id}
+                name={`certificates.${index}.certificate`}
+                control={form.control}
+                render={({ field: controllerField, fieldState }) => (
+                  <Field
+                    orientation="horizontal"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldContent>
+                      <InputGroup>
+                        <InputGroupInput
+                          {...controllerField}
+                          id={`certificate-${index}`}
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Ex: Permis B, Allemand B2..."
+                          type="text"
+                          autoComplete="off"
+                        />
+                        <InputGroupAddon align="inline-end">
+                          <InputGroupButton
+                            type="button"
+                            variant="ghost"
+                            size="icon-xs"
+                            onClick={() => remove(index)}
+                            aria-label={`Supprimer certificat ${index + 1}`}
+                          >
+                            <XIcon />
+                          </InputGroupButton>
+                        </InputGroupAddon>
+                      </InputGroup>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </FieldContent>
+                  </Field>
+                )}
               />
-            </Badge>
-          ))}
-        </div>
-      </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => append({ certificate: "" })}
+              disabled={fields.length >= 5}
+            >
+              Ajouter un certificat
+            </Button>
+          </FieldGroup>
+          {form.formState.errors.certificates?.root && (
+            <FieldError errors={[form.formState.errors.certificates.root]} />
+          )}
+        </FieldSet>
+      </form>
 
-      <div>
-        <Label htmlFor="contact">Contact *</Label>
-        <Input
-          id="contact"
-          {...register("contact", {
-            required: "Les informations de contact sont requises",
-          })}
-          placeholder="Email, téléphone ou autre moyen de contact"
-        />
-        {errors.contact && (
-          <p className="text-sm text-red-500 mt-1">{errors.contact.message}</p>
+      {/* Navigation Buttons */}
+      <Field orientation="horizontal" className="pt-4">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={prevStep}
+          disabled={currentStep === 1}
+          className="flex items-center gap-2"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          Précédent
+        </Button>
+
+        {currentStep < totalSteps ? (
+          <Button
+            type="button"
+            onClick={nextStep}
+            className="flex items-center gap-2"
+          >
+            Suivant
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            onClick={form.handleSubmit(onSubmit)}
+            disabled={form.formState.isSubmitting}
+            className="flex items-center gap-2"
+          >
+            {form.formState.isSubmitting ? "Publication..." : "Publier l'offre"}
+          </Button>
         )}
-      </div>
-
-      <Button type="submit" disabled={isLoading} className="w-full">
-        {isLoading ? "Publication..." : "Publier l'offre"}
-      </Button>
-    </form>
+      </Field>
+    </div>
   );
 }

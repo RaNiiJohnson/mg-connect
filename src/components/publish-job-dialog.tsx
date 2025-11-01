@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { JobForm } from "@app/emplois/_component/job.form";
+import { JobOfferForm } from "./job-offer-form";
 
 interface PublishJobDialogProps {
   trigger?: React.ReactNode;
@@ -41,7 +41,8 @@ export function PublishJobDialog({ trigger }: PublishJobDialogProps) {
             Partagez une opportunité d&apos;emploi avec la communauté
           </DialogDescription>
         </DialogHeader>
-        <JobForm onSuccess={handleSuccess} />
+        {/* <JobForm onSuccess={handleSuccess} /> */}
+        <JobOfferForm onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>
   );

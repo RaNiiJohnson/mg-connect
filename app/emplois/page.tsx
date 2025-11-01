@@ -89,6 +89,7 @@ async function EmploisPageContent() {
             </Badge>
           </div>
         </div>
+        {/* //https://www.youtube.com/watch?v=lW_0InDuejU */}
 
         {/* Liste des offres */}
         <div className="space-y-6">
