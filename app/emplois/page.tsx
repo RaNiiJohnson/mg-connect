@@ -17,11 +17,11 @@ import {
   Euro,
   Clock,
   Building,
-  Plus,
 } from "lucide-react";
 import { getUser } from "@/lib/auth-server";
 import { getAllJobOffers } from "@/lib/database";
 import { Suspense } from "react";
+import { PublishJobDialog } from "@/components/publish-job-dialog";
 
 async function EmploisPageContent() {
   const user = await getUser();
@@ -40,12 +40,7 @@ async function EmploisPageContent() {
                 communauté
               </p>
             </div>
-            {user && (
-              <Button className="flex items-center gap-2 w-full sm:w-auto">
-                <Plus className="h-4 w-4" />
-                <span className="sm:inline">Publier une offre</span>
-              </Button>
-            )}
+            {user && <PublishJobDialog />}
           </div>
 
           {/* Barre de recherche et filtres */}
@@ -192,7 +187,9 @@ async function EmploisPageContent() {
             <p className="text-muted-foreground mb-6">
               Soyez le premier à partager une opportunité avec la communauté
             </p>
-            {user && <Button>Publier une offre</Button>}
+            {user && (
+              <PublishJobDialog trigger={<Button>Publier une offre</Button>} />
+            )}
           </div>
         )}
 
@@ -206,7 +203,9 @@ async function EmploisPageContent() {
             ou de formation
           </p>
           {user ? (
-            <Button size="lg">Publier une offre</Button>
+            <PublishJobDialog
+              trigger={<Button size="lg">Publier une offre</Button>}
+            />
           ) : (
             <Button size="lg">S&apos;inscrire pour publier</Button>
           )}
