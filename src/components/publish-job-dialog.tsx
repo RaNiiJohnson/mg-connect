@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Activity, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -34,16 +34,17 @@ export function PublishJobDialog({ trigger }: PublishJobDialogProps) {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Publier une offre d&apos;emploi</DialogTitle>
-          <DialogDescription>
-            Partagez une opportunité d&apos;emploi avec la communauté
-          </DialogDescription>
-        </DialogHeader>
-        {/* <JobForm onSuccess={handleSuccess} /> */}
-        <JobOfferForm onSuccess={handleSuccess} />
-      </DialogContent>
+      <Activity mode={open ? "visible" : "hidden"}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Publier une offre d&apos;emploi</DialogTitle>
+            <DialogDescription>
+              Partagez une opportunité d&apos;emploi avec la communauté
+            </DialogDescription>
+          </DialogHeader>
+          <JobOfferForm onSuccess={handleSuccess} />
+        </DialogContent>
+      </Activity>
     </Dialog>
   );
 }
