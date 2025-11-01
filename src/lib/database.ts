@@ -110,6 +110,21 @@ export async function getJobOffersByUser(userId: string) {
   });
 }
 
+export async function getJobOfferById(id: string) {
+  return await prisma.jobOffer.findUnique({
+    where: { id },
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          photo: true,
+        },
+      },
+    },
+  });
+}
+
 // Real estate operations
 export async function createRealEstateListing(
   authorId: string,

@@ -18,6 +18,7 @@ import {
   Clock,
   Building,
 } from "lucide-react";
+import Link from "next/link";
 import { getUser } from "@/lib/auth-server";
 import { getAllJobOffers } from "@/lib/database";
 import { Suspense } from "react";
@@ -92,18 +93,20 @@ async function EmploisPageContent() {
         {/* //https://www.youtube.com/watch?v=lW_0InDuejU */}
 
         {/* Liste des offres */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           {jobOffers.map((job) => (
             <Card key={job.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
+              <CardContent className="p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-3">
                       <Badge variant="outline">{job.type}</Badge>
                       <Badge variant="secondary">{job.contractType}</Badge>
                     </div>
-                    <CardTitle className="text-xl mb-2">{job.title}</CardTitle>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                    <CardTitle className="text-xl mb-3 hover:text-primary transition-colors">
+                      <Link href={`/emplois/${job.id}`}>{job.title}</Link>
+                    </CardTitle>
+                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
                       <div className="flex items-center gap-1">
                         <Building className="h-4 w-4" />
                         <span>{job.company}</span>
@@ -112,13 +115,6 @@ async function EmploisPageContent() {
                         <MapPin className="h-4 w-4" />
                         <span>{job.city}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" />
-                        <span>
-                          Début:{" "}
-                          {new Date(job.startDate).toLocaleDateString("fr-FR")}
-                        </span>
-                      </div>
                       {job.duration && (
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
@@ -126,55 +122,28 @@ async function EmploisPageContent() {
                         </div>
                       )}
                     </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-2">
+                      {user?.id !== job.authorId && (
+                        <Button size="sm">Postuler</Button>
+                      )}
+                      <Link href={`/emplois/${job.id}`}>
+                        <Button variant="outline" size="sm">
+                          Voir détails
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
-                  <div className="text-right">
+
+                  <div className="text-right flex flex-col items-end gap-2">
                     {job.salary && (
                       <div className="flex items-center gap-1 text-lg font-semibold text-primary">
                         <Euro className="h-5 w-5" />
                         <span>{job.salary}</span>
                       </div>
                     )}
-                    <div className="text-sm text-muted-foreground mt-1">
-                      Publié le{" "}
-                      {new Date(job.createdAt).toLocaleDateString("fr-FR")}
-                    </div>
                   </div>
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-4">
-                <CardDescription className="text-base">
-                  {job.description}
-                </CardDescription>
-
-                {/* Certificats requis */}
-                {job.certificates.length > 0 && (
-                  <div>
-                    <h4 className="font-semibold text-sm mb-2">
-                      Certificats requis :
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {job.certificates.map((cert, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="text-xs"
-                        >
-                          {cert}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Actions */}
-                <div className="flex gap-2 pt-4 border-t">
-                  {user?.id !== job.authorId && (
-                    <Button size="sm">Postuler</Button>
-                  )}
-                  <Button variant="outline" size="sm">
-                    Détails
-                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -247,18 +216,18 @@ function EmploisPageSkeleton() {
         </div>
 
         {/* Job offers skeleton */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           {[1, 2, 3].map((i) => (
             <Card key={i}>
-              <CardHeader>
+              <CardContent className="p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-3">
                       <div className="h-5 bg-muted rounded-full w-16"></div>
                       <div className="h-5 bg-muted rounded-full w-12"></div>
                     </div>
-                    <div className="h-7 bg-muted rounded mb-2 w-64"></div>
-                    <div className="flex flex-wrap items-center gap-4">
+                    <div className="h-7 bg-muted rounded mb-3 w-64"></div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
                       {[1, 2, 3, 4].map((j) => (
                         <div
                           key={j}
@@ -266,33 +235,16 @@ function EmploisPageSkeleton() {
                         ></div>
                       ))}
                     </div>
+                    <div className="flex gap-2">
+                      <div className="h-8 bg-muted rounded w-20"></div>
+                      <div className="h-8 bg-muted rounded w-24"></div>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <div className="h-6 bg-muted rounded mb-1 w-20"></div>
+                  <div className="text-right flex flex-col items-end gap-2">
+                    <div className="h-6 bg-muted rounded w-20"></div>
                     <div className="h-4 bg-muted rounded w-24"></div>
+                    <div className="h-3 bg-muted rounded w-16"></div>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="h-4 bg-muted rounded w-full"></div>
-                  <div className="h-4 bg-muted rounded w-4/5"></div>
-                  <div className="h-4 bg-muted rounded w-3/5"></div>
-                </div>
-                <div>
-                  <div className="h-4 bg-muted rounded mb-2 w-32"></div>
-                  <div className="flex flex-wrap gap-1">
-                    {[1, 2, 3].map((k) => (
-                      <div
-                        key={k}
-                        className="h-5 bg-muted rounded-full w-16"
-                      ></div>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex gap-2 pt-4 border-t">
-                  <div className="h-8 bg-muted rounded w-20"></div>
-                  <div className="h-8 bg-muted rounded w-16"></div>
                 </div>
               </CardContent>
             </Card>
