@@ -1,0 +1,10 @@
+"use server";
+
+import { headers } from "next/headers";
+import { auth } from "./auth";
+
+export async function logout() {
+  await auth.api.signOut({
+    headers: await headers(),
+  });
+}

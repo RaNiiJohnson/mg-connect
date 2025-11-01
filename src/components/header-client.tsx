@@ -1,0 +1,179 @@
+"use client";
+
+import { Menu, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ReactNode, useState } from "react";
+import { Button } from "./ui/button";
+
+type HeaderClientProps = {
+  rightSlot: ReactNode;
+};
+
+export function HeaderClient({ rightSlot }: HeaderClientProps) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  return (
+    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur">
+      <div className="mx-auto flex sm:gap-10 gap-2 items-center p-4 relative">
+        <Link
+          href="/"
+          className="text-2xl text-primary font-bold hover:opacity-80 transition"
+        >
+          Hallo
+        </Link>
+        {/* Navigation Desktop */}
+        <nav className="hidden md:flex gap-4 relative">
+          {[
+            { href: "/", label: "Accueil" },
+            { href: "/communaute", label: "Communauté" },
+            { href: "/emplois", label: "Emplois" },
+            { href: "/immobilier", label: "Immobilier" },
+          ].map((item, index) => {
+            const isActive = pathname === item.href;
+            return (
+              <motion.div
+                key={item.href}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
+                className="relative"
+              >
+                <Link
+                  href={item.href}
+                  className={`text-accent-foreground/60 font-medium transition-colors relative z-10 ${
+                    isActive ? "text-foreground" : "hover:text-foreground"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+                {isActive && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                    layoutId="activeTab"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  />
+                )}
+              </motion.div>
+            );
+          })}
+        </nav>{" "}
+        {/* Bouton hamburger mobile */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          <AnimatePresence mode="wait">
+            {mobileMenuOpen ? (
+              <motion.div
+                key="close"
+                initial={{ opacity: 0, rotate: -90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: 90 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+              >
+                <X size={24} strokeWidth={3.5} />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="menu"
+                initial={{ opacity: 0, rotate: 90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: -90 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+              >
+                <Menu size={24} strokeWidth={3.5} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </Button>
+        <span className="flex-1" />
+        <div className="flex items-center sm:gap-4 gap-2">{rightSlot}</div>
+      </div>
+
+      {/* Menu mobile */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="absolute top-full left-0 right-0 md:hidden border-t bg-background/95 backdrop-blur-sm shadow-lg z-40"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <motion.nav
+              className="flex flex-col p-4 gap-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, delay: 0.1 }}
+            >
+              {[
+                { href: "/", label: "Accueil" },
+                { href: "/communaute", label: "Communauté" },
+                { href: "/emplois", label: "Emplois" },
+                { href: "/immobilier", label: "Immobilier" },
+              ].map((item, index) => {
+                const isActive = pathname === item.href;
+                return (
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
+                    className="relative"
+                  >
+                    <Link
+                      href={item.href}
+                      className={`text-accent-foreground/60 font-medium transition-colors p-2 rounded-md block relative z-10 ${
+                        isActive
+                          ? "text-foreground bg-accent"
+                          : "hover:text-foreground hover:bg-accent"
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                    {isActive && (
+                      <motion.div
+                        className="absolute left-0 top-0 bottom-0 w-1 rounded-r-lg"
+                        layoutId="activeMobileTab"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                  </motion.div>
+                );
+              })}
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="fixed inset-0 z-40 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}
