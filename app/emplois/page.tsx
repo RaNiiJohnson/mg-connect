@@ -139,7 +139,6 @@ async function EmploisPageContent() {
                   <div className="text-right flex flex-col items-end gap-2">
                     {job.salary && (
                       <div className="flex items-center gap-1 text-lg font-semibold text-primary">
-                        <Euro className="h-5 w-5" />
                         <span>{job.salary}</span>
                       </div>
                     )}
