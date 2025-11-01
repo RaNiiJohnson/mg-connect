@@ -169,7 +169,9 @@ async function EmploisPageContent() {
 
                 {/* Actions */}
                 <div className="flex gap-2 pt-4 border-t">
-                  <Button size="sm">Postuler</Button>
+                  {user?.id !== job.authorId && (
+                    <Button size="sm">Postuler</Button>
+                  )}
                   <Button variant="outline" size="sm">
                     Détails
                   </Button>
