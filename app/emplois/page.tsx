@@ -1,20 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
-  Briefcase,
-  Search,
-  Filter,
-  MapPin,
-  Clock,
-  Building,
-} from "lucide-react";
-import Link from "next/link";
 import { getUser } from "@/lib/auth-server";
 import { getAllJobOffers } from "@/lib/database";
 import { Suspense } from "react";
 import { PublishJobDialog } from "@/components/publish-job-dialog";
+import { EmploisClient } from "./_component/emplois-client";
+import { Card, CardContent } from "@/components/ui/card";
 
 async function EmploisPageContent() {
   const user = await getUser();
@@ -25,7 +15,7 @@ async function EmploisPageContent() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
             <div className="flex-1">
               <h1 className="text-3xl sm:text-4xl font-bold mb-4">Emplois</h1>
               <p className="text-base sm:text-lg text-muted-foreground">
@@ -36,128 +26,12 @@ async function EmploisPageContent() {
             {user && <PublishJobDialog />}
           </div>
 
-          {/* Barre de recherche et filtres */}
-          <div className="flex gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Rechercher par titre, ville, entreprise..."
-                className="pl-10"
-              />
-            </div>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 shrink-0"
-            >
-              <Filter className="h-4 w-4" />
-              <span className="hidden sm:inline">Filtres</span>
-            </Button>
-          </div>
-
-          {/* Filtres rapides */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            <Badge
-              variant="secondary"
-              className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-            >
-              Toutes
-            </Badge>
-            <Badge
-              variant="outline"
-              className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-            >
-              Au pair
-            </Badge>
-            <Badge
-              variant="outline"
-              className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-            >
-              Ausbildung
-            </Badge>
-            <Badge
-              variant="outline"
-              className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-            >
-              FSJ/FOJ
-            </Badge>
-          </div>
+          {/* Filtres et recherche avec nuqs */}
+          <EmploisClient jobs={jobOffers} user={user} />
         </div>
-        {/* //https://www.youtube.com/watch?v=lW_0InDuejU */}
-
-        {/* Liste des offres */}
-        <div className="space-y-4">
-          {jobOffers.map((job) => (
-            <Card key={job.id} className="hover:shadow-lg transition-shadow">
-              <CardContent className="px-2 sm:px-6  ">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Badge variant="outline">{job.type}</Badge>
-                      <Badge variant="secondary">{job.contractType}</Badge>
-                    </div>
-                    <CardTitle className="text-xl mb-3 hover:text-primary transition-colors">
-                      <Link href={`/emplois/${job.id}`}>{job.title}</Link>
-                    </CardTitle>
-                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
-                      <div className="flex items-center gap-1">
-                        <Building className="h-4 w-4" />
-                        <span>{job.company}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-4 w-4" />
-                        <span>{job.city}</span>
-                      </div>
-                      {job.duration && (
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          <span>{job.duration}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex gap-2">
-                      {user?.id !== job.authorId && (
-                        <Button size="sm">Postuler</Button>
-                      )}
-                      <Link href={`/emplois/${job.id}`}>
-                        <Button variant="outline" size="sm">
-                          Voir détails
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-
-                  <div className="text-right flex flex-col items-end gap-2">
-                    {job.salary && (
-                      <div className="flex items-center gap-1 text-lg font-semibold text-primary">
-                        <span>{job.salary}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {jobOffers.length === 0 && (
-          <div className="text-center py-12">
-            <Briefcase className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">
-              Aucune offre d&apos;emploi
-            </h3>
-            <p className="text-muted-foreground mb-6">
-              Soyez le premier à partager une opportunité avec la communauté
-            </p>
-            {user && (
-              <PublishJobDialog trigger={<Button>Publier une offre</Button>} />
-            )}
-          </div>
-        )}
 
         {/* Call to action */}
-        <div className="text-center mt-12 p-8  bg-linear-to-br from-accent to-accent/0 rounded-lg">
+        <div className="text-center mt-12 p-8 bg-linear-to-br from-accent to-accent/0 rounded-lg">
           <h3 className="text-2xl font-bold mb-4">
             Vous avez une opportunité à partager ?
           </h3>

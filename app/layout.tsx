@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { Toaster } from "sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const kantumruyPro = Kantumruy_Pro({
   variable: "--font-kantumruy-pro",
@@ -39,7 +40,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen">
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </main>
           <Toaster />
           <Footer />
         </ThemeProvider>
