@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "./prisma";
+import { nextCookies } from "better-auth/next-js";
 // import { sendVerificationEmail } from "./email";
 
 export const auth = betterAuth({
@@ -31,4 +32,5 @@ export const auth = betterAuth({
   //     console.log(`Email de vérification envoyé à ${user.email}`);
   //   },
   // },
+  plugins: [nextCookies()],
 });
