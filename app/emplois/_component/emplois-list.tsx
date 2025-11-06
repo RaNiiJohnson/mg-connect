@@ -5,8 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Building, Briefcase } from "lucide-react";
 import Link from "next/link";
-import { useQueryState, parseAsString } from "nuqs";
-import { filterJobs, type JobFilters } from "./filter-utils";
 import type { JobOffer } from "@/generated/prisma";
 import type { User } from "better-auth";
 import { PublishJobDialog } from "@/components/publish-job-dialog";
@@ -17,24 +15,7 @@ interface EmploisListProps {
 }
 
 export function EmploisList({ jobs, user }: EmploisListProps) {
-  const [search] = useQueryState("search", parseAsString.withDefault(""));
-  const [selectedType] = useQueryState("type", parseAsString.withDefault(""));
-  const [contractType] = useQueryState(
-    "contract",
-    parseAsString.withDefault("")
-  );
-  const [city] = useQueryState("city", parseAsString.withDefault(""));
-
-  const filters: JobFilters = {
-    search,
-    type: selectedType,
-    contractType,
-    city,
-  };
-
-  const filteredJobs = filterJobs(jobs, filters);
-
-  if (filteredJobs.length === 0 && jobs.length > 0) {
+  if (jobs.length === 0) {
     return (
       <div className="text-center py-12">
         <Briefcase className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
@@ -43,20 +24,6 @@ export function EmploisList({ jobs, user }: EmploisListProps) {
         </h3>
         <p className="text-muted-foreground mb-6">
           Essayez de modifier vos filtres pour voir plus d&apos;offres
-        </p>
-      </div>
-    );
-  }
-
-  if (jobs.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <Briefcase className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-        <h3 className="text-xl font-semibold mb-2">
-          Aucune offre d&apos;emploi
-        </h3>
-        <p className="text-muted-foreground mb-6">
-          Soyez le premier à partager une opportunité avec la communauté
         </p>
         {user && (
           <PublishJobDialog trigger={<Button>Publier une offre</Button>} />
@@ -67,7 +34,7 @@ export function EmploisList({ jobs, user }: EmploisListProps) {
 
   return (
     <div className="space-y-4">
-      {filteredJobs.map((job) => (
+      {jobs.map((job) => (
         <Card key={job.id} className="hover:shadow-lg transition-shadow">
           <CardContent className="px-2 sm:px-6">
             <div className="flex items-start justify-between gap-4">

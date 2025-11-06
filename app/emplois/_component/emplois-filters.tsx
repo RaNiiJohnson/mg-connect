@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Filter, X } from "lucide-react";
-import { useQueryState, parseAsString, parseAsArrayOf } from "nuqs";
+import { useQueryState, parseAsString, parseAsInteger } from "nuqs";
 import {
   Select,
   SelectContent,
@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
 const JOB_TYPES = [
   { value: "Au pair", label: "Au pair" },
@@ -52,22 +52,30 @@ export function EmploisFilters({
     parseAsString.withDefault("")
   );
   const [city, setCity] = useQueryState("city", parseAsString.withDefault(""));
+  const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const clearAllFilters = () => {
-    setSearch("");
-    setSelectedType("");
-    setContractType("");
-    setCity("");
+    startTransition(() => {
+      setSearch("");
+      setSelectedType("");
+      setContractType("");
+      setCity("");
+      setPage(1);
+    });
   };
 
   const selectJobType = (type: string) => {
-    // Si on clique sur le type déjà sélectionné, on le désélectionne
-    if (selectedType === type) {
-      setSelectedType("");
-    } else {
-      setSelectedType(type);
-    }
+    startTransition(() => {
+      // Si on clique sur le type déjà sélectionné, on le désélectionne
+      if (selectedType === type) {
+        setSelectedType("");
+      } else {
+        setSelectedType(type);
+      }
+      setPage(1);
+    });
   };
 
   const hasActiveFilters = search || selectedType || contractType || city;
@@ -82,16 +90,25 @@ export function EmploisFilters({
             placeholder="Rechercher par titre, ville, entreprise..."
             className="pl-10"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            disabled={isPending}
+            onChange={(e) => {
+              startTransition(() => {
+                setSearch(e.target.value);
+                setPage(1);
+              });
+            }}
           />
         </div>
         <Button
           variant="outline"
           className="flex items-center gap-2 shrink-0"
           onClick={() => setShowAdvanced(!showAdvanced)}
+          disabled={isPending}
         >
           <Filter className="h-4 w-4" />
-          <span className="hidden sm:inline">Filtres</span>
+          <span className="hidden sm:inline">
+            {isPending ? "Chargement..." : "Filtres"}
+          </span>
           {hasActiveFilters && (
             <Badge
               variant="secondary"
@@ -108,7 +125,12 @@ export function EmploisFilters({
         <Badge
           variant={!selectedType ? "default" : "outline"}
           className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-          onClick={() => setSelectedType("")}
+          onClick={() => {
+            startTransition(() => {
+              setSelectedType("");
+              setPage(1);
+            });
+          }}
         >
           Toutes ({totalJobs})
         </Badge>
@@ -149,9 +171,12 @@ export function EmploisFilters({
               </label>
               <Select
                 value={contractType || "all"}
-                onValueChange={(value) =>
-                  setContractType(value === "all" ? "" : value)
-                }
+                onValueChange={(value) => {
+                  startTransition(() => {
+                    setContractType(value === "all" ? "" : value);
+                    setPage(1);
+                  });
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Tous les contrats" />
@@ -172,7 +197,12 @@ export function EmploisFilters({
               <Input
                 placeholder="Filtrer par ville..."
                 value={city}
-                onChange={(e) => setCity(e.target.value)}
+                onChange={(e) => {
+                  startTransition(() => {
+                    setCity(e.target.value);
+                    setPage(1);
+                  });
+                }}
               />
             </div>
           </div>

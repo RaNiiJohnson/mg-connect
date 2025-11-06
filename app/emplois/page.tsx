@@ -3,11 +3,19 @@ import { getUser } from "@/lib/auth-server";
 import { getAllJobOffers } from "@/lib/database";
 import { Suspense } from "react";
 import { PublishJobDialog } from "@/components/publish-job-dialog";
-import { EmploisClient } from "./_component/emplois-client";
+import { EmploisClientOptimized } from "./_component/emplois-client-optimized";
 import { Card, CardContent } from "@/components/ui/card";
 
-async function EmploisPageContent() {
+type EmploisPageProps = Record<string, never>;
+
+// Ensure this page is always rendered dynamically so query param changes
+// (filters via URL) trigger a server re-render without a manual refresh
+export const dynamic = "force-dynamic";
+
+async function EmploisPageContent({}: EmploisPageProps) {
   const user = await getUser();
+  // Pour l'instant, on charge toutes les données pour la compatibilité
+  // Mais le filtrage sera fait via l'API route optimisée
   const jobOffers = await getAllJobOffers();
 
   return (
@@ -26,8 +34,8 @@ async function EmploisPageContent() {
             {user && <PublishJobDialog />}
           </div>
 
-          {/* Filtres et recherche avec nuqs */}
-          <EmploisClient jobs={jobOffers} user={user} />
+          {/* Filtres et recherche avec nuqs + requêtes optimisées */}
+          <EmploisClientOptimized initialJobs={jobOffers} user={user} />
         </div>
 
         {/* Call to action */}
@@ -127,10 +135,10 @@ function EmploisPageSkeleton() {
   );
 }
 
-export default function EmploisPage() {
+export default function EmploisPage(props: EmploisPageProps) {
   return (
     <Suspense fallback={<EmploisPageSkeleton />}>
-      <EmploisPageContent />
+      <EmploisPageContent {...props} />
     </Suspense>
   );
 }
