@@ -16,9 +16,91 @@ import {
   Globe,
   HandHeart,
   User,
+  Sparkles,
 } from "lucide-react";
 import { getUser } from "@/lib/auth-server";
 import { Suspense } from "react";
+import { cn } from "@/lib/utils";
+import { Marquee } from "@/components/ui/marquee";
+
+const reviews = [
+  {
+    icon: "Heart",
+    title: "Mission",
+    description:
+      "Créer un pont entre les Malagasy vivant en Allemagne et ceux restés au pays, facilitant l'intégration et le partage d'expériences.",
+  },
+  {
+    icon: "Globe",
+    title: "Vision",
+    description:
+      "Devenir la référence pour la communauté Malagasy en Allemagne, un espace d'entraide et de croissance mutuelle.",
+  },
+  {
+    icon: "HandHeart",
+    title: "Valeurs",
+    description:
+      "Solidarité, respect, partage et entraide. La force de la communauté pour surmonter ensemble les défis de l'expatriation.",
+  },
+  {
+    icon: "Users",
+    title: "Engagement",
+    description:
+      "Accompagner chaque membre dans son parcours en Allemagne, de l'arrivée à l'épanouissement professionnel et personnel.",
+  },
+  {
+    icon: "Sparkles",
+    title: "Identité",
+    description:
+      "Préserver et célébrer la culture Malagasy tout en embrassant la diversité allemande, pour un enrichissement mutuel harmonieux.",
+  },
+];
+
+const firstRow = reviews.slice(0, reviews.length / 2);
+
+const ReviewCard = ({
+  icon,
+  title,
+  description,
+}: {
+  icon: string;
+  title: string;
+  description: string;
+}) => {
+  const iconMap = {
+    Heart,
+    Globe,
+    HandHeart,
+    Users,
+    Sparkles,
+  };
+
+  const IconComponent = iconMap[icon as keyof typeof iconMap];
+
+  return (
+    <figure
+      className={cn(
+        "relative h-full w-64 sm:w-80 cursor-pointer overflow-hidden rounded-xl border p-4",
+        // light styles
+        "border-gray-950/10 bg-gray-950/1 hover:bg-gray-950/5",
+        // dark styles
+        "dark:border-gray-50/10 dark:bg-gray-50/10 dark:hover:bg-gray-50/15"
+      )}
+    >
+      <div className="flex flex-row items-center gap-3">
+        {IconComponent && <IconComponent className="h-6 w-6 text-primary" />}
+        <div className="flex flex-col">
+          <figcaption className="text-sm font-medium dark:text-white">
+            {title}
+          </figcaption>
+        </div>
+      </div>
+      <blockquote className="mt-3 text-sm leading-relaxed">
+        {description}
+      </blockquote>
+    </figure>
+  );
+};
 
 async function HomePageContent() {
   const user = await getUser();
@@ -26,7 +108,7 @@ async function HomePageContent() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[91vh] w-full flex items-center justify-center">
+      <section className="relative h-[91vh] w-full flex flex-col items-center justify-start sm:pt-36 pt-24">
         <div className="text-center p-4 max-w-4xl mx-auto">
           <h1 className="text-6xl md:text-7xl font-bold mb-6 text-primary">
             Hallo Hallo
@@ -67,56 +149,14 @@ async function HomePageContent() {
             </Button>
           )}
         </div>
-      </section>
-
-      {/* À propos Section */}
-      <section className="py-16 px-4 bg-linear-to-br from-accent to-accent/0">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">
-            À propos de nous
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card>
-              <CardHeader>
-                <Heart className="h-12 w-12 text-primary mb-4" />
-                <CardTitle>Notre Mission</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base">
-                  Créer un pont entre les Malagasy vivant en Allemagne et ceux
-                  restés au pays, facilitant l&apos;intégration et le partage
-                  d&apos;expériences.
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <Globe className="h-12 w-12 text-primary mb-4" />
-                <CardTitle>Notre Vision</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base">
-                  Devenir la référence pour la communauté Malagasy en Allemagne,
-                  un espace d&apos;entraide et de croissance mutuelle.
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <HandHeart className="h-12 w-12 text-primary mb-4" />
-                <CardTitle>Nos Valeurs</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base">
-                  Solidarité, respect, partage et entraide. Nous croyons en la
-                  force de la communauté pour surmonter les défis de
-                  l&apos;expatriation.
-                </CardDescription>
-              </CardContent>
-            </Card>
-          </div>
+        <div className="absolute sm:bottom-16 bottom-6 left-0 right-0 f flex w-full flex-col items-center justify-center overflow-hidden">
+          <Marquee pauseOnHover className="[--duration:20s]">
+            {firstRow.map((review) => (
+              <ReviewCard key={review.icon} {...review} />
+            ))}
+          </Marquee>
+          <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-linear-to-r"></div>
+          <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-linear-to-l"></div>
         </div>
       </section>
 
@@ -191,30 +231,6 @@ function HomePageSkeleton() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <div className="h-14 bg-muted rounded-lg w-48"></div>
             <div className="h-14 bg-muted rounded-lg w-48"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* À propos Section Skeleton */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="max-w-6xl mx-auto">
-          <div className="h-12 bg-muted rounded-lg mb-12 w-80 mx-auto"></div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <Card key={i}>
-                <CardHeader>
-                  <div className="h-12 w-12 bg-muted rounded mb-4"></div>
-                  <div className="h-6 bg-muted rounded w-3/4"></div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="h-4 bg-muted rounded w-full"></div>
-                    <div className="h-4 bg-muted rounded w-5/6"></div>
-                    <div className="h-4 bg-muted rounded w-4/5"></div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>
