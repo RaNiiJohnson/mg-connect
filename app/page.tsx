@@ -22,6 +22,7 @@ import { getUser } from "@/lib/auth-server";
 import { Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { Marquee } from "@/components/ui/marquee";
+import { ShineBorder } from "@/components/ui/shine-border";
 
 const reviews = [
   {
@@ -87,6 +88,7 @@ const ReviewCard = ({
         "dark:border-gray-50/10 dark:bg-gray-50/10 dark:hover:bg-gray-50/15"
       )}
     >
+      <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} />
       <div className="flex flex-row items-center gap-3">
         {IconComponent && <IconComponent className="h-6 w-6 text-primary" />}
         <div className="flex flex-col">
@@ -195,7 +197,7 @@ async function HomePageContent() {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow flex flex-col">
+            <Card className="hover:shadow-lg relative transition-shadow flex flex-col">
               <CardHeader>
                 <Home className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Immobilier</CardTitle>
