@@ -23,6 +23,7 @@ import { Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { Marquee } from "@/components/ui/marquee";
 import { ShineBorder } from "@/components/ui/shine-border";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 const reviews = [
   {
@@ -167,7 +168,7 @@ async function HomePageContent() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">Nos Services</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="hover:shadow-lg transition-shadow flex flex-col">
+            <Card className="hover:shadow-lg relative transition-shadow flex flex-col">
               <CardHeader>
                 <Users className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Communauté</CardTitle>
@@ -180,9 +181,11 @@ async function HomePageContent() {
                   <Link href="/communaute">Découvrir</Link>
                 </Button>
               </CardContent>
+
+              <BorderBeam duration={8} size={100} />
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow flex flex-col">
+            <Card className="hover:shadow-lg transition-shadow flex flex-col relative">
               <CardHeader>
                 <Briefcase className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Emplois</CardTitle>
@@ -195,6 +198,8 @@ async function HomePageContent() {
                   <Link href="/emplois">Explorer</Link>
                 </Button>
               </CardContent>
+
+              <BorderBeam duration={8} size={100} />
             </Card>
 
             <Card className="hover:shadow-lg relative transition-shadow flex flex-col">
@@ -210,6 +215,8 @@ async function HomePageContent() {
                   <Link href="/immobilier">Voir les annonces</Link>
                 </Button>
               </CardContent>
+
+              <BorderBeam duration={8} size={200} />
             </Card>
           </div>
         </div>
