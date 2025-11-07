@@ -4,11 +4,11 @@ import { useMemo, useEffect } from "react";
 import { useQueryState, parseAsInteger } from "nuqs";
 import { EmploisList } from "./emplois-list";
 import { EmploisPagination } from "./emplois-pagination";
-import type { JobOffer } from "@/generated/prisma";
+import type { JobOfferListItem } from "@/lib/database";
 import type { User } from "better-auth";
 
 interface EmploisClientPaginationProps {
-  jobs: JobOffer[];
+  jobs: JobOfferListItem[];
   user: User | null;
 }
 

@@ -4,12 +4,15 @@ import { getJobOffersOptimized } from "@/lib/database";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
-  const search = searchParams.get("search") || "";
-  const type = searchParams.get("type") || "";
-  const contractType = searchParams.get("contract") || "";
-  const city = searchParams.get("city") || "";
-  const page = parseInt(searchParams.get("page") || "1", 10);
-  const limit = parseInt(searchParams.get("limit") || "10", 10);
+  const search = searchParams.get("search") || undefined;
+  const type = searchParams.get("type") || undefined;
+  const contractType = searchParams.get("contract") || undefined;
+  const city = searchParams.get("city") || undefined;
+
+  const parsedPage = parseInt(searchParams.get("page") ?? "", 10);
+  const parsedLimit = parseInt(searchParams.get("limit") ?? "", 10);
+  const page = Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : undefined;
+  const limit = Number.isFinite(parsedLimit) && parsedLimit > 0 ? parsedLimit : undefined;
 
   try {
     const result = await getJobOffersOptimized({

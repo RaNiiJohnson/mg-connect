@@ -2,13 +2,13 @@
 
 import { EmploisFilters } from "./emplois-filters";
 import { EmploisClientPagination } from "./emplois-client-pagination";
-import type { JobOffer } from "@/generated/prisma";
+import type { JobOfferListItem } from "@/lib/database";
 import type { User } from "better-auth";
 import { useMemo } from "react";
 import { useQueryState, parseAsString } from "nuqs";
 
 interface EmploisClientProps {
-  jobs: JobOffer[];
+  jobs: JobOfferListItem[];
   user: User | null;
 }
 
@@ -37,12 +37,7 @@ export function EmploisClient({ jobs, user }: EmploisClientProps) {
 
       if (!normalizedSearch) return true;
 
-      const haystack = [
-        job.title,
-        job.company,
-        job.city,
-        job.description,
-      ]
+      const haystack = [job.title, job.company, job.city, job.description]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
@@ -53,7 +48,10 @@ export function EmploisClient({ jobs, user }: EmploisClientProps) {
 
   return (
     <>
-      <EmploisFilters totalJobs={jobs.length} filteredJobs={filteredJobs.length} />
+      <EmploisFilters
+        totalJobs={jobs.length}
+        filteredJobs={filteredJobs.length}
+      />
       <EmploisClientPagination jobs={filteredJobs} user={user} />
     </>
   );

@@ -65,6 +65,61 @@ export async function getAllCommunityMembers() {
 }
 
 // Job offer operations
+type JobOfferQueryParams = {
+  search?: string;
+  type?: string;
+  contractType?: string;
+  city?: string;
+};
+
+const jobOfferListSelect = {
+  id: true,
+  title: true,
+  type: true,
+  contractType: true,
+  city: true,
+  duration: true,
+  company: true,
+  salary: true,
+  description: true,
+  authorId: true,
+  createdAt: true,
+  author: {
+    select: {
+      id: true,
+      name: true,
+      photo: true,
+    },
+  },
+} satisfies Prisma.JobOfferSelect;
+
+export type JobOfferListItem = Prisma.JobOfferGetPayload<{
+  select: typeof jobOfferListSelect;
+}>;
+
+function buildJobOfferWhere(
+  filters: JobOfferQueryParams
+): Prisma.JobOfferWhereInput {
+  const search = filters.search?.trim();
+  const city = filters.city?.trim();
+
+  return {
+    ...(search
+      ? {
+          OR: [
+            { title: { contains: search, mode: "insensitive" } },
+            { company: { contains: search, mode: "insensitive" } },
+            { city: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+          ],
+        }
+      : {}),
+    ...(filters.type ? { type: filters.type } : {}),
+    ...(filters.contractType ? { contractType: filters.contractType } : {}),
+    ...(city ? { city: { contains: city, mode: "insensitive" } } : {}),
+  } satisfies Prisma.JobOfferWhereInput;
+}
+
 export async function createJobOffer(
   authorId: string,
   data: {
@@ -119,64 +174,14 @@ export async function getJobOffersWithPagination({
   contractType?: string;
   city?: string;
 }) {
-  const skip = (page - 1) * limit;
-
-  // Build where clause for filtering
-  const where: Prisma.JobOfferWhereInput = {};
-
-  if (search) {
-    where.OR = [
-      { title: { contains: search, mode: "insensitive" } },
-      { company: { contains: search, mode: "insensitive" } },
-      { city: { contains: search, mode: "insensitive" } },
-      { description: { contains: search, mode: "insensitive" } },
-    ];
-  }
-
-  if (type) {
-    where.type = type;
-  }
-
-  if (contractType) {
-    where.contractType = contractType;
-  }
-
-  if (city) {
-    where.city = { contains: city, mode: "insensitive" };
-  }
-
-  // Get total count for pagination
-  const totalCount = await prisma.jobOffer.count({ where });
-
-  // Get paginated results
-  const jobOffers = await prisma.jobOffer.findMany({
-    where,
-    include: {
-      author: {
-        select: {
-          id: true,
-          name: true,
-          photo: true,
-        },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-    skip,
-    take: limit,
+  return getJobOffersOptimized({
+    page,
+    limit,
+    search,
+    type,
+    contractType,
+    city,
   });
-
-  const totalPages = Math.ceil(totalCount / limit);
-
-  return {
-    jobOffers,
-    pagination: {
-      currentPage: page,
-      totalPages,
-      totalCount,
-      hasNextPage: page < totalPages,
-      hasPreviousPage: page > 1,
-    },
-  };
 }
 
 export async function getJobOffersByUser(userId: string) {
@@ -269,63 +274,40 @@ export async function getJobOffersOptimized({
   page?: number;
   limit?: number;
 }) {
-  const skip = (page - 1) * limit;
+  const sanitizedLimit = Math.min(Math.max(limit, 1), 100);
+  const normalizedPage = Math.max(page, 1);
 
-  // Build where clause for filtering
-  const where: Prisma.JobOfferWhereInput = {};
+  const where = buildJobOfferWhere({ search, type, contractType, city });
 
-  if (search) {
-    where.OR = [
-      { title: { contains: search, mode: "insensitive" } },
-      { company: { contains: search, mode: "insensitive" } },
-      { city: { contains: search, mode: "insensitive" } },
-      { description: { contains: search, mode: "insensitive" } },
-    ];
-  }
+  const overallCountPromise = prisma.jobOffer.count();
+  const filteredCount = await prisma.jobOffer.count({ where });
 
-  if (type) {
-    where.type = type;
-  }
+  const totalPages = Math.ceil(filteredCount / sanitizedLimit) || 0;
+  const safePage = totalPages > 0 ? Math.min(normalizedPage, totalPages) : 1;
+  const skip = (safePage - 1) * sanitizedLimit;
 
-  if (contractType) {
-    where.contractType = contractType;
-  }
-
-  if (city) {
-    where.city = { contains: city, mode: "insensitive" };
-  }
-
-  // Execute both queries in parallel for better performance
-  const [jobOffers, totalCount] = await Promise.all([
+  const [jobOffers, overallCount] = await Promise.all([
     prisma.jobOffer.findMany({
       where,
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            photo: true,
-          },
-        },
-      },
+      select: jobOfferListSelect,
       orderBy: { createdAt: "desc" },
       skip,
-      take: limit,
+      take: sanitizedLimit,
     }),
-    prisma.jobOffer.count({ where }),
+    overallCountPromise,
   ]);
-
-  const totalPages = Math.ceil(totalCount / limit);
 
   return {
     jobOffers,
     pagination: {
-      currentPage: page,
+      currentPage: safePage,
       totalPages,
-      totalCount,
-      hasNextPage: page < totalPages,
-      hasPreviousPage: page > 1,
+      totalCount: filteredCount,
+      pageSize: sanitizedLimit,
+      hasNextPage: safePage < totalPages,
+      hasPreviousPage: safePage > 1 && totalPages > 0,
     },
+    overallCount,
   };
 }
 export async function getJobOffersStats() {

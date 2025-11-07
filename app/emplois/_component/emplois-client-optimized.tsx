@@ -5,19 +5,15 @@ import { EmploisList } from "./emplois-list";
 import { EmploisPagination } from "./emplois-pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
-import type { JobOffer } from "@/generated/prisma";
+import type { JobOfferListItem } from "@/lib/database";
 import type { User } from "better-auth";
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useQueryState, parseAsString, parseAsInteger } from "nuqs";
 
 interface EmploisClientOptimizedProps {
-  initialJobs: (JobOffer & {
-    author: {
-      id: string;
-      name: string | null;
-      photo: string | null;
-    };
-  })[];
+  initialJobs: JobOfferListItem[];
+  initialPagination: PaginationData;
+  initialOverallCount: number;
   user: User | null;
 }
 
@@ -27,23 +23,23 @@ interface PaginationData {
   totalCount: number;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
+  pageSize?: number;
 }
 
 export function EmploisClientOptimized({
   initialJobs,
+  initialPagination,
+  initialOverallCount,
   user,
 }: EmploisClientOptimizedProps) {
-  // État pour les données optimisées
   const [jobs, setJobs] = useState(initialJobs);
   const [pagination, setPagination] = useState<PaginationData>({
-    currentPage: 1,
-    totalPages: Math.ceil(initialJobs.length / 10),
-    totalCount: initialJobs.length,
-    hasNextPage: initialJobs.length > 10,
-    hasPreviousPage: false,
+    ...initialPagination,
+    pageSize: initialPagination.pageSize ?? 10,
   });
+  const [overallCount, setOverallCount] = useState(initialOverallCount);
   const [isLoading, setIsLoading] = useState(false);
-  const [useOptimizedAPI, setUseOptimizedAPI] = useState(false);
+  const isFirstRender = useRef(true);
 
   // Filtres avec nuqs
   const [search] = useQueryState("search", parseAsString.withDefault(""));
@@ -53,143 +49,90 @@ export function EmploisClientOptimized({
     parseAsString.withDefault("")
   );
   const [city] = useQueryState("city", parseAsString.withDefault(""));
-  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [limit, setLimit] = useQueryState(
+    "limit",
+    parseAsInteger.withDefault(initialPagination.pageSize ?? 10)
+  );
 
   // Fonction pour charger les données optimisées via API
   const loadOptimizedData = useCallback(async () => {
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (selectedType) params.set("type", selectedType);
+    if (contractType) params.set("contract", contractType);
+    if (city) params.set("city", city);
+    params.set("page", Math.max(page, 1).toString());
+    params.set("limit", Math.max(limit, 1).toString());
+
     setIsLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (search) params.set("search", search);
-      if (selectedType) params.set("type", selectedType);
-      if (contractType) params.set("contract", contractType);
-      if (city) params.set("city", city);
-      params.set("page", page.toString());
-      params.set("limit", "10");
-
-      const response = await fetch(`/api/emplois?${params.toString()}`);
+      const response = await fetch(`/api/emplois?${params.toString()}`, {
+        cache: "no-store",
+      });
       if (response.ok) {
         const data = await response.json();
+        if (
+          typeof data.pagination?.currentPage === "number" &&
+          data.pagination.currentPage !== page
+        ) {
+          setPage(data.pagination.currentPage);
+        }
         setJobs(data.jobOffers);
-        setPagination(data.pagination);
-        setUseOptimizedAPI(true);
+        setPagination({
+          ...data.pagination,
+          pageSize: data.pagination?.pageSize ?? Math.max(limit, 1),
+        });
+        if (typeof data.overallCount === "number") {
+          setOverallCount(data.overallCount);
+        }
       }
     } catch (error) {
       console.error("Erreur lors du chargement des données:", error);
-      // Fallback vers le filtrage client
-      setUseOptimizedAPI(false);
     } finally {
       setIsLoading(false);
     }
-  }, [search, selectedType, contractType, city, page]);
+  }, [search, selectedType, contractType, city, page, limit]);
 
-  // Filtrage côté client (fallback)
-  const filteredJobsClient = useMemo(() => {
-    if (useOptimizedAPI) return jobs; // Utiliser les données de l'API
-
-    const normalizedSearch = search.trim().toLowerCase();
-    const normalizedCity = city.trim().toLowerCase();
-
-    return initialJobs.filter((job) => {
-      if (selectedType && job.type !== selectedType) return false;
-      if (contractType && job.contractType !== contractType) return false;
-      if (
-        normalizedCity &&
-        !(job.city ?? "").toLowerCase().includes(normalizedCity)
-      )
-        return false;
-
-      if (!normalizedSearch) return true;
-
-      const haystack = [job.title, job.company, job.city, job.description]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-      return haystack.includes(normalizedSearch);
-    });
-  }, [
-    initialJobs,
-    search,
-    selectedType,
-    contractType,
-    city,
-    useOptimizedAPI,
-    jobs,
-  ]);
-
-  // Pagination côté client
-  const paginatedJobsClient = useMemo(() => {
-    if (useOptimizedAPI) return jobs; // Utiliser les données de l'API
-
-    const startIndex = (page - 1) * 10;
-    const endIndex = startIndex + 10;
-    return filteredJobsClient.slice(startIndex, endIndex);
-  }, [filteredJobsClient, page, useOptimizedAPI, jobs]);
-
-  // Charger les données optimisées quand les filtres changent
   useEffect(() => {
-    // Utiliser l'API optimisée seulement si on a des filtres actifs
-    const hasFilters =
-      search || selectedType || contractType || city || page > 1;
-
-    if (hasFilters) {
-      loadOptimizedData();
-    } else {
-      // Pas de filtres, utiliser les données initiales
-      setUseOptimizedAPI(false);
-      setJobs(initialJobs.slice(0, 10));
-      setPagination({
-        currentPage: 1,
-        totalPages: Math.ceil(initialJobs.length / 10),
-        totalCount: initialJobs.length,
-        hasNextPage: initialJobs.length > 10,
-        hasPreviousPage: false,
-      });
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  }, [
-    search,
-    selectedType,
-    contractType,
-    city,
-    page,
-    loadOptimizedData,
-    initialJobs,
-  ]);
 
-  // Données finales à afficher
-  const finalJobs = useOptimizedAPI ? jobs : paginatedJobsClient;
-  const finalPagination = useOptimizedAPI
-    ? pagination
-    : {
-        currentPage: page,
-        totalPages: Math.ceil(filteredJobsClient.length / 10),
-        totalCount: filteredJobsClient.length,
-        hasNextPage: page < Math.ceil(filteredJobsClient.length / 10),
-        hasPreviousPage: page > 1,
-      };
+    void loadOptimizedData();
+  }, [loadOptimizedData]);
+
+  const handleItemsPerPageChange = useCallback(
+    (newLimit: number) => {
+      setLimit(newLimit);
+      setPage(1);
+    },
+    [setLimit, setPage]
+  );
 
   return (
     <div className="space-y-6">
       {/* Filtres */}
       <EmploisFilters
-        totalJobs={useOptimizedAPI ? pagination.totalCount : initialJobs.length}
-        filteredJobs={useOptimizedAPI ? jobs.length : filteredJobsClient.length}
+        totalJobs={overallCount}
+        filteredJobs={pagination.totalCount}
       />
 
       {/* Loading state avec skeleton */}
       {isLoading && <EmploisListSkeleton />}
 
       {/* Liste des emplois */}
-      {!isLoading && <EmploisList jobs={finalJobs} user={user} />}
+      {!isLoading && <EmploisList jobs={jobs} user={user} />}
 
       {/* Pagination */}
-      {!isLoading && finalPagination.totalPages > 1 && (
+      {!isLoading && pagination.totalPages > 1 && (
         <EmploisPagination
-          currentPage={finalPagination.currentPage}
-          totalPages={finalPagination.totalPages}
-          totalCount={finalPagination.totalCount}
-          itemsPerPage={10}
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          totalCount={pagination.totalCount}
+          itemsPerPage={pagination.pageSize ?? limit}
+          onItemsPerPageChange={handleItemsPerPageChange}
         />
       )}
     </div>

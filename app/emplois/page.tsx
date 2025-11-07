@@ -1,22 +1,71 @@
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/auth-server";
-import { getAllJobOffers } from "@/lib/database";
+import { getJobOffersOptimized } from "@/lib/database";
 import { Suspense } from "react";
 import { PublishJobDialog } from "@/components/publish-job-dialog";
 import { EmploisClientOptimized } from "./_component/emplois-client-optimized";
 import { Card, CardContent } from "@/components/ui/card";
 
-type EmploisPageProps = Record<string, never>;
+type EmploisSearchParams = {
+  search?: string;
+  type?: string;
+  contract?: string;
+  city?: string;
+  page?: string;
+  limit?: string;
+};
+
+type EmploisPageProps = {
+  searchParams?: EmploisSearchParams | Promise<EmploisSearchParams>;
+};
 
 // Ensure this page is always rendered dynamically so query param changes
 // (filters via URL) trigger a server re-render without a manual refresh
 export const dynamic = "force-dynamic";
 
-async function EmploisPageContent({}: EmploisPageProps) {
+async function EmploisPageContent({ searchParams }: EmploisPageProps) {
   const user = await getUser();
-  // Pour l'instant, on charge toutes les données pour la compatibilité
-  // Mais le filtrage sera fait via l'API route optimisée
-  const jobOffers = await getAllJobOffers();
+
+  const resolvedSearchParams =
+    typeof searchParams === "object" &&
+    searchParams !== null &&
+    "then" in searchParams
+      ? await searchParams
+      : ((searchParams as EmploisSearchParams | undefined) ?? {});
+
+  const parsePositiveInt = (value?: string) => {
+    if (!value) return undefined;
+    const parsed = Number.parseInt(value, 10);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
+  };
+
+  const search =
+    typeof resolvedSearchParams.search === "string"
+      ? resolvedSearchParams.search
+      : undefined;
+  const type =
+    typeof resolvedSearchParams.type === "string"
+      ? resolvedSearchParams.type
+      : undefined;
+  const contractType =
+    typeof resolvedSearchParams.contract === "string"
+      ? resolvedSearchParams.contract
+      : undefined;
+  const city =
+    typeof resolvedSearchParams.city === "string"
+      ? resolvedSearchParams.city
+      : undefined;
+  const page = parsePositiveInt(resolvedSearchParams.page);
+  const limit = parsePositiveInt(resolvedSearchParams.limit);
+
+  const { jobOffers, pagination, overallCount } = await getJobOffersOptimized({
+    search,
+    type,
+    contractType,
+    city,
+    page,
+    limit,
+  });
 
   return (
     <div className="min-h-screen p-4">
@@ -35,7 +84,12 @@ async function EmploisPageContent({}: EmploisPageProps) {
           </div>
 
           {/* Filtres et recherche avec nuqs + requêtes optimisées */}
-          <EmploisClientOptimized initialJobs={jobOffers} user={user} />
+          <EmploisClientOptimized
+            initialJobs={jobOffers}
+            initialPagination={pagination}
+            initialOverallCount={overallCount}
+            user={user}
+          />
         </div>
 
         {/* Call to action */}

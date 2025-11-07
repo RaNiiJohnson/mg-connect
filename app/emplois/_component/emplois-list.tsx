@@ -5,12 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Building, Briefcase } from "lucide-react";
 import Link from "next/link";
-import type { JobOffer } from "@/generated/prisma";
+import type { JobOfferListItem } from "@/lib/database";
 import type { User } from "better-auth";
 import { PublishJobDialog } from "@/components/publish-job-dialog";
 
 interface EmploisListProps {
-  jobs: JobOffer[];
+  jobs: JobOfferListItem[];
   user: User | null;
 }
 

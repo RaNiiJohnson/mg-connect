@@ -1,4 +1,4 @@
-import type { JobOffer } from "@/generated/prisma";
+import type { JobOfferListItem } from "@/lib/database";
 
 export interface JobFilters {
   search: string;
@@ -7,7 +7,10 @@ export interface JobFilters {
   city: string;
 }
 
-export function filterJobs(jobs: JobOffer[], filters: JobFilters): JobOffer[] {
+export function filterJobs(
+  jobs: JobOfferListItem[],
+  filters: JobFilters
+): JobOfferListItem[] {
   return jobs.filter((job) => {
     // Recherche textuelle
     if (filters.search) {
@@ -41,7 +44,7 @@ export function filterJobs(jobs: JobOffer[], filters: JobFilters): JobOffer[] {
   });
 }
 
-export function getJobStats(jobs: JobOffer[]) {
+export function getJobStats(jobs: JobOfferListItem[]) {
   const typeStats = jobs.reduce(
     (acc, job) => {
       acc[job.type] = (acc[job.type] || 0) + 1;
