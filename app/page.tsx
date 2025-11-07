@@ -153,7 +153,7 @@ async function HomePageContent() {
           )}
         </div>
         <div className="absolute sm:bottom-16 bottom-6 left-0 right-0 f flex w-full flex-col items-center justify-center overflow-hidden">
-          <Marquee pauseOnHover className="[--duration:20s]">
+          <Marquee pauseOnHover className="[--duration:40s]">
             {firstRow.map((review) => (
               <ReviewCard key={review.icon} {...review} />
             ))}
