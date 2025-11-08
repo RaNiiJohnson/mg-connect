@@ -115,10 +115,12 @@ async function HomePageContent() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen w-full flex flex-col items-center justify-center">
+      <section className="relative h-screen w-full flex flex-col items-center justify-center md:pb-16 pb-28">
         <div className="text-center p-4 max-w-4xl mx-auto">
-          <h1 className="text-6xl md:text-7xl font-bold mb-6">Hallo Hallo</h1>
-          <p className="text-xl md:text-2xl mb-8 text-muted-foreground leading-relaxed">
+          <h1 className="text-5xl md:text-7xl font-bold sm:mb-6 mb-3">
+            Hallo Hallo
+          </h1>
+          <p className="md:text-2xl mb-8 text-muted-foreground leading-relaxed">
             Nous sommes une communauté dédiée aux réseautages entre natif et
             diaspora{" "}
             <Highlighter action="underline" color="#FF9800">
