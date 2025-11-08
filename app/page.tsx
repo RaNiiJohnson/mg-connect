@@ -15,8 +15,8 @@ import {
   Heart,
   Globe,
   HandHeart,
-  User,
   Sparkles,
+  ArrowRightIcon,
 } from "lucide-react";
 import { getUser } from "@/lib/auth-server";
 import { Suspense } from "react";
@@ -24,6 +24,12 @@ import { cn } from "@/lib/utils";
 import { Marquee } from "@/components/ui/marquee";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { BorderBeam } from "@/components/ui/border-beam";
+import { LightRays } from "@/components/ui/light-rays";
+import { Highlighter } from "@/components/ui/highlighter";
+import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
+import { AuroraText } from "@/components/ui/aurora-text";
+import { LineShadowText } from "@/components/ui/line-shadow-text";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
 const reviews = [
   {
@@ -111,45 +117,49 @@ async function HomePageContent() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[91vh] w-full flex flex-col items-center justify-start sm:pt-36 pt-24">
+      <section className="relative h-screen w-full flex flex-col items-center justify-center">
         <div className="text-center p-4 max-w-4xl mx-auto">
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 text-primary">
-            Hallo Hallo
-          </h1>
+          <h1 className="text-6xl md:text-7xl font-bold mb-6">Hallo Hallo</h1>
           <p className="text-xl md:text-2xl mb-8 text-muted-foreground leading-relaxed">
             Nous sommes une communauté dédiée aux réseautages entre natif et
-            diaspora Malagasy en Allemagne. Une plateforme d&apos;échange et de
-            partage pour favoriser l&apos;entraide entre les jeunes expats de
-            Madagascar.
+            diaspora{" "}
+            <Highlighter action="underline" color="#FF9800">
+              Malagasy en Allemagne
+            </Highlighter>{" "}
+            . Une plateforme d&apos;échange et de partage pour favoriser
+            l&apos;entraide entre les jeunes expats de Madagascar.
           </p>
 
-          {/* Plus besoin de isPending - la session est déjà résolue ! */}
           {user ? (
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild size="lg" className="text-lg px-8 py-6">
-                  <Link href="/communaute">
-                    <Users className="mr-2 h-5 w-5" />
-                    Voir la communauté
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="text-lg px-8 py-6"
+                <Link
+                  href="/communaute"
+                  className="z-10 flex items-center justify-center"
                 >
-                  <Link href="/profile">
-                    <User className="mr-2 h-5 w-5" />
-                    Mon profil
-                  </Link>
-                </Button>
+                  <div
+                    className={cn(
+                      "group rounded-full border border-border bg-card/90 text-base text-card-foreground transition-all ease-in hover:cursor-pointer hover:bg-accent/80 backdrop-blur-sm shadow-sm hover:shadow-xl"
+                    )}
+                  >
+                    <AnimatedShinyText className="inline-flex items-center justify-center px-6 py-3 transition ease-out hover:text-accent-foreground hover:duration-300">
+                      <Users className="mr-2 h-4 w-4" />
+                      <span>Voir la communauté</span>
+                      <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+                    </AnimatedShinyText>
+                  </div>
+                </Link>
               </div>
             </div>
           ) : (
-            <Button asChild size="lg" className="text-lg px-8 py-6">
-              <Link href="/auth/signup">S&apos;inscrire</Link>
-            </Button>
+            <Link
+              href="/auth/signin"
+              className="z-10 flex items-center justify-center"
+            >
+              <InteractiveHoverButton className="bg-card/90 shadow-sm hover:shadow-xl">
+                Se connecter
+              </InteractiveHoverButton>
+            </Link>
           )}
         </div>
         <div className="absolute sm:bottom-16 bottom-6 left-0 right-0 f flex w-full flex-col items-center justify-center overflow-hidden">
@@ -161,6 +171,7 @@ async function HomePageContent() {
           <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-linear-to-r"></div>
           <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-linear-to-l"></div>
         </div>
+        <LightRays />
       </section>
 
       {/* Services Section */}
