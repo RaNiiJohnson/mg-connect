@@ -86,7 +86,7 @@ const ReviewCard = ({
   return (
     <figure
       className={cn(
-        "relative h-full w-64 sm:w-80 cursor-pointer overflow-hidden rounded-xl border p-4",
+        "relative h-full w-70 cursor-pointer overflow-hidden rounded-xl border p-4",
         // light styles
         "border-gray-950/10 bg-gray-950/1 hover:bg-gray-950/5",
         // dark styles
@@ -182,12 +182,14 @@ async function HomePageContent() {
           <h2 className="text-4xl font-bold text-center mb-12">Nos Services</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="hover:shadow-lg relative transition-shadow flex flex-col">
-              <CardHeader>
+              <CardHeader className="flex flex-row items-center gap-3">
                 <Users className="h-12 w-12 text-primary mb-4" />
-                <CardTitle>Communauté</CardTitle>
-                <CardDescription>
-                  Connectez-vous avec d&apos;autres Malagasy en Allemagne
-                </CardDescription>
+                <div>
+                  <CardTitle> Communauté</CardTitle>
+                  <CardDescription>
+                    Connectez-vous avec d&apos;autres Malagasy en Allemagne
+                  </CardDescription>
+                </div>
               </CardHeader>
               <CardContent className="flex-1 flex items-end">
                 <Button asChild variant="outline" className="w-full">
@@ -198,13 +200,15 @@ async function HomePageContent() {
               <BorderBeam duration={8} size={100} />
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow flex flex-col relative">
-              <CardHeader>
+            <Card className="hover:shadow-lg relative transition-shadow flex flex-col">
+              <CardHeader className="flex flex-row items-center gap-3">
                 <Briefcase className="h-12 w-12 text-primary mb-4" />
-                <CardTitle>Emplois</CardTitle>
-                <CardDescription>
-                  Trouvez des opportunités d&apos;emploi et de formation
-                </CardDescription>
+                <div>
+                  <CardTitle>Emplois</CardTitle>
+                  <CardDescription>
+                    Trouvez des opportunités d&apos;emploi et de formation
+                  </CardDescription>
+                </div>
               </CardHeader>
               <CardContent className="flex-1 flex items-end">
                 <Button asChild variant="outline" className="w-full">
@@ -216,12 +220,14 @@ async function HomePageContent() {
             </Card>
 
             <Card className="hover:shadow-lg relative transition-shadow flex flex-col">
-              <CardHeader>
+              <CardHeader className="flex flex-row items-center gap-3">
                 <Home className="h-12 w-12 text-primary mb-4" />
-                <CardTitle>Immobilier</CardTitle>
-                <CardDescription>
-                  Partagez et trouvez des logements
-                </CardDescription>
+                <div>
+                  <CardTitle>Immobilier</CardTitle>
+                  <CardDescription>
+                    Partagez et trouvez des logements
+                  </CardDescription>
+                </div>
               </CardHeader>
               <CardContent className="flex-1 flex items-end">
                 <Button asChild variant="outline" className="w-full">
