@@ -92,7 +92,7 @@ export function EmploisClientOptimized({
     } finally {
       setIsLoading(false);
     }
-  }, [search, selectedType, contractType, city, page, limit]);
+  }, [search, selectedType, contractType, city, page, limit, setPage]);
 
   useEffect(() => {
     if (isFirstRender.current) {

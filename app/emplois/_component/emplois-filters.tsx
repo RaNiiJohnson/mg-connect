@@ -14,6 +14,13 @@ import {
 } from "@/components/ui/select";
 import { useState, useTransition } from "react";
 
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+
 const JOB_TYPES = [
   { value: "Au pair", label: "Au pair" },
   { value: "Formation", label: "Formation" },
@@ -88,9 +95,8 @@ export function EmploisFilters({
     <div className="space-y-4">
       {/* Barre de recherche principale */}
       <div className="flex gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-2 h-4 w-4 text-muted-foreground" />
-          <Input
+        <InputGroup>
+          <InputGroupInput
             placeholder="Rechercher par titre, ville, entreprise..."
             className="pl-10"
             value={search}
@@ -102,26 +108,30 @@ export function EmploisFilters({
               });
             }}
           />
-        </div>
-        <Button
-          variant="outline"
-          className="flex items-center gap-2 shrink-0"
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          disabled={isPending}
-        >
-          <Filter className="h-4 w-4" />
-          <span className="hidden sm:inline">
-            {isPending ? "Chargement..." : "Filtres"}
-          </span>
-          {hasActiveFilters && (
-            <Badge
-              variant="secondary"
-              className="ml-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton
+              variant="outline"
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              disabled={isPending}
             >
-              {(selectedType ? 1 : 0) + (contractType ? 1 : 0) + (city ? 1 : 0)}
-            </Badge>
-          )}
-        </Button>
+              <Filter className="h-4 w-4" />
+              <span className="hidden sm:inline">Filtres</span>
+              {hasActiveFilters && (
+                <Badge
+                  variant="secondary"
+                  className="ml-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+                >
+                  {(selectedType ? 1 : 0) +
+                    (contractType ? 1 : 0) +
+                    (city ? 1 : 0)}
+                </Badge>
+              )}
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
       </div>
 
       {/* Filtres rapides par type */}
