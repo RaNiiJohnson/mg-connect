@@ -27,8 +27,6 @@ import { BorderBeam } from "@/components/ui/border-beam";
 import { LightRays } from "@/components/ui/light-rays";
 import { Highlighter } from "@/components/ui/highlighter";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
-import { AuroraText } from "@/components/ui/aurora-text";
-import { LineShadowText } from "@/components/ui/line-shadow-text";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
 const reviews = [
