@@ -277,7 +277,7 @@ async function HomePageContent() {
                       {IconComponent && (
                         <IconComponent className="h-5 w-5 text-primary" />
                       )}
-                      <span>{review.title}</span>
+                      <span>Notre {review.title}</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="text-balance leading-relaxed">
