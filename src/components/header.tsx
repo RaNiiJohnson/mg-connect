@@ -1,6 +1,6 @@
 import { AuthNav } from "./auth-nav";
 import { HeaderClient } from "./header-client";
-import { ThemeToggle } from "./theme-toggle";
+import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 
 export default function Header() {
   return (
@@ -8,7 +8,7 @@ export default function Header() {
       rightSlot={
         <>
           <AuthNav />
-          <ThemeToggle />
+          <AnimatedThemeToggler />
         </>
       }
     />
