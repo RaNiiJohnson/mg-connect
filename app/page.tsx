@@ -113,7 +113,7 @@ async function HomePageContent() {
   const user = await getUser();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-hidden">
       {/* Hero Section */}
       <section className="relative h-screen w-full flex flex-col items-center justify-center md:pb-16 pb-28">
         <div className="text-center p-4 max-w-4xl mx-auto">
@@ -162,14 +162,16 @@ async function HomePageContent() {
             </Link>
           )}
         </div>
-        <div className="absolute bottom-16 left-0 right-0 f flex w-full flex-col items-center justify-center overflow-hidden">
-          <Marquee pauseOnHover className="[--duration:40s]">
-            {firstRow.map((review) => (
-              <ReviewCard key={review.icon} {...review} />
-            ))}
-          </Marquee>
-          <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-linear-to-r"></div>
-          <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-linear-to-l"></div>
+        <div className="absolute bottom-16 left-0 right-0 flex w-full flex-col items-center justify-center">
+          <div className="relative w-full overflow-hidden">
+            <Marquee pauseOnHover className="[--duration:40s] py-4">
+              {firstRow.map((review) => (
+                <ReviewCard key={review.icon} {...review} />
+              ))}
+            </Marquee>
+            <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-linear-to-r z-10"></div>
+            <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-linear-to-l z-10"></div>
+          </div>
         </div>
         <LightRays />
       </section>
