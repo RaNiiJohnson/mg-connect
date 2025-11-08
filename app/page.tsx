@@ -40,30 +40,35 @@ const reviews = [
   {
     icon: "Heart",
     title: "Mission",
+    titleAccordion: "Notre Mission",
     description:
       "Créer un pont entre les Malagasy vivant en Allemagne et ceux restés au pays, facilitant l'intégration et le partage d'expériences.",
   },
   {
     icon: "Globe",
     title: "Vision",
+    titleAccordion: "Notre Vision",
     description:
       "Devenir la référence pour la communauté Malagasy en Allemagne, un espace d'entraide et de croissance mutuelle.",
   },
   {
     icon: "HandHeart",
     title: "Valeurs",
+    titleAccordion: "Nos Valeurs",
     description:
       "Solidarité, respect, partage et entraide. La force de la communauté pour surmonter ensemble les défis de l'expatriation.",
   },
   {
     icon: "Users",
     title: "Engagement",
+    titleAccordion: "Notre Engagement",
     description:
       "Accompagner chaque membre dans son parcours en Allemagne, de l'arrivée à l'épanouissement professionnel et personnel.",
   },
   {
     icon: "Sparkles",
     title: "Identité",
+    titleAccordion: "Notre Identité",
     description:
       "Préserver et célébrer la culture Malagasy tout en embrassant la diversité allemande, pour un enrichissement mutuel harmonieux.",
   },
@@ -277,7 +282,7 @@ async function HomePageContent() {
                       {IconComponent && (
                         <IconComponent className="h-5 w-5 text-primary" />
                       )}
-                      <span>Notre {review.title}</span>
+                      <span>{review.titleAccordion}</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="text-balance leading-relaxed">
