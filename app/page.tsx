@@ -115,7 +115,7 @@ async function HomePageContent() {
   return (
     <div className="min-h-screen overflow-hidden">
       {/* Hero Section */}
-      <section className="relative h-screen w-full flex flex-col items-center justify-center md:pb-16 pb-28">
+      <section className="relative h-screen w-full flex flex-col items-center justify-center gap-8">
         <div className="text-center p-4 max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-bold sm:mb-6 mb-3">
             Hallo Hallo
@@ -162,7 +162,7 @@ async function HomePageContent() {
             </Link>
           )}
         </div>
-        <div className="absolute bottom-16 left-0 right-0 flex w-full flex-col items-center justify-center">
+        <div className="flex w-full flex-col items-end justify-center">
           <div className="relative w-full overflow-hidden">
             <Marquee pauseOnHover className="[--duration:40s] py-4">
               {firstRow.map((review) => (
