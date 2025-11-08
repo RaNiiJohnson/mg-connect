@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/auth-server";
 import { getJobOffersOptimized } from "@/lib/database";
 import { Suspense } from "react";
-import { PublishJobDialog } from "@/components/publish-job-dialog";
+import { PublishJobDialog } from "@app/emplois/_component/publish-job-dialog";
 import { EmploisClientOptimized } from "./_component/emplois-client-optimized";
 import { Card, CardContent } from "@/components/ui/card";
 

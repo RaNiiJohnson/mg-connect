@@ -16,18 +16,22 @@ import { useState, useTransition } from "react";
 
 const JOB_TYPES = [
   { value: "Au pair", label: "Au pair" },
-  { value: "Ausbildung", label: "Ausbildung" },
-  { value: "FSJ/FOJ", label: "FSJ/FOJ" },
+  { value: "Formation", label: "Formation" },
+  { value: "Volontariat", label: "Volontariat" },
   { value: "Stage", label: "Stage" },
-  { value: "CDI", label: "CDI" },
-  { value: "CDD", label: "CDD" },
+  { value: "Mini-job", label: "Mini-job" },
+  { value: "Emploi", label: "Emploi" },
+  { value: "Bourse d'étude", label: "Bourse d'étude" },
 ];
 
 const CONTRACT_TYPES = [
+  { value: "CDD", label: "CDD" },
+  { value: "CDI", label: "CDI" },
+  { value: "FSJ/FOJ/BFD", label: "FSJ/FOJ/BFD" },
   { value: "Temps plein", label: "Temps plein" },
   { value: "Temps partiel", label: "Temps partiel" },
   { value: "Freelance", label: "Freelance" },
-  { value: "Stage", label: "Stage" },
+  { value: "Aprentissage", label: "Aprentissage" },
 ];
 
 interface EmploisFiltersProps {

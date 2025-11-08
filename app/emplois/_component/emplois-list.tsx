@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Briefcase } from "lucide-react";
 import type { JobOfferListItem } from "@/lib/database";
 import type { User } from "better-auth";
-import { PublishJobDialog } from "@/components/publish-job-dialog";
+import { PublishJobDialog } from "@app/emplois/_component/publish-job-dialog";
 import { formatDate } from "@/lib/date";
 import {
   Item,
