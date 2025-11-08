@@ -15,8 +15,14 @@ export function HeaderClient({ rightSlot }: HeaderClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  // Header transparent et fixe sur la page d'accueil, sticky sur les autres
+  const isHomePage = pathname === "/";
+  const headerClasses = isHomePage
+    ? "fixed top-0 z-50 w-full bg-transparent backdrop-blur-sm"
+    : "sticky top-0 z-50 w-full bg-transparent backdrop-blur-sm";
+
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur">
+    <header className={headerClasses}>
       <div className="mx-auto flex sm:gap-10 gap-2 items-center p-4 relative">
         <Link
           href="/"
