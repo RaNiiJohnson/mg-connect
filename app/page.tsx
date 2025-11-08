@@ -29,6 +29,13 @@ import { Highlighter } from "@/components/ui/highlighter";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 const reviews = [
   {
     icon: "Heart",
@@ -177,7 +184,7 @@ async function HomePageContent() {
       </section>
 
       {/* Services Section */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 bg-secondary">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">Nos Services</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -238,6 +245,48 @@ async function HomePageContent() {
               <BorderBeam duration={8} size={200} />
             </Card>
           </div>
+        </div>
+      </section>
+      {/* About Us Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-4xl font-bold text-center mb-12">
+            À Propos de Nous
+          </h2>
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full"
+            defaultValue="item-0"
+          >
+            {reviews.map((review, index) => {
+              const iconMap = {
+                Heart,
+                Globe,
+                HandHeart,
+                Users,
+                Sparkles,
+              };
+              const IconComponent =
+                iconMap[review.icon as keyof typeof iconMap];
+
+              return (
+                <AccordionItem key={review.icon} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left">
+                    <div className="flex items-center gap-3">
+                      {IconComponent && (
+                        <IconComponent className="h-5 w-5 text-primary" />
+                      )}
+                      <span>{review.title}</span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-balance leading-relaxed">
+                    <p className="ml-8">{review.description}</p>
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
+          </Accordion>
         </div>
       </section>
     </div>
