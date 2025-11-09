@@ -222,14 +222,6 @@ export function EmploisFilters({
           </div>
         </div>
       )}
-
-      {/* Résultats */}
-      {hasActiveFilters && (
-        <div className="text-sm text-muted-foreground">
-          {filteredJobs} résultat{filteredJobs !== 1 ? "s" : ""} sur {totalJobs}{" "}
-          offre{totalJobs !== 1 ? "s" : ""}
-        </div>
-      )}
     </div>
   );
 }

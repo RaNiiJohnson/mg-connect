@@ -80,13 +80,7 @@ export function EmploisPagination({
     <div className="flex flex-col items-center gap-6 mt-8">
       {/* Results info and items per page selector */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
-        <div className="text-sm text-muted-foreground">
-          Affichage de{" "}
-          {Math.min((currentPage - 1) * itemsPerPage + 1, totalCount)} à{" "}
-          {Math.min(currentPage * itemsPerPage, totalCount)} sur {totalCount}{" "}
-          résultat
-          {totalCount !== 1 ? "s" : ""}
-        </div>
+        <div className="text-sm text-muted-foreground"></div>
 
         {onItemsPerPageChange && (
           <div className="flex items-center gap-2 text-sm">
