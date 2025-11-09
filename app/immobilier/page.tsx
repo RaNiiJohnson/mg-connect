@@ -1,25 +1,17 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
-  MapPin,
-  Euro,
-  Search,
-  Filter,
-  Plus,
-  Bath,
-  Bed,
-  Square,
-} from "lucide-react";
-import Image from "next/image";
+  ItemContent,
+  ItemMedia,
+  ItemSeparator,
+  ItemTitle,
+} from "@/components/ui/item";
 import { getAllRealEstateListings } from "@/lib/database";
+import { Euro, Filter, MapPinIcon, Plus, Search } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { Suspense } from "react";
 
 async function ImmobilierPageContent() {
@@ -95,108 +87,37 @@ async function ImmobilierPageContent() {
         {/* Grille des annonces */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {annonces.map((annonce) => (
-            <Card
-              key={annonce.id}
-              className="hover:shadow-lg transition-shadow overflow-hidden"
-            >
-              {/* Image */}
-              <div className="relative h-48 w-full">
-                <Image
-                  src={annonce.photos[0] || "/placeholder-image.jpg"}
-                  alt={annonce.title}
-                  fill
-                  className="object-cover"
-                />
-                <Badge className="absolute top-2 left-2">{annonce.type}</Badge>
-                <Badge variant="secondary" className="absolute top-2 right-2">
-                  {annonce.available}
-                </Badge>
-              </div>
-
-              <CardHeader>
-                <CardTitle className="text-lg line-clamp-2">
-                  {annonce.title}
-                </CardTitle>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="h-4 w-4" />
-                  <span>
+            <div key={annonce.id} className="relative">
+              <Link href={`/immobilier/${annonce.id}`}>
+                <ItemMedia
+                  variant="image"
+                  className="relative h-80 w-full rounded-xl"
+                >
+                  <Image
+                    src={annonce.photos[0] || "/placeholder-image.jpg"}
+                    alt={annonce.title}
+                    fill
+                    className="object-cover p-0"
+                  />
+                  <Badge className="absolute top-2 left-2">
+                    {annonce.type}
+                  </Badge>
+                </ItemMedia>
+                <ItemContent className="absolute inset-x-3 p-2 h-fit bottom-3 bg-background rounded-lg">
+                  <ItemTitle>{annonce.title}</ItemTitle>
+                  <span className="flex items-center gap-1 text-xs font-light">
+                    <MapPinIcon className="size-4 text-primary" />
                     {annonce.city} - {annonce.district}
                   </span>
-                </div>
-              </CardHeader>
-
-              <CardContent className="flex flex-col flex-1 space-y-4">
-                <CardDescription className="line-clamp-3">
-                  {annonce.description}
-                </CardDescription>
-
-                {/* Prix */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <Euro className="h-4 w-4 text-primary" />
-                    <span className="text-2xl font-bold text-primary">
-                      {annonce.price}€
-                    </span>
-                    <span className="text-sm text-muted-foreground">
-                      /{annonce.type === "Weekend" ? "nuit" : "mois"}
-                    </span>
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    Caution: {annonce.deposit}€
-                  </div>
-                </div>
-
-                {/* Caractéristiques */}
-                <div className="grid grid-cols-3 gap-2 text-sm">
-                  <div className="flex items-center gap-1">
-                    <Square className="h-4 w-4 text-muted-foreground" />
-                    <span>{annonce.area}m²</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Bed className="h-4 w-4 text-muted-foreground" />
-                    <span>{annonce.bedrooms} ch.</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Bath className="h-4 w-4 text-muted-foreground" />
-                    <span>{annonce.bathrooms} sdb</span>
-                  </div>
-                </div>
-
-                {/* Détails supplémentaires */}
-                <div className="space-y-2 text-sm">
-                  <div>
-                    <span className="font-medium">Étage:</span> {annonce.floor}
-                  </div>
-                  <div>
-                    <span className="font-medium">Animaux:</span>{" "}
-                    {annonce.pets ? "Acceptés" : "Non acceptés"}
-                  </div>
-                </div>
-
-                {/* Extras */}
-                {annonce.extras.length > 0 && (
-                  <div>
-                    <h4 className="font-semibold text-sm mb-2">Extras :</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {annonce.extras.map((extra, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="text-xs"
-                        >
-                          {extra}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex gap-2 mt-auto">
-                  <Button className="flex-1">Contacter</Button>
-                  <Button variant="outline">Détails</Button>
-                </div>
-              </CardContent>
-            </Card>
+                  <ItemSeparator />
+                  <span className="flex  items-center gap-1 font-bold">
+                    <Euro className="size-4 font-bold" strokeWidth={3} />
+                    <span>{annonce.price}</span>{" "}
+                    <span className="font-extralight text-xs">/ mois</span>
+                  </span>
+                </ItemContent>
+              </Link>
+            </div>
           ))}
         </div>
 
