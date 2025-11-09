@@ -48,7 +48,6 @@ interface EmploisFiltersProps {
 
 export function EmploisFilters({
   totalJobs,
-  filteredJobs,
 }: EmploisFiltersProps) {
   const [search, setSearch] = useQueryState(
     "search",

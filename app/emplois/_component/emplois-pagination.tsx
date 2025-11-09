@@ -29,7 +29,6 @@ interface EmploisPaginationProps {
 export function EmploisPagination({
   currentPage,
   totalPages,
-  totalCount,
   itemsPerPage = 10,
   onItemsPerPageChange,
 }: EmploisPaginationProps) {
