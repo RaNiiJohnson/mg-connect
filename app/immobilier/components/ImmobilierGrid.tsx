@@ -121,17 +121,18 @@ export function ImmobilierGrid({ annonces }: ImmobilierGridProps) {
           <div
             key={annonce.id}
             className={cn(
-              "relative group cursor-pointer transition-all duration-300",
-              selectedId === annonce.id && "ring-2 ring-primary"
+              "relative group cursor-pointer transition-all duration-300 ",
+              selectedId === annonce.id &&
+                "ring-2 ring-primary rounded-xl shadow-primary"
             )}
             onClick={() => handleAnnonceClick(annonce.id)}
           >
-            <div className="relative h-80 w-full rounded-xl overflow-hidden">
+            <div className="relative h-80 w-full rounded-xl overflow-hidden shadow-xl">
               <Image
                 src={annonce.photos[0] || "/placeholder-image.jpg"}
                 alt={annonce.title}
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                className="object-cover transition-transform duration-300 group-hover:scale-105 "
               />
               <Badge className="absolute top-2 left-2">{annonce.type}</Badge>
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
