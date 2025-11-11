@@ -27,7 +27,7 @@ export function ImageCarousel({
   title,
 }: ImageCarouselProps) {
   const [api, setApi] = useState<CarouselApi>();
-  const [fullscreenApi, setFullscreenApi] = useState<CarouselApi>();
+  const [fullscreenApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenIndex, setFullscreenIndex] = useState(0);
@@ -121,7 +121,7 @@ export function ImageCarousel({
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent" />
                   {/* Bouton plein écran */}
                   <Button
                     variant="secondary"
@@ -170,7 +170,7 @@ export function ImageCarousel({
               <button
                 key={index}
                 className={cn(
-                  "relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200",
+                  "relative shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200",
                   index === current
                     ? "border-primary scale-105"
                     : "border-transparent hover:border-muted-foreground/50"

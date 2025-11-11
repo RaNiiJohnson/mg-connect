@@ -246,7 +246,12 @@ export async function getAllRealEstateListings() {
           photo: true,
         },
       },
-      ContactInfo: true,
+      ContactInfo: {
+        select: {
+          phone: true,
+          email: true,
+        },
+      },
     },
     orderBy: { createdAt: "desc" },
   });
