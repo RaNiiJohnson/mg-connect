@@ -23,7 +23,7 @@ import { Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { Marquee } from "@/components/ui/marquee";
 import { ShineBorder } from "@/components/ui/shine-border";
-import { BorderBeam } from "@/components/ui/border-beam";
+
 import { LightRays } from "@/components/ui/light-rays";
 import { Highlighter } from "@/components/ui/highlighter";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
@@ -35,6 +35,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import CTApricing from "@/components/CTA.pricing";
 
 const reviews = [
   {
@@ -192,64 +193,97 @@ async function HomePageContent() {
       <section className="py-8 sm:py-12 md:py-16 px-4 bg-secondary shrink-0">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">Nos Services</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="hover:shadow-lg relative transition-shadow flex flex-col">
-              <CardHeader className="flex flex-row items-center gap-3">
-                <Users className="h-12 w-12 text-primary mb-4" />
-                <div>
-                  <CardTitle> Communauté</CardTitle>
-                  <CardDescription>
-                    Connectez-vous avec d&apos;autres Malagasy en Allemagne
-                  </CardDescription>
+          <div className="grid md:grid-cols-3 gap-12 lg:gap-16">
+            {/* Communauté */}
+            <div className="text-center space-y-4 group cursor-pointer">
+              <div className="flex justify-center mb-6">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <Users className="h-8 w-8 text-primary" />
                 </div>
-              </CardHeader>
-              <CardContent className="flex-1 flex items-end">
-                <Button asChild variant="outline" className="w-full">
-                  <Link href="/communaute">Découvrir</Link>
+              </div>
+              <h3 className="text-xl font-semibold">Communauté</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Connectez-vous avec d&apos;autres Malagasy en Allemagne et créez
+                des liens durables au sein de notre communauté.
+              </p>
+              <div className="pt-4">
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="group-hover:bg-primary/10"
+                >
+                  <Link
+                    href="/communaute"
+                    className="inline-flex items-center gap-2"
+                  >
+                    Découvrir
+                    <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </Button>
-              </CardContent>
+              </div>
+            </div>
 
-              <BorderBeam duration={8} size={100} />
-            </Card>
-
-            <Card className="hover:shadow-lg relative transition-shadow flex flex-col">
-              <CardHeader className="flex flex-row items-center gap-3">
-                <Briefcase className="h-12 w-12 text-primary mb-4" />
-                <div>
-                  <CardTitle>Emplois</CardTitle>
-                  <CardDescription>
-                    Trouvez des opportunités d&apos;emploi et de formation
-                  </CardDescription>
+            {/* Emplois */}
+            <div className="text-center space-y-4 group cursor-pointer">
+              <div className="flex justify-center mb-6">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <Briefcase className="h-8 w-8 text-primary" />
                 </div>
-              </CardHeader>
-              <CardContent className="flex-1 flex items-end">
-                <Button asChild variant="outline" className="w-full">
-                  <Link href="/emplois">Explorer</Link>
+              </div>
+              <h3 className="text-xl font-semibold">Emplois</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Trouvez des opportunités d&apos;emploi et de formation adaptées
+                à votre profil et vos ambitions professionnelles.
+              </p>
+              <div className="pt-4">
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="group-hover:bg-primary/10"
+                >
+                  <Link
+                    href="/emplois"
+                    className="inline-flex items-center gap-2"
+                  >
+                    Explorer
+                    <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </Button>
-              </CardContent>
+              </div>
+            </div>
 
-              <BorderBeam duration={8} size={100} />
-            </Card>
-
-            <Card className="hover:shadow-lg relative transition-shadow flex flex-col">
-              <CardHeader className="flex flex-row items-center gap-3">
-                <Home className="h-12 w-12 text-primary mb-4" />
-                <div>
-                  <CardTitle>Immobilier</CardTitle>
-                  <CardDescription>
-                    Partagez et trouvez des logements
-                  </CardDescription>
+            {/* Immobilier */}
+            <div className="text-center space-y-4 group cursor-pointer">
+              <div className="flex justify-center mb-6">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <Home className="h-8 w-8 text-primary" />
                 </div>
-              </CardHeader>
-              <CardContent className="flex-1 flex items-end">
-                <Button asChild variant="outline" className="w-full">
-                  <Link href="/immobilier">Voir les annonces</Link>
+              </div>
+              <h3 className="text-xl font-semibold">Immobilier</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Partagez et trouvez des logements facilement grâce à notre
+                réseau de confiance au sein de la communauté.
+              </p>
+              <div className="pt-4">
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="group-hover:bg-primary/10"
+                >
+                  <Link
+                    href="/immobilier"
+                    className="inline-flex items-center gap-2"
+                  >
+                    Voir les annonces
+                    <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </Button>
-              </CardContent>
-
-              <BorderBeam duration={8} size={200} />
-            </Card>
+              </div>
+            </div>
           </div>
+
+          {/* Premium CTA Section */}
+          <CTApricing />
         </div>
       </section>
       {/* About Us Section */}
