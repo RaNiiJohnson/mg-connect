@@ -56,21 +56,21 @@ const reviews = [
     title: "Valeurs",
     titleAccordion: "Nos Valeurs",
     description:
-      "Solidarité, respect, partage et entraide. La force de la communauté pour surmonter ensemble les défis de l'expatriation.",
+      "Solidarité, partage et entraide. La force de la communauté pour surmonter ensemble les défis de l'expatriation.",
   },
   {
     icon: "Users",
     title: "Engagement",
     titleAccordion: "Notre Engagement",
     description:
-      "Accompagner chaque membre dans son parcours en Allemagne, de l'arrivée à l'épanouissement professionnel et personnel.",
+      "Offrir une solution pratique pour faciliter l’épanouissement de chaque membre, en simplifiant son quotidien et en ouvrant des opportunités.",
   },
   {
     icon: "Sparkles",
     title: "Identité",
     titleAccordion: "Notre Identité",
     description:
-      "Préserver et célébrer la culture Malagasy tout en embrassant la diversité allemande, pour un enrichissement mutuel harmonieux.",
+      "Préserver et célébrer la culture Malagasy tout en embrassant la diversité allemande, pour représenter fièrement notre pays.",
   },
 ];
 
