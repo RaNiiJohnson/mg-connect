@@ -118,7 +118,7 @@ model JobOffer {
 }
 
 model RealEstateListing {
-  id          String   @id @default(cuid())
+  id          String       @id @default(cuid())
   title       String
   type        String
   city        String
@@ -128,17 +128,26 @@ model RealEstateListing {
   area        Int
   bedrooms    Int
   bathrooms   Int
-  floor       String
-  pets        Boolean  @default(false)
+  floor       Int
+  pets        Boolean      @default(false)
   photos      String[]
+  coverPhoto  String
   description String
   extras      String[]
-  contact     String
-  available   String
+  available   DateTime?
   authorId    String
-  author      User     @relation("RealEstateListings", fields: [authorId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  author      User         @relation("RealEstateListings", fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  ContactInfo ContactInfo?
 
   @@map("real_estate_listing")
+}
+
+model ContactInfo {
+  id        String            @id @default(cuid())
+  phone     String?
+  email     String?
+  listingId String            @unique
+  listing   RealEstateListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }

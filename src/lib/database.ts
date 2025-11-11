@@ -219,13 +219,13 @@ export async function createRealEstateListing(
     area: number;
     bedrooms: number;
     bathrooms: number;
-    floor: string;
+    floor: number;
     pets: boolean;
     photos: string[];
+    coverPhoto: string;
     description: string;
     extras: string[];
-    contact: string;
-    available: string;
+    available: Date | null;
   }
 ) {
   return await prisma.realEstateListing.create({
@@ -246,6 +246,7 @@ export async function getAllRealEstateListings() {
           photo: true,
         },
       },
+      ContactInfo: true,
     },
     orderBy: { createdAt: "desc" },
   });
