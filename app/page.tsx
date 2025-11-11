@@ -125,11 +125,11 @@ async function HomePageContent() {
   const user = await getUser();
 
   return (
-    <div className="min-h-screen overflow-hidden">
+    <div className="min-h-screen overflow-hidden flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-screen w-full flex flex-col items-center justify-center gap-8">
+      <section className="relative min-h-screen sm:min-h-[90vh] md:min-h-screen w-full flex flex-col items-center justify-center gap-4 py-8">
         <div className="text-center p-4 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold sm:mb-6 mb-3">
+          <h1 className="text-5xl md:text-7xl font-bold sm:mb-6 mb-3 pt-20">
             Hallo Hallo
           </h1>
           <p className="md:text-2xl mb-8 text-muted-foreground leading-relaxed">
@@ -174,7 +174,7 @@ async function HomePageContent() {
             </Link>
           )}
         </div>
-        <div className="flex w-full flex-col items-end justify-center">
+        <div className="flex w-full flex-col">
           <div className="relative w-full overflow-hidden">
             <Marquee pauseOnHover className="[--duration:40s] py-4">
               {firstRow.map((review) => (
@@ -189,7 +189,7 @@ async function HomePageContent() {
       </section>
 
       {/* Services Section */}
-      <section className="py-16 px-4 bg-secondary">
+      <section className="py-8 sm:py-12 md:py-16 px-4 bg-secondary shrink-0">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">Nos Services</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -253,7 +253,7 @@ async function HomePageContent() {
         </div>
       </section>
       {/* About Us Section */}
-      <section className="py-16 px-4">
+      <section className="py-8 sm:py-12 md:py-16 px-4 shrink-0">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">
             À Propos de Nous
