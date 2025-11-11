@@ -18,11 +18,11 @@ export function HeaderClient({ rightSlot }: HeaderClientProps) {
   // Header transparent et fixe sur la page d'accueil, sticky sur les autres
   const isHomePage = pathname === "/";
   const headerClasses = isHomePage
-    ? "fixed top-0 z-50 w-full bg-transparent backdrop-blur-sm"
-    : "sticky top-0 z-50 w-full bg-transparent backdrop-blur-sm";
+    ? "fixed top-0 z-50 w-full bg-transparent backdrop-blur-lg"
+    : "sticky top-0 z-50 w-full bg-transparent backdrop-blur-lg";
 
   return (
-    <header className={headerClasses}>
+    <header className={`${headerClasses} + h-16`}>
       <div className="mx-auto flex sm:gap-10 gap-2 items-center p-4 relative">
         <Link
           href="/"
