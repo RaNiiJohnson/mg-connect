@@ -6,14 +6,37 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Select } from "./ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Badge } from "./ui/badge";
 import { X } from "lucide-react";
+
+interface EmploisFilters {
+  typeEmploi?: string;
+  ville?: string;
+  domaine?: string;
+}
+
+interface ImmobilierFilters {
+  typeLogement?: string;
+  prixMin?: number;
+  prixMax?: number;
+  ville?: string;
+  chambres?: string;
+  surface?: number;
+}
+
+interface CommunauteFilters {
+  statut?: string;
+  ville?: string;
+  domaine?: string;
+  anneeArrivee?: string;
+}
+
+type FilterType = EmploisFilters | ImmobilierFilters | CommunauteFilters;
 
 interface FilterDialogProps {
   type: "emplois" | "immobilier" | "communaute";
   isOpen: boolean;
   onClose: () => void;
-  onApplyFilters: (filters: any) => void;
+  onApplyFilters: (filters: FilterType) => void;
 }
 
 export function FilterDialog({
@@ -22,7 +45,7 @@ export function FilterDialog({
   onClose,
   onApplyFilters,
 }: FilterDialogProps) {
-  const [filters, setFilters] = useState<any>({});
+  const [filters] = useState<FilterType>({});
 
   if (!isOpen) return null;
 
@@ -34,7 +57,7 @@ export function FilterDialog({
   const renderEmploisFilters = () => (
     <div className="space-y-4">
       <div>
-        <Label htmlFor="type-emploi">Type d'emploi</Label>
+        <Label htmlFor="type-emploi">Type d&apos;emploi</Label>
         <Select>
           <option value="">Tous les types</option>
           <option value="au-pair">Au pair</option>
@@ -70,7 +93,7 @@ export function FilterDialog({
           <option value="">Tous les types</option>
           <option value="colocation">Colocation</option>
           <option value="location">Location</option>
-          <option value="weekend">Weekend</option>
+          <option value="À courte durée">À courte durée</option>
         </Select>
       </div>
 
@@ -139,7 +162,7 @@ export function FilterDialog({
       </div>
 
       <div>
-        <Label htmlFor="annee-arrivee">Année d'arrivée</Label>
+        <Label htmlFor="annee-arrivee">Année d&apos;arrivée</Label>
         <Select>
           <option value="">Toutes les années</option>
           <option value="2024">2024</option>
