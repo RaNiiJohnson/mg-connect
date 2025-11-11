@@ -32,41 +32,149 @@ export function HeaderClient({ rightSlot }: HeaderClientProps) {
         </Link>
         {/* Navigation Desktop */}
         <nav className="hidden md:flex gap-4 relative">
-          {[
-            { href: "/", label: "Accueil" },
-            { href: "/communaute", label: "Communauté" },
-            { href: "/emplois", label: "Emplois" },
-            { href: "/immobilier", label: "Immobilier" },
-          ].map((item, index) => {
-            const isActive = pathname === item.href;
-            return (
+          {/* Accueil */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            className="relative"
+          >
+            <Link
+              href="/"
+              className={`text-accent-foreground/60 font-medium transition-colors relative z-10 ${
+                pathname === "/" ? "text-foreground" : "hover:text-foreground"
+              }`}
+            >
+              Accueil
+            </Link>
+            {pathname === "/" && (
               <motion.div
-                key={item.href}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
-                className="relative"
-              >
-                <Link
-                  href={item.href}
-                  className={`text-accent-foreground/60 font-medium transition-colors relative z-10 ${
-                    isActive ? "text-foreground" : "hover:text-foreground"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-                {isActive && (
-                  <motion.div
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                    layoutId="activeTab"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
-              </motion.div>
-            );
-          })}
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                layoutId="activeTab"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            )}
+          </motion.div>
+
+          {/* Communauté */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            className="relative"
+          >
+            <Link
+              href="/communaute"
+              className={`text-accent-foreground/60 font-medium transition-colors relative z-10 ${
+                pathname === "/communaute"
+                  ? "text-foreground"
+                  : "hover:text-foreground"
+              }`}
+            >
+              Communauté
+            </Link>
+            {pathname === "/communaute" && (
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                layoutId="activeTab"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            )}
+          </motion.div>
+
+          {/* Emplois */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.3 }}
+            className="relative"
+          >
+            <Link
+              href="/emplois"
+              className={`text-accent-foreground/60 font-medium transition-colors relative z-10 ${
+                pathname === "/emplois"
+                  ? "text-foreground"
+                  : "hover:text-foreground"
+              }`}
+            >
+              Emplois
+            </Link>
+            {pathname === "/emplois" && (
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                layoutId="activeTab"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            )}
+          </motion.div>
+
+          {/* Immobilier */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.4 }}
+            className="relative"
+          >
+            <Link
+              href="/immobilier"
+              className={`text-accent-foreground/60 font-medium transition-colors relative z-10 ${
+                pathname === "/immobilier"
+                  ? "text-foreground"
+                  : "hover:text-foreground"
+              }`}
+            >
+              Immobilier
+            </Link>
+            {pathname === "/immobilier" && (
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                layoutId="activeTab"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            )}
+          </motion.div>
+
+          {/* Premium - Styles spéciaux */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.5 }}
+            className="relative"
+          >
+            <Link
+              href="/pricing"
+              className={`font-medium transition-all relative z-10 px-3 py-1.5 rounded-full border-2 ${
+                pathname === "/pricing"
+                  ? "text-white bg-linear-to-r from-purple-500 to-pink-500 border-transparent shadow-lg"
+                  : "text-transparent bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text border-gradient-to-r hover:shadow-lg hover:scale-105"
+              }`}
+              style={{
+                borderImage:
+                  pathname !== "/pricing"
+                    ? "linear-gradient(to right, #a855f7, #ec4899) 1"
+                    : undefined,
+              }}
+            >
+              Passer au Premium
+            </Link>
+            {pathname === "/pricing" && (
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-linear-to-r from-purple-500 to-pink-500"
+                layoutId="activeTab"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            )}
+          </motion.div>
         </nav>{" "}
         {/* Bouton hamburger mobile */}
         <Button
@@ -120,48 +228,170 @@ export function HeaderClient({ rightSlot }: HeaderClientProps) {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2, delay: 0.1 }}
             >
-              {[
-                { href: "/", label: "Accueil" },
-                { href: "/communaute", label: "Communauté" },
-                { href: "/emplois", label: "Emplois" },
-                { href: "/immobilier", label: "Immobilier" },
-              ].map((item, index) => {
-                const isActive = pathname === item.href;
-                return (
+              {/* Accueil Mobile */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className="relative"
+              >
+                <Link
+                  href="/"
+                  className={`text-accent-foreground/60 font-medium transition-colors p-2 rounded-md block relative z-10 ${
+                    pathname === "/"
+                      ? "text-foreground bg-accent"
+                      : "hover:text-foreground hover:bg-accent"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Accueil
+                </Link>
+                {pathname === "/" && (
                   <motion.div
-                    key={item.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
-                    className="relative"
-                  >
-                    <Link
-                      href={item.href}
-                      className={`text-accent-foreground/60 font-medium transition-colors p-2 rounded-md block relative z-10 ${
-                        isActive
-                          ? "text-foreground bg-accent"
-                          : "hover:text-foreground hover:bg-accent"
-                      }`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                    {isActive && (
-                      <motion.div
-                        className="absolute left-0 top-0 bottom-0 w-1 rounded-r-lg"
-                        layoutId="activeMobileTab"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 500,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                  </motion.div>
-                );
-              })}
+                    className="absolute left-0 top-0 bottom-0 w-1 rounded-r-lg bg-primary"
+                    layoutId="activeMobileTab"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 30,
+                    }}
+                  />
+                )}
+              </motion.div>
+
+              {/* Communauté Mobile */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                className="relative"
+              >
+                <Link
+                  href="/communaute"
+                  className={`text-accent-foreground/60 font-medium transition-colors p-2 rounded-md block relative z-10 ${
+                    pathname === "/communaute"
+                      ? "text-foreground bg-accent"
+                      : "hover:text-foreground hover:bg-accent"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Communauté
+                </Link>
+                {pathname === "/communaute" && (
+                  <motion.div
+                    className="absolute left-0 top-0 bottom-0 w-1 rounded-r-lg bg-primary"
+                    layoutId="activeMobileTab"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 30,
+                    }}
+                  />
+                )}
+              </motion.div>
+
+              {/* Emplois Mobile */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
+                className="relative"
+              >
+                <Link
+                  href="/emplois"
+                  className={`text-accent-foreground/60 font-medium transition-colors p-2 rounded-md block relative z-10 ${
+                    pathname === "/emplois"
+                      ? "text-foreground bg-accent"
+                      : "hover:text-foreground hover:bg-accent"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Emplois
+                </Link>
+                {pathname === "/emplois" && (
+                  <motion.div
+                    className="absolute left-0 top-0 bottom-0 w-1 rounded-r-lg bg-primary"
+                    layoutId="activeMobileTab"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 30,
+                    }}
+                  />
+                )}
+              </motion.div>
+
+              {/* Immobilier Mobile */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
+                className="relative"
+              >
+                <Link
+                  href="/immobilier"
+                  className={`text-accent-foreground/60 font-medium transition-colors p-2 rounded-md block relative z-10 ${
+                    pathname === "/immobilier"
+                      ? "text-foreground bg-accent"
+                      : "hover:text-foreground hover:bg-accent"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Immobilier
+                </Link>
+                {pathname === "/immobilier" && (
+                  <motion.div
+                    className="absolute left-0 top-0 bottom-0 w-1 rounded-r-lg bg-primary"
+                    layoutId="activeMobileTab"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 30,
+                    }}
+                  />
+                )}
+              </motion.div>
+
+              {/* Premium Mobile - Styles spéciaux */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.5 }}
+                className="relative"
+              >
+                <Link
+                  href="/pricing"
+                  className={`font-medium transition-all p-2 rounded-md block relative z-10 ${
+                    pathname === "/pricing"
+                      ? "text-white bg-linear-to-r from-purple-500 to-pink-500 shadow-lg"
+                      : "text-transparent bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text hover:text-foreground hover:bg-accent"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Passer au Premium
+                </Link>
+                {pathname === "/pricing" && (
+                  <motion.div
+                    className="absolute left-0 top-0 bottom-0 w-1 rounded-r-lg bg-linear-to-b from-purple-500 to-pink-500"
+                    layoutId="activeMobileTab"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 30,
+                    }}
+                  />
+                )}
+              </motion.div>
             </motion.nav>
           </motion.div>
         )}
