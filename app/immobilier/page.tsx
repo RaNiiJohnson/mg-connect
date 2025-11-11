@@ -73,10 +73,9 @@ async function ImmobilierPageContent() {
             </Badge>
           </div>
         </div>
-
-        {/* Call to action */}
-      </ImmobilierContainer>{" "}
-      <div className="text-center mt-12 p-8 bg-linear-to-br from-accent to-accent/0 rounded-lg">
+        Call to action
+      </ImmobilierContainer>
+      {/* <div className="text-center mt-12 p-8 bg-linear-to-br from-accent to-accent/0 rounded-lg">
         <h3 className="text-2xl font-bold mb-4">
           Vous avez un logement à proposer ?
         </h3>
@@ -85,7 +84,7 @@ async function ImmobilierPageContent() {
           weekend
         </p>
         <Button size="lg">Publier une annonce</Button>
-      </div>
+      </div> */}
     </div>
   );
 }

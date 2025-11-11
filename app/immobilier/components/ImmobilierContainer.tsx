@@ -9,20 +9,27 @@ interface RealEstateListing {
   city: string;
   district: string;
   price: number;
+  deposit: number;
   type: string;
   photos: string[];
-  bedrooms?: number;
-  bathrooms?: number;
-  area?: number;
-  available?: string;
-  description?: string;
-  features?: string[];
-  contact?: string;
-  author?: {
+  coverPhoto: string;
+  bedrooms: number;
+  bathrooms: number;
+  area: number;
+  floor: number;
+  pets: boolean;
+  available: Date | null;
+  description: string;
+  extras: string[];
+  author: {
     id: string;
     name: string | null;
     photo: string | null;
   };
+  ContactInfo?: {
+    phone: string | null;
+    email: string | null;
+  } | null;
 }
 
 interface ImmobilierContainerProps {
