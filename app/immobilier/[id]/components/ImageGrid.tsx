@@ -148,7 +148,7 @@ export function ImageGrid({ images, coverPhoto, title }: ImageGridProps) {
 
       {/* Modal plein écran avec Carousel */}
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-        <DialogContent className="max-w-[95vw] md:max-w-[97vw] max-h-[95vh] p-0 bg-black/50 border-0">
+        <DialogContent className="max-w-[95vw] md:max-w-[97vw] max-h-[95vh] p-0 bg-black/90 border-0">
           <DialogTitle className="sr-only">
             Galerie d&apos;images - {title}
           </DialogTitle>
