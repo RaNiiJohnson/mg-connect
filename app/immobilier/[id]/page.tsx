@@ -33,7 +33,7 @@ async function PropertyPageContent({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Header avec navigation */}
-      <div className="flex items-center justify-between border-bmax-w-7xl mx-auto px-4 py-4">
+      <div className="flex items-center justify-between border-bmax-w-7xl mx-auto px-4 py-2 sm:py-4">
         <Link href="/immobilier">
           <Button variant="ghost" className="flex items-center gap-2">
             <ArrowLeft className="h-4 w-4" />
@@ -48,7 +48,7 @@ async function PropertyPageContent({ params }: PageProps) {
             className="flex items-center gap-2"
           >
             <Share2 className="h-4 w-4" />
-            Partager
+            <span className="max-sm:hidden">Partager</span>
           </Button>
           <Button
             variant="outline"
@@ -56,13 +56,13 @@ async function PropertyPageContent({ params }: PageProps) {
             className="flex items-center gap-2"
           >
             <Heart className="h-4 w-4" />
-            Favoris
+            <span className="max-sm:hidden">Favoris</span>
           </Button>
         </div>
       </div>
 
       {/* Contenu principal */}
-      <div className="max-w-4xl mx-auto py-8">
+      <div className="max-w-4xl mx-auto py-8 px-4">
         <PropertyDetails property={property} />
 
         {/* Section des annonces similaires */}
