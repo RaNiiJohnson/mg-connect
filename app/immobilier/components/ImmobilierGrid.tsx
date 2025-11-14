@@ -11,6 +11,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Euro, MapPin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnnonceDetails, AnnonceDetailsContent } from "./AnnoneDetails";
 
@@ -114,14 +115,22 @@ export function ImmobilierGrid({ annonces }: ImmobilierGridProps) {
         )}
       >
         {annonces.map((annonce) => (
-          <div
+          <Link
             key={annonce.id}
+            href={`/immobilier/${annonce.id}`}
             className={cn(
-              "relative group cursor-pointer transition-all duration-300 h-fit",
+              "relative group cursor-pointer transition-all duration-300 h-fit block",
               selectedId === annonce.id &&
                 "ring-2 ring-primary rounded-xl shadow-primary"
             )}
-            onClick={() => handleAnnonceClick(annonce.id)}
+            onClick={(e) => {
+              // Sur les grands écrans, empêcher la navigation et utiliser le panel
+              if (isLargeScreen) {
+                e.preventDefault();
+                handleAnnonceClick(annonce.id);
+              }
+              // Sur les petits écrans, laisser la navigation normale se faire
+            }}
           >
             <div className="relative h-80 w-full rounded-xl overflow-hidden shadow-xl">
               <Image
@@ -159,7 +168,7 @@ export function ImmobilierGrid({ annonces }: ImmobilierGridProps) {
                 </span>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
 
         {/* Panel de détails pour écrans lg */}

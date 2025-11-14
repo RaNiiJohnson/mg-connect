@@ -121,7 +121,7 @@ function getRandomPhotos(count: number): string[] {
 }
 
 async function main() {
-  console.log("🏠 Début du seed immobilier...");
+  console.log("🏠 Ajout de 3 nouvelles annonces immobilières...");
 
   // Récupérer tous les utilisateurs existants
   const users = await prisma.user.findMany();
@@ -135,15 +135,14 @@ async function main() {
 
   console.log(`✅ ${users.length} utilisateurs trouvés.`);
 
-  // Supprimer seulement les anciennes annonces immobilières (pas les utilisateurs)
-  console.log("🗑️ Suppression des anciennes annonces immobilières...");
-  await prisma.contactInfo.deleteMany();
-  await prisma.realEstateListing.deleteMany();
-  console.log("✅ Anciennes annonces supprimées.");
+  // Vérifier le nombre d'annonces existantes
+  const existingListings = await prisma.realEstateListing.count();
+  console.log(`📊 ${existingListings} annonces immobilières existantes.`);
 
   const realEstateListings = [];
 
-  for (let i = 0; i < 20; i++) {
+  // Ajouter seulement 3 nouvelles annonces
+  for (let i = 0; i < 3; i++) {
     const randomUser = users[Math.floor(Math.random() * users.length)];
     const randomCityData = CITIES[Math.floor(Math.random() * CITIES.length)];
     const randomDistrict =
@@ -208,8 +207,8 @@ async function main() {
     realEstateListings.push(listing);
   }
 
-  // Créer les annonces immobilières
-  console.log("🏗️ Création des annonces immobilières...");
+  // Créer les nouvelles annonces immobilières
+  console.log("🏗️ Création des 3 nouvelles annonces immobilières...");
   for (const listing of realEstateListings) {
     const createdListing = await prisma.realEstateListing.create({
       data: listing,
@@ -234,9 +233,11 @@ async function main() {
     }
   }
 
+  const totalListings = await prisma.realEstateListing.count();
   console.log(
-    `✅ ${realEstateListings.length} annonces immobilières créées avec succès !`
+    `✅ ${realEstateListings.length} nouvelles annonces immobilières créées avec succès !`
   );
+  console.log(`📊 Total d'annonces : ${totalListings}`);
   console.log("📸 Chaque annonce contient :");
   console.log("   - 1 photo de couverture");
   console.log("   - 3 à 6 photos supplémentaires");

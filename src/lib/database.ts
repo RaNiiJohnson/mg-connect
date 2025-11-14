@@ -265,6 +265,55 @@ export async function getRealEstateListingsByUser(userId: string) {
     orderBy: { createdAt: "desc" },
   });
 }
+
+export async function getRealEstateListingById(id: string) {
+  return await prisma.realEstateListing.findUnique({
+    where: { id },
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          photo: true,
+        },
+      },
+      ContactInfo: {
+        select: {
+          phone: true,
+          email: true,
+        },
+      },
+    },
+  });
+}
+
+export async function getSimilarRealEstateListings(
+  excludeId: string,
+  city: string,
+  type: string,
+  limit: number = 6
+) {
+  return await prisma.realEstateListing.findMany({
+    where: {
+      id: { not: excludeId },
+      OR: [{ city: { contains: city, mode: "insensitive" } }, { type: type }],
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          photo: true,
+        },
+      },
+    },
+    orderBy: [
+      { city: "asc" }, // Priorité aux annonces de la même ville
+      { createdAt: "desc" },
+    ],
+    take: limit,
+  });
+}
 export async function getJobOffersOptimized({
   search,
   type,

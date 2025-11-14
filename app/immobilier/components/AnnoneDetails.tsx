@@ -1,22 +1,8 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Bath,
-  Bed,
-  Calendar,
-  ChevronDown,
-  ChevronUp,
-  Euro,
-  Heart,
-  Mail,
-  MapPin,
-  Phone,
-  Square,
-  X,
-} from "lucide-react";
-import { useState } from "react";
+import { Euro, ExternalLink, MapPin, X } from "lucide-react";
+import Link from "next/link";
 import { ImageCarousel } from "./ImageCarousel";
 
 interface RealEstateListing {
@@ -106,6 +92,14 @@ export function AnnonceDetails({
             {annonce.city} - {annonce.district}
           </span>
         </div>
+
+        {/* Bouton vers les détails complets */}
+        <Link href={`/immobilier/${annonce.id}`} className="block mt-4">
+          <Button className="w-full flex items-center gap-2">
+            <ExternalLink className="size-4" />
+            Voir tous les détails
+          </Button>
+        </Link>
       </div>
     </div>
   );
@@ -149,6 +143,14 @@ export function AnnonceDetailsContent({
           {annonce.city} - {annonce.district}
         </span>
       </div>
+
+      {/* Bouton vers les détails complets */}
+      <Link href={`/immobilier/${annonce.id}`} className="block mt-4">
+        <Button className="w-full flex items-center gap-2">
+          <ExternalLink className="size-4" />
+          Voir tous les détails
+        </Button>
+      </Link>
     </div>
   );
 }
