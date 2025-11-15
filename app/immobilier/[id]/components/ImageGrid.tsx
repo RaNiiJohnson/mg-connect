@@ -135,17 +135,6 @@ export function ImageGrid({ images, coverPhoto, title }: ImageGridProps) {
           ))}
       </div>
 
-      {/* Bouton "Voir toutes les photos" */}
-      {allImages.length > 1 && (
-        <Button
-          variant="secondary"
-          className="mt-3 w-full"
-          onClick={() => openFullscreen(0)}
-        >
-          Voir toutes les photos ({allImages.length})
-        </Button>
-      )}
-
       {/* Modal plein écran avec Carousel */}
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
         <DialogContent className="max-w-[95vw] md:max-w-[97vw] max-h-[95vh] p-0 bg-black/90 border-0">
