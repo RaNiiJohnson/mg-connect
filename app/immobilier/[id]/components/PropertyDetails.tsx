@@ -233,7 +233,7 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
         {/* Colonne latérale - Contact */}
         <div className="space-y-6">
           <Item variant="outline" className="sticky top-24">
-            <ItemContent className="p-6">
+            <ItemContent className="">
               <h2 className="text-xl font-semibold mb-4">Contact</h2>
 
               {/* Informations du propriétaire */}
