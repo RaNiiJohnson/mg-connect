@@ -1,3 +1,5 @@
+import "@/lib/orpc/orpc.server"; // for pre-rendering
+
 import type { Metadata } from "next";
 import { Kantumruy_Pro, Geist_Mono } from "next/font/google";
 import "./globals.css";
