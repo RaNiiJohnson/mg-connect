@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Briefcase, MapPin, Building2, Clock } from "lucide-react";
+import { Briefcase, MapPin, Clock } from "lucide-react";
 import type { JobOfferListItem } from "@/lib/database";
 import type { User } from "better-auth";
 import { PublishJobDialog } from "@app/emplois/_component/publish-job-dialog";

@@ -119,13 +119,26 @@ export function EmploisClientOptimized({
         filteredJobs={pagination.totalCount}
       />
 
+      {/* Pagination du haut - toujours visible si plus d'une page */}
+      {pagination.totalPages > 1 && (
+        <div className={isLoading ? "opacity-50 pointer-events-none" : ""}>
+          <EmploisPagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            totalCount={pagination.totalCount}
+            itemsPerPage={pagination.pageSize ?? limit}
+            onItemsPerPageChange={handleItemsPerPageChange}
+          />
+        </div>
+      )}
+
       {/* Loading state avec skeleton */}
       {isLoading && <EmploisListSkeleton />}
 
       {/* Liste des emplois */}
       {!isLoading && <EmploisList jobs={jobs} user={user} />}
 
-      {/* Pagination */}
+      {/* Pagination du bas */}
       {!isLoading && pagination.totalPages > 1 && (
         <EmploisPagination
           currentPage={pagination.currentPage}
@@ -142,52 +155,66 @@ export function EmploisClientOptimized({
 // Composant skeleton pour le chargement des offres d'emploi
 function EmploisListSkeleton() {
   return (
-    <div className="space-y-4">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <Card key={i}>
-          <CardContent className="p-6">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1">
-                {/* Badges skeleton */}
-                <div className="flex items-center gap-2 mb-3">
-                  <Skeleton className="h-5 w-16 rounded-full" />
-                  <Skeleton className="h-5 w-20 rounded-full" />
+    <div className="space-y-6">
+      {/* Liste des emplois skeleton */}
+      <div className="space-y-4">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Card key={i}>
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  {/* Badges skeleton */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <Skeleton className="h-5 w-16 rounded-full" />
+                    <Skeleton className="h-5 w-20 rounded-full" />
+                  </div>
+
+                  {/* Titre skeleton */}
+                  <Skeleton className="h-7 w-64 mb-3" />
+
+                  {/* Informations skeleton */}
+                  <div className="flex flex-wrap gap-4 text-sm mb-4">
+                    <div className="flex items-center gap-1">
+                      <Skeleton className="h-4 w-4" />
+                      <Skeleton className="h-4 w-24" />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Skeleton className="h-4 w-4" />
+                      <Skeleton className="h-4 w-20" />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Skeleton className="h-4 w-4" />
+                      <Skeleton className="h-4 w-16" />
+                    </div>
+                  </div>
+
+                  {/* Boutons skeleton */}
+                  <div className="flex gap-2">
+                    <Skeleton className="h-8 w-20" />
+                    <Skeleton className="h-8 w-24" />
+                  </div>
                 </div>
 
-                {/* Titre skeleton */}
-                <Skeleton className="h-7 w-64 mb-3" />
-
-                {/* Informations skeleton */}
-                <div className="flex flex-wrap gap-4 text-sm mb-4">
-                  <div className="flex items-center gap-1">
-                    <Skeleton className="h-4 w-4" />
-                    <Skeleton className="h-4 w-24" />
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Skeleton className="h-4 w-4" />
-                    <Skeleton className="h-4 w-20" />
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Skeleton className="h-4 w-4" />
-                    <Skeleton className="h-4 w-16" />
-                  </div>
-                </div>
-
-                {/* Boutons skeleton */}
-                <div className="flex gap-2">
-                  <Skeleton className="h-8 w-20" />
-                  <Skeleton className="h-8 w-24" />
+                {/* Salaire skeleton */}
+                <div className="text-right flex flex-col items-end gap-2">
+                  <Skeleton className="h-6 w-20" />
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
-              {/* Salaire skeleton */}
-              <div className="text-right flex flex-col items-end gap-2">
-                <Skeleton className="h-6 w-20" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+      {/* Pagination skeleton */}
+      <div className="flex justify-end mt-8">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-9 w-9" />
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Skeleton key={i} className="h-9 w-9" />
+          ))}
+          <Skeleton className="h-9 w-9" />
+        </div>
+      </div>
     </div>
   );
 }
