@@ -120,24 +120,27 @@ function EmploisPageSkeleton() {
       <div className="max-w-6xl mx-auto">
         {/* Header Skeleton */}
         <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
             <div className="flex-1">
-              <div className="h-10 bg-muted rounded-lg mb-4 w-32"></div>
-              <div className="h-6 bg-muted rounded w-96"></div>
+              <div className="h-8 sm:h-10 bg-muted rounded-lg mb-4 w-24 sm:w-32"></div>
+              <div className="h-5 sm:h-6 bg-muted rounded w-full max-w-sm sm:max-w-md"></div>
             </div>
-            <div className="h-10 bg-muted rounded w-48"></div>
+            <div className="h-10 bg-muted rounded w-full sm:w-48"></div>
           </div>
 
           {/* Search and filters skeleton */}
-          <div className="flex gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="h-10 bg-muted rounded flex-1"></div>
-            <div className="h-10 bg-muted rounded w-24"></div>
+            <div className="h-10 bg-muted rounded w-full sm:w-24"></div>
           </div>
 
           {/* Filter badges skeleton */}
           <div className="flex flex-wrap gap-2 mb-6">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-6 bg-muted rounded-full w-16"></div>
+              <div
+                key={i}
+                className="h-6 bg-muted rounded-full w-12 sm:w-16"
+              ></div>
             ))}
           </div>
         </div>
@@ -146,31 +149,31 @@ function EmploisPageSkeleton() {
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
             <Card key={i}>
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between gap-4">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="h-5 bg-muted rounded-full w-16"></div>
-                      <div className="h-5 bg-muted rounded-full w-12"></div>
+                      <div className="h-5 bg-muted rounded-full w-12 sm:w-16"></div>
+                      <div className="h-5 bg-muted rounded-full w-10 sm:w-12"></div>
                     </div>
-                    <div className="h-7 bg-muted rounded mb-3 w-64"></div>
+                    <div className="h-6 sm:h-7 bg-muted rounded mb-3 w-full max-w-xs sm:max-w-sm"></div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
                       {[1, 2, 3, 4].map((j) => (
                         <div
                           key={j}
-                          className="h-4 bg-muted rounded w-20"
+                          className="h-4 bg-muted rounded w-16 sm:w-20"
                         ></div>
                       ))}
                     </div>
                     <div className="flex gap-2">
-                      <div className="h-8 bg-muted rounded w-20"></div>
-                      <div className="h-8 bg-muted rounded w-24"></div>
+                      <div className="h-8 bg-muted rounded w-16 sm:w-20"></div>
+                      <div className="h-8 bg-muted rounded w-20 sm:w-24"></div>
                     </div>
                   </div>
-                  <div className="text-right flex flex-col items-end gap-2">
-                    <div className="h-6 bg-muted rounded w-20"></div>
-                    <div className="h-4 bg-muted rounded w-24"></div>
-                    <div className="h-3 bg-muted rounded w-16"></div>
+                  <div className="text-left sm:text-right flex flex-row sm:flex-col sm:items-end gap-2">
+                    <div className="h-6 bg-muted rounded w-16 sm:w-20"></div>
+                    <div className="h-4 bg-muted rounded w-20 sm:w-24"></div>
+                    <div className="h-3 bg-muted rounded w-12 sm:w-16"></div>
                   </div>
                 </div>
               </CardContent>
@@ -179,10 +182,10 @@ function EmploisPageSkeleton() {
         </div>
 
         {/* CTA skeleton */}
-        <div className="text-center mt-12 p-8  bg-linear-to-br from-accent to-accent/0 rounded-lg">
-          <div className="h-8 bg-muted rounded mb-4 w-80 mx-auto"></div>
-          <div className="h-4 bg-muted rounded mb-6 w-96 mx-auto"></div>
-          <div className="h-12 bg-muted rounded w-48 mx-auto"></div>
+        <div className="text-center mt-12 p-6 sm:p-8 bg-linear-to-br from-accent to-accent/0 rounded-lg">
+          <div className="h-6 sm:h-8 bg-muted rounded mb-4 w-full max-w-sm sm:max-w-md mx-auto"></div>
+          <div className="h-4 bg-muted rounded mb-6 w-full max-w-md sm:max-w-lg mx-auto"></div>
+          <div className="h-10 sm:h-12 bg-muted rounded w-full max-w-xs sm:w-48 mx-auto"></div>
         </div>
       </div>
     </div>
