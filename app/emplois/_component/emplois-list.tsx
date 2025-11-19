@@ -8,6 +8,7 @@ import { PublishJobDialog } from "@app/emplois/_component/publish-job-dialog";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { getRelativeTime } from "@/lib/date";
+import { SalaryDisplay } from "@app/emplois/_component/salary";
 
 interface EmploisListProps {
   jobs: JobOfferListItem[];
@@ -65,8 +66,11 @@ export function EmploisList({ jobs, user }: EmploisListProps) {
                     <span>{job.type}</span>
                   </div>
                   {job.salary && (
-                    <div className="flex items-center gap-1 font-medium text-foreground">
-                      <span>{job.salary}</span>
+                    <div className="flex items-center gap-1">
+                      <SalaryDisplay
+                        salary={job.salary}
+                        className="text-foreground"
+                      />
                     </div>
                   )}
                 </div>

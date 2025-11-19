@@ -353,21 +353,119 @@ export function JobOfferForm({ onSuccess }: JobOfferFormProps) {
           <Controller
             name="salary"
             control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="job-salary">Salaire *</FieldLabel>
-                <Input
-                  {...field}
-                  id="job-salary"
-                  aria-invalid={fieldState.invalid}
-                  placeholder="Ex: 2500€/mois, À négocier"
-                  autoComplete="off"
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
+            render={({ field, fieldState }) => {
+              // Parse existing salary value with better null handling
+              const parseExistingSalary = (
+                value: string | null | undefined
+              ) => {
+                if (!value || typeof value !== "string") {
+                  return { amount: "", period: "" };
+                }
+
+                // Check for "À négocier" or similar
+                if (value.toLowerCase().includes("négocier")) {
+                  return { amount: "", period: "negotiable" };
+                }
+
+                // Extract number from string
+                const amountMatch = value.match(/(\d+(?:\.\d+)?)/);
+                const amount = amountMatch ? amountMatch[1] : "";
+
+                // Determine period
+                let period = "";
+                if (value.includes("/mois") || value.includes("mois")) {
+                  period = "month";
+                } else if (value.includes("/an") || value.includes("annuel")) {
+                  period = "year";
+                } else if (
+                  value.includes("/heure") ||
+                  value.includes("heure")
+                ) {
+                  period = "hour";
+                }
+
+                return { amount, period };
+              };
+
+              const { amount, period } = parseExistingSalary(field.value);
+
+              // Update the combined value whenever amount or period changes
+              const updateSalary = (newAmount: string, newPeriod: string) => {
+                if (newPeriod === "negotiable") {
+                  field.onChange("À négocier");
+                } else if (newAmount && newPeriod) {
+                  const periodText =
+                    {
+                      month: "/mois",
+                      year: "/an",
+                      hour: "/heure",
+                    }[newPeriod] || "";
+                  field.onChange(`${newAmount}€${periodText}`);
+                } else if (newAmount && !newPeriod) {
+                  // Keep amount even without period selected
+                  field.onChange(`${newAmount}€`);
+                } else {
+                  field.onChange("");
+                }
+              };
+
+              return (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="job-salary">Salaire *</FieldLabel>
+                  <div className="flex gap-2">
+                    <Input
+                      id="job-salary"
+                      type="number"
+                      value={period === "negotiable" ? "" : amount}
+                      onChange={(e) => {
+                        const newAmount = e.target.value;
+                        updateSalary(newAmount, period);
+                      }}
+                      aria-invalid={fieldState.invalid}
+                      placeholder={
+                        period === "negotiable"
+                          ? "Salaire à négocier"
+                          : "Montant"
+                      }
+                      autoComplete="off"
+                      disabled={period === "negotiable"}
+                      className="flex-1"
+                    />
+                    <Select
+                      value={period || ""}
+                      onValueChange={(newPeriod) => {
+                        if (newPeriod === "negotiable") {
+                          updateSalary("", newPeriod);
+                        } else {
+                          updateSalary(amount, newPeriod);
+                        }
+                      }}
+                    >
+                      <SelectTrigger
+                        className="w-[180px]"
+                        aria-invalid={fieldState.invalid}
+                      >
+                        <SelectValue placeholder="Période" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="month">€/mois</SelectItem>
+                        <SelectItem value="year">€/an</SelectItem>
+                        <SelectItem value="hour">€/heure</SelectItem>
+                        <SelectItem value="negotiable">À négocier</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <FieldDescription>
+                    {period === "negotiable"
+                      ? "Le salaire sera à négocier avec le candidat"
+                      : "Entrez le montant et sélectionnez la période"}
+                  </FieldDescription>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              );
+            }}
           />
 
           <Controller

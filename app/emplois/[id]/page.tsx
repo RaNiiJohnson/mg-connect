@@ -15,12 +15,12 @@ import {
   Building2,
   Mail,
   Briefcase,
-  DollarSign,
   FileText,
   Award,
   Share2,
   Bookmark,
 } from "lucide-react";
+import { SalaryDisplay } from "@app/emplois/_component/salary";
 import { getUser } from "@/lib/auth-server";
 import { getJobOfferById } from "@/lib/database";
 import { notFound } from "next/navigation";
@@ -86,9 +86,12 @@ async function JobDetailsContent(props: Pageprops) {
                       <span>{jobOffer.contractType}</span>
                     </div>
                     {jobOffer.salary && (
-                      <div className="flex items-center gap-1.5 font-semibold text-foreground">
-                        <DollarSign className="h-4 w-4" />
-                        <span>{jobOffer.salary}</span>
+                      <div className="flex items-center gap-1.5">
+                        <SalaryDisplay
+                          salary={jobOffer.salary}
+                          className="text-foreground"
+                          showIcon
+                        />
                       </div>
                     )}
                   </div>
@@ -157,8 +160,8 @@ async function JobDetailsContent(props: Pageprops) {
                         <div className="text-sm text-muted-foreground">
                           Salaire
                         </div>
-                        <div className="font-medium text-primary">
-                          {jobOffer.salary}
+                        <div className="text-primary">
+                          <SalaryDisplay salary={jobOffer.salary} />
                         </div>
                       </div>
                     )}
@@ -305,9 +308,10 @@ async function JobDetailsContent(props: Pageprops) {
                 {jobOffer.salary && (
                   <div className="flex justify-between py-2">
                     <span className="text-muted-foreground">Salaire</span>
-                    <span className="font-semibold text-primary">
-                      {jobOffer.salary}
-                    </span>
+                    <SalaryDisplay
+                      salary={jobOffer.salary}
+                      className="text-primary"
+                    />
                   </div>
                 )}
               </CardContent>
