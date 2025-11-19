@@ -1,4 +1,4 @@
-import { Banknote } from "lucide-react";
+import { Banknote, Coins, CreditCard, Wallet } from "lucide-react";
 
 export interface ParsedSalary {
   amount: string;
@@ -40,11 +40,7 @@ interface SalaryDisplayProps {
   showIcon?: boolean;
 }
 
-export function SalaryDisplay({
-  salary,
-  className = "",
-  showIcon = false,
-}: SalaryDisplayProps) {
+export function SalaryDisplay({ salary, className = "" }: SalaryDisplayProps) {
   const parsed = parseSalary(salary);
 
   if (parsed.isNegotiable) {
@@ -61,7 +57,7 @@ export function SalaryDisplay({
 
   return (
     <span className={`font-medium ${className}`}>
-      {showIcon && <Banknote className="h-4 w-4 mr-1 inline" />}
+      <Wallet className="h-4 w-4 mr-1 inline" />
       <span className="font-semibold">{parsed.amount}€ </span>
       {parsed.period && (
         <span className="text-muted-foreground text-xs font-normal">
