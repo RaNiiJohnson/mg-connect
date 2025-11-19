@@ -1,10 +1,8 @@
-import { os } from '@orpc/server'
-
-const ping = os.handler(async () => 'ping')
-const pong = os.handler(async () => 'pong')
+import { createJobOffer, getAllJobOffers } from "@/lib/database";
 
 export const router = {
-  ping,
-  pong,
-  nested: { ping, pong }
-}
+  jobOffer: {
+    createJobOffer: createJobOffer,
+    getJobOffers: getAllJobOffers,
+  },
+};

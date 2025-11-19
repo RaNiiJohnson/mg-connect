@@ -1,5 +1,8 @@
 import { Prisma } from "@/generated/prisma";
 import prisma from "./prisma";
+import { os } from "@orpc/server";
+import { JobOfferSchema, JobOfferWithAuthorSchema } from "./orpc/route/schema";
+import { authorized } from "./orpc/authorized";
 
 // User operations
 export async function getUserProfile(userId: string) {
@@ -120,44 +123,36 @@ function buildJobOfferWhere(
   } satisfies Prisma.JobOfferWhereInput;
 }
 
-export async function createJobOffer(
-  authorId: string,
-  data: {
-    title: string;
-    type: string;
-    contractType: string;
-    city: string;
-    duration: string;
-    startDate: string;
-    company: string;
-    description: string;
-    certificates: string[];
-    salary: string;
-    contact: string;
-  }
-) {
-  return await prisma.jobOffer.create({
-    data: {
-      ...data,
-      authorId,
-    },
-  });
-}
+export const createJobOffer = authorized
+  .input(JobOfferSchema.omit({ id: true, authorId: true }))
+  .output(JobOfferSchema)
+  .handler(async ({ context, input }) => {
+    const jobOffer = await prisma.jobOffer.create({
+      data: {
+        ...input,
+        authorId: context.user.id,
+      },
+    });
 
-export async function getAllJobOffers() {
-  return await prisma.jobOffer.findMany({
-    include: {
-      author: {
-        select: {
-          id: true,
-          name: true,
-          photo: true,
+    return jobOffer;
+  });
+
+export const getAllJobOffers = os
+  .output(JobOfferWithAuthorSchema.array())
+  .handler(async () => {
+    return await prisma.jobOffer.findMany({
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            photo: true,
+          },
         },
       },
-    },
-    orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: "desc" },
+    });
   });
-}
 
 export async function getJobOffersWithPagination({
   page = 1,

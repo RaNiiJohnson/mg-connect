@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import * as z from "zod";
 import { useState } from "react";
 
@@ -37,7 +36,8 @@ import {
 } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight, XIcon } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { createJobOfferAction } from "@/lib/job-actions";
+import { client } from "@/lib/orpc/orpc";
+import { toast } from "sonner";
 
 const jobTypes = [
   "Au pair",
@@ -159,20 +159,21 @@ export function JobOfferForm({ onSuccess }: JobOfferFormProps) {
   };
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const result = await createJobOfferAction({
-      ...data,
-      certificates:
-        data.certificates
-          ?.map((cert) => cert.certificate)
-          .filter((cert) => cert.trim() !== "") || [],
-    });
+    try {
+      await client.jobOffer.createJobOffer({
+        ...data,
+        certificates:
+          data.certificates
+            ?.map((cert) => cert.certificate)
+            .filter((cert) => cert.trim() !== "") || [],
+      });
 
-    if (result.success) {
-      toast.success(result.message);
+      toast.success("Offre créée avec succès");
       form.reset();
       onSuccess?.();
-    } else {
-      toast.error(result.message);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.success("Erreur lors de la création de l'offre");
     }
   }
 
