@@ -7,6 +7,7 @@ import type { User } from "better-auth";
 import { PublishJobDialog } from "@app/emplois/_component/publish-job-dialog";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { getRelativeTime } from "@/lib/date";
 
 interface EmploisListProps {
   jobs: JobOfferListItem[];
@@ -33,18 +34,6 @@ export function EmploisList({ jobs, user }: EmploisListProps) {
       </div>
     );
   }
-
-  const getRelativeTime = (date: Date) => {
-    const now = new Date();
-    const diffInMs = now.getTime() - new Date(date).getTime();
-    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-
-    if (diffInDays === 0) return "Aujourd'hui";
-    if (diffInDays === 1) return "Hier";
-    if (diffInDays < 7) return `Il y a ${diffInDays} jours`;
-    if (diffInDays < 30) return `Il y a ${Math.floor(diffInDays / 7)} semaines`;
-    return `Il y a ${Math.floor(diffInDays / 30)} mois`;
-  };
 
   return (
     <div className="space-y-3">

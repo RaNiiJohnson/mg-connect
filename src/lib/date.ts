@@ -68,6 +68,24 @@ export const formatProfilDate = (date: Date | string) => {
   return "maintenant";
 };
 
+export const getRelativeTime = (date: Date | string) => {
+  const now = new Date();
+  const diffInMs = now.getTime() - new Date(date).getTime();
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+  if (diffInDays === 0) return "Aujourd'hui";
+  if (diffInDays === 1) return "Hier";
+  if (diffInDays < 7) {
+    return diffInDays === 1 ? "Il y a un jour" : `Il y a ${diffInDays} jours`;
+  }
+  if (diffInDays < 30) {
+    const weeks = Math.floor(diffInDays / 7);
+    return weeks === 1 ? "Il y a une semaine" : `Il y a ${weeks} semaines`;
+  }
+  const months = Math.floor(diffInDays / 30);
+  return months === 1 ? "Il y a un mois" : `Il y a ${months} mois`;
+};
+
 export const dateParser = (num: Date | string) => {
   let timestamp: number;
 
@@ -98,4 +116,12 @@ export const dateParser = (num: Date | string) => {
     " " +
     date.toString().split(",").slice(2)
   );
+};
+
+export const formatDateLong = (date: Date | string) => {
+  return new Date(date).toLocaleDateString("fr-FR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 };

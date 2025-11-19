@@ -26,6 +26,7 @@ import { getJobOfferById } from "@/lib/database";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
+import { getRelativeTime, formatDateLong } from "@/lib/date";
 
 type Pageprops = {
   params: Promise<{ id: string }>;
@@ -39,27 +40,6 @@ async function JobDetailsContent(props: Pageprops) {
   if (!jobOffer) {
     notFound();
   }
-
-  const formatDate = (date: Date | string) => {
-    return new Date(date).toLocaleDateString("fr-FR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const getRelativeTime = (date: Date | string) => {
-    const now = new Date();
-    const diffInMs = now.getTime() - new Date(date).getTime();
-    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-
-    if (diffInDays === 0) return "Aujourd'hui";
-    if (diffInDays === 1) return "Hier";
-    if (diffInDays < 7) return `Il y a ${diffInDays} jours`;
-    if (diffInDays < 30)
-      return `Il y a ${Math.floor(diffInDays / 7)} semaine${Math.floor(diffInDays / 7) > 1 ? "s" : ""}`;
-    return `Il y a ${Math.floor(diffInDays / 30)} mois`;
-  };
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -161,7 +141,7 @@ async function JobDetailsContent(props: Pageprops) {
                         Date de début
                       </div>
                       <div className="font-medium">
-                        {formatDate(jobOffer.startDate)}
+                        {formatDateLong(jobOffer.startDate)}
                       </div>
                     </div>
                     {jobOffer.duration && (
