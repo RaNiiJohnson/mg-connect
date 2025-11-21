@@ -16,7 +16,7 @@ import { LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { logout } from "@/lib/logout";
 
-type UserShape = {
+export type UserShape = {
   name?: string | null;
   email?: string | null;
   image?: string | null;

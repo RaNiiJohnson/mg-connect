@@ -4,14 +4,16 @@ import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { Button } from "./ui/button";
+import { ThemeToggle } from "./theme-toggle";
+import { AuthNavClient, UserShape } from "./auth-nav-client";
 
 type HeaderClientProps = {
-  rightSlot: ReactNode;
+  user: UserShape;
 };
 
-export function HeaderClient({ rightSlot }: HeaderClientProps) {
+export function HeaderClient({ user }: HeaderClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -208,7 +210,10 @@ export function HeaderClient({ rightSlot }: HeaderClientProps) {
           </AnimatePresence>
         </Button>
         <span className="flex-1" />
-        <div className="flex items-center sm:gap-4 gap-2">{rightSlot}</div>
+        <div className="flex items-center sm:gap-4 gap-2">
+          <AuthNavClient user={user} />
+          <ThemeToggle />
+        </div>
       </div>
 
       {/* Menu mobile */}

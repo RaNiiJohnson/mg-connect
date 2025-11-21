@@ -1,16 +1,7 @@
-import { AuthNav } from "./auth-nav";
+import { getUser } from "@/lib/auth-server";
 import { HeaderClient } from "./header-client";
-import { ThemeToggle } from "./theme-toggle";
 
-export default function Header() {
-  return (
-    <HeaderClient
-      rightSlot={
-        <>
-          <AuthNav />
-          <ThemeToggle />
-        </>
-      }
-    />
-  );
+export default async function Header() {
+  const user = await getUser();
+  return <HeaderClient user={user} />;
 }
