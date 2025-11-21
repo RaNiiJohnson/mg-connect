@@ -18,6 +18,12 @@ export const getSession = async () => {
     if (error instanceof Error && error.message.includes("prerender")) {
       return null;
     }
+
+    // Rethrow dynamic server usage errors to allow Next.js to opt into dynamic rendering
+    if (error instanceof Error && error.message.includes("Dynamic server usage")) {
+      throw error;
+    }
+
     console.error("Error getting session:", error);
     return null;
   }
@@ -28,6 +34,10 @@ export const getUser = async () => {
     const session = await getSession();
     return session?.user || null;
   } catch (error) {
+    // Rethrow dynamic server usage errors to allow Next.js to opt into dynamic rendering
+    if (error instanceof Error && error.message.includes("Dynamic server usage")) {
+      throw error;
+    }
     console.error("Error getting user:", error);
     return null;
   }
