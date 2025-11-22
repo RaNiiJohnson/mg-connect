@@ -179,13 +179,6 @@ function EmploisPageSkeleton() {
             </div>
           ))}
         </div>
-
-        {/* CTA skeleton */}
-        <div className="text-center mt-12 p-6 sm:p-8 bg-linear-to-br from-accent to-accent/0 rounded-lg">
-          <Skeleton className="h-6 sm:h-8 mb-4 w-full max-w-sm sm:max-w-md mx-auto" />
-          <Skeleton className="h-4 mb-6 w-full max-w-md sm:max-w-lg mx-auto" />
-          <Skeleton className="h-10 sm:h-12 w-full max-w-xs sm:w-48 mx-auto" />
-        </div>
       </div>
     </div>
   );
