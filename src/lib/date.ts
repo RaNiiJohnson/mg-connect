@@ -71,19 +71,36 @@ export const formatProfilDate = (date: Date | string) => {
 export const getRelativeTime = (date: Date | string) => {
   const now = new Date();
   const diffInMs = now.getTime() - new Date(date).getTime();
-  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+  const diffInSeconds = Math.floor(diffInMs / 1000);
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  const diffInDays = Math.floor(diffInHours / 24);
 
-  if (diffInDays === 0) return "Aujourd'hui";
-  if (diffInDays === 1) return "Hier";
+  if (diffInSeconds < 30) {
+    return "à l'instant";
+  }
+  if (diffInSeconds < 60) {
+    return `il y a ${diffInSeconds} secondes`;
+  }
+  if (diffInMinutes < 60) {
+    return `il y a ${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""}`;
+  }
+  if (diffInHours < 24) {
+    return `il y a ${diffInHours} heure${diffInHours > 1 ? "s" : ""}`;
+  }
   if (diffInDays < 7) {
-    return diffInDays === 1 ? "Il y a un jour" : `Il y a ${diffInDays} jours`;
+    return `il y a ${diffInDays} jour${diffInDays > 1 ? "s" : ""}`;
   }
   if (diffInDays < 30) {
     const weeks = Math.floor(diffInDays / 7);
-    return weeks === 1 ? "Il y a une semaine" : `Il y a ${weeks} semaines`;
+    return `il y a ${weeks} semaine${weeks > 1 ? "s" : ""}`;
   }
   const months = Math.floor(diffInDays / 30);
-  return months === 1 ? "Il y a un mois" : `Il y a ${months} mois`;
+  if (months < 12) {
+    return `il y a ${months} mois`;
+  }
+  const years = Math.floor(months / 12);
+  return `il y a ${years} an${years > 1 ? "s" : ""}`;
 };
 
 export const dateParser = (num: Date | string) => {
