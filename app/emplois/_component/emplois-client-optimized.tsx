@@ -155,53 +155,39 @@ export function EmploisClientOptimized({
 // Composant skeleton pour le chargement des offres d'emploi
 function EmploisListSkeleton() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Liste des emplois skeleton */}
       <div className="space-y-4">
         {[1, 2, 3, 4, 5].map((i) => (
-          <Card key={i}>
-            <CardContent className="p-6">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  {/* Badges skeleton */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <Skeleton className="h-5 w-16 rounded-full" />
-                    <Skeleton className="h-5 w-20 rounded-full" />
-                  </div>
+          <div key={i} className="bg-card border border-border rounded-lg p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1 min-w-0 space-y-3">
+                {/* Title skeleton */}
+                <Skeleton className="h-6 w-3/4" />
 
-                  {/* Titre skeleton */}
-                  <Skeleton className="h-7 w-64 mb-3" />
+                {/* Company skeleton */}
+                <Skeleton className="h-4 w-1/4" />
 
-                  {/* Informations skeleton */}
-                  <div className="flex flex-wrap gap-4 text-sm mb-4">
-                    <div className="flex items-center gap-1">
-                      <Skeleton className="h-4 w-4" />
-                      <Skeleton className="h-4 w-24" />
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Skeleton className="h-4 w-4" />
-                      <Skeleton className="h-4 w-20" />
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Skeleton className="h-4 w-4" />
-                      <Skeleton className="h-4 w-16" />
-                    </div>
-                  </div>
-
-                  {/* Boutons skeleton */}
-                  <div className="flex gap-2">
-                    <Skeleton className="h-8 w-20" />
-                    <Skeleton className="h-8 w-24" />
-                  </div>
+                {/* Location, Type & Salary skeleton */}
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-28" />
                 </div>
 
-                {/* Salaire skeleton */}
-                <div className="text-right flex flex-col items-end gap-2">
-                  <Skeleton className="h-6 w-20" />
+                {/* Badges skeleton */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <Skeleton className="h-5 w-16 rounded-full" />
+                  <Skeleton className="h-5 w-20 rounded-full" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+
+              {/* Date skeleton */}
+              <div className="shrink-0">
+                <Skeleton className="h-3 w-16" />
+              </div>
+            </div>
+          </div>
         ))}
       </div>
 
