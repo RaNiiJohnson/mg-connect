@@ -7,7 +7,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { Button } from "@/components/ui/button";
+
 import {
   Select,
   SelectContent,
@@ -17,6 +17,9 @@ import {
 } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useQueryState, parseAsInteger } from "nuqs";
+import { usePagination } from "@/hooks/use-pagination";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 interface EmploisPaginationProps {
   currentPage: number;
@@ -24,13 +27,20 @@ interface EmploisPaginationProps {
   totalCount: number;
   itemsPerPage?: number;
   onItemsPerPageChange?: (itemsPerPage: number) => void;
+  paginationItemsToDisplay?: number;
 }
 
 export function EmploisPagination({
   currentPage,
   totalPages,
+  paginationItemsToDisplay = 5,
 }: EmploisPaginationProps) {
   const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
+  const { pages, showLeftEllipsis, showRightEllipsis } = usePagination({
+    currentPage,
+    totalPages,
+    paginationItemsToDisplay,
+  });
 
   if (totalPages <= 1) return null;
 
@@ -40,86 +50,125 @@ export function EmploisPagination({
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Generate page numbers to show
-  const getVisiblePages = () => {
-    const delta = 2; // Number of pages to show on each side of current page
-    const range = [];
-    const rangeWithDots = [];
-
-    for (
-      let i = Math.max(2, currentPage - delta);
-      i <= Math.min(totalPages - 1, currentPage + delta);
-      i++
-    ) {
-      range.push(i);
-    }
-
-    if (currentPage - delta > 2) {
-      rangeWithDots.push(1, "...");
-    } else {
-      rangeWithDots.push(1);
-    }
-
-    rangeWithDots.push(...range);
-
-    if (currentPage + delta < totalPages - 1) {
-      rangeWithDots.push("...", totalPages);
-    } else if (totalPages > 1) {
-      rangeWithDots.push(totalPages);
-    }
-
-    return rangeWithDots;
-  };
-
-  const visiblePages = getVisiblePages();
-
   return (
     <div className="flex justify-end mt-8">
       <div className="flex flex-col items-end gap-4">
-        {/* Pagination */}
-        <Pagination className="mx-0">
-          <PaginationContent>
-            {/* Previous button */}
-            <PaginationItem>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage <= 1}
-                className="h-9 w-9 p-0"
+        <Pagination>
+          <PaginationContent className="inline-flex gap-0 -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
+            {/* Previous page button */}
+            <PaginationItem className="[&:first-child>a]:rounded-s-md [&:last-child>a]:rounded-e-md">
+              <PaginationLink
+                className={cn(
+                  buttonVariants({
+                    variant: "outline",
+                  }),
+                  "rounded-none shadow-none focus-visible:z-10 aria-disabled:pointer-events-none [&[aria-disabled]>svg]:opacity-50 cursor-pointer"
+                )}
+                onClick={() =>
+                  currentPage > 1 && handlePageChange(currentPage - 1)
+                }
+                aria-label="Go to previous page"
+                aria-disabled={currentPage === 1}
               >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
+                <ChevronLeft size={16} aria-hidden="true" />
+              </PaginationLink>
             </PaginationItem>
 
-            {/* Page numbers */}
-            {visiblePages.map((page, index) => (
-              <PaginationItem key={index}>
-                {page === "..." ? (
-                  <PaginationEllipsis />
-                ) : (
+            {/* First page and Left ellipsis */}
+            {showLeftEllipsis && (
+              <>
+                <PaginationItem>
                   <PaginationLink
-                    onClick={() => handlePageChange(page as number)}
-                    isActive={page === currentPage}
-                    className="cursor-pointer"
+                    className={cn(
+                      buttonVariants({
+                        variant: "outline",
+                      }),
+                      "rounded-none shadow-none focus-visible:z-10 cursor-pointer"
+                    )}
+                    onClick={() => handlePageChange(1)}
                   >
-                    {page}
+                    1
                   </PaginationLink>
-                )}
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationEllipsis
+                    className={cn(
+                      buttonVariants({
+                        variant: "outline",
+                      }),
+                      "pointer-events-none rounded-none shadow-none"
+                    )}
+                  />
+                </PaginationItem>
+              </>
+            )}
+
+            {/* Page number links */}
+            {pages.map((page) => (
+              <PaginationItem key={page}>
+                <PaginationLink
+                  className={cn(
+                    buttonVariants({
+                      variant: "outline",
+                    }),
+                    "rounded-none shadow-none focus-visible:z-10 cursor-pointer",
+                    page === currentPage &&
+                      "border-primary border-3 text-primary"
+                  )}
+                  onClick={() => handlePageChange(page)}
+                  isActive={page === currentPage}
+                >
+                  {page}
+                </PaginationLink>
               </PaginationItem>
             ))}
 
-            {/* Next button */}
-            <PaginationItem>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage >= totalPages}
-                className="h-9 w-9 p-0"
+            {/* Right ellipsis and Last page */}
+            {showRightEllipsis && (
+              <>
+                <PaginationItem>
+                  <PaginationEllipsis
+                    className={cn(
+                      buttonVariants({
+                        variant: "outline",
+                      }),
+                      "pointer-events-none rounded-none shadow-none"
+                    )}
+                  />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink
+                    className={cn(
+                      buttonVariants({
+                        variant: "outline",
+                      }),
+                      "rounded-none shadow-none focus-visible:z-10 cursor-pointer"
+                    )}
+                    onClick={() => handlePageChange(totalPages)}
+                  >
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              </>
+            )}
+
+            {/* Next page button */}
+            <PaginationItem className="[&:first-child>a]:rounded-s-md [&:last-child>a]:rounded-e-md">
+              <PaginationLink
+                className={cn(
+                  buttonVariants({
+                    variant: "outline",
+                  }),
+                  "rounded-none shadow-none focus-visible:z-10 aria-disabled:pointer-events-none [&[aria-disabled]>svg]:opacity-50 cursor-pointer"
+                )}
+                onClick={() =>
+                  currentPage < totalPages && handlePageChange(currentPage + 1)
+                }
+                aria-label="Go to next page"
+                aria-disabled={currentPage === totalPages}
               >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
+                <ChevronRight size={16} aria-hidden="true" />
+              </PaginationLink>
             </PaginationItem>
           </PaginationContent>
         </Pagination>
