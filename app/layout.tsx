@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   title: "Hallo Hallo - Communauté Malagasy en Allemagne",
   description:
     "Plateforme d'échange et de partage pour favoriser l'entraide entre les jeunes expats Malagasy en Allemagne. Emplois, logements, communauté.",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({

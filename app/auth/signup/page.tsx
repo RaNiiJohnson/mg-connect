@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { SignupForm } from "./signup-form";
-import { Kanban } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 export default async function SignupPage() {
   return (
@@ -10,7 +10,7 @@ export default async function SignupPage() {
         <CardHeader className="space-y-4 pb-8 text-center">
           <div className="flex justify-center">
             <div className="p-3 rounded-full bg-primary/10">
-              <Kanban className="w-8 h-8 text-primary" />
+              <Logo className="w-12 h-12 text-primary" />
             </div>
           </div>
           <div className="space-y-2">

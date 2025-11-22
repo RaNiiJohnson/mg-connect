@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { ThemeToggle } from "./theme-toggle";
 import { AuthSection } from "./auth-section";
+import { Logo } from "./logo";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,9 +25,10 @@ export default function Header() {
       <div className="mx-auto flex sm:gap-10 gap-2 items-center p-4 relative">
         <Link
           href="/"
-          className="text-2xl text-primary font-bold hover:opacity-80 transition"
+          className="flex items-center gap-2 text-2xl text-primary font-bold hover:opacity-80 transition"
         >
-          Hallo
+          <Logo className="w-8 h-8" />
+          <span>Hallo</span>
         </Link>
 
         {/* Navigation Desktop */}
