@@ -118,7 +118,6 @@ export function EmploisClientOptimized({
         filteredJobs={pagination.totalCount}
       />
 
-      {/* Pagination du haut - toujours visible si plus d'une page */}
       {pagination.totalPages > 1 && pagination.currentPage > 1 && (
         <div className={isLoading ? "opacity-50 pointer-events-none" : ""}>
           <EmploisPagination
