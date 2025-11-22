@@ -187,6 +187,7 @@ export async function getJobOffersByUser(userId: string) {
 }
 
 export async function getJobOfferById(id: string) {
+  "use cache";
   return await prisma.jobOffer.findUnique({
     where: { id },
     include: {

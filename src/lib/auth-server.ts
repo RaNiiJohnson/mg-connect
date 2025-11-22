@@ -20,7 +20,10 @@ export const getSession = async () => {
     }
 
     // Rethrow dynamic server usage errors to allow Next.js to opt into dynamic rendering
-    if (error instanceof Error && error.message.includes("Dynamic server usage")) {
+    if (
+      error instanceof Error &&
+      error.message.includes("Dynamic server usage")
+    ) {
       throw error;
     }
 
@@ -34,9 +37,14 @@ export const getUser = async () => {
     const session = await getSession();
     return session?.user || null;
   } catch (error) {
-    // Rethrow dynamic server usage errors to allow Next.js to opt into dynamic rendering
-    if (error instanceof Error && error.message.includes("Dynamic server usage")) {
-      throw error;
+    // During prerendering/static generation, headers() throws "Dynamic server usage"
+    // We catch it and return null so the page can be generated statically (with logged-out state)
+    if (
+      error instanceof Error &&
+      (error.message.includes("Dynamic server usage") ||
+        error.message.includes("prerender"))
+    ) {
+      return null;
     }
     console.error("Error getting user:", error);
     return null;

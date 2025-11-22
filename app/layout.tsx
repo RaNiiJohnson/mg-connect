@@ -5,9 +5,11 @@ import { Kantumruy_Pro, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
+import { Suspense } from "react";
 import Footer from "@/components/footer";
 import { Toaster } from "sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import HeaderFallback from "@/components/headerFallback";
 
 const kantumruyPro = Kantumruy_Pro({
   variable: "--font-kantumruy-pro",
@@ -41,7 +43,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
+          <Suspense fallback={<HeaderFallback />}>
+            <Header />
+          </Suspense>
           <main className="min-h-screen">
             <NuqsAdapter>{children}</NuqsAdapter>
           </main>

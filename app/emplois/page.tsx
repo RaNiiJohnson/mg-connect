@@ -21,7 +21,7 @@ type EmploisPageProps = {
 
 // Ensure this page is always rendered dynamically so query param changes
 // (filters via URL) trigger a server re-render without a manual refresh
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 async function EmploisPageContent({ searchParams }: EmploisPageProps) {
   const user = await getUser();
