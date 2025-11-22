@@ -4,7 +4,6 @@ import { EmploisFilters } from "./emplois-filters";
 import { EmploisList } from "./emplois-list";
 import { EmploisPagination } from "./emplois-pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent } from "@/components/ui/card";
 import type { JobOfferListItem } from "@/lib/database";
 import type { User } from "better-auth";
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -120,7 +119,7 @@ export function EmploisClientOptimized({
       />
 
       {/* Pagination du haut - toujours visible si plus d'une page */}
-      {pagination.totalPages > 1 && (
+      {pagination.totalPages > 1 && pagination.currentPage > 1 && (
         <div className={isLoading ? "opacity-50 pointer-events-none" : ""}>
           <EmploisPagination
             currentPage={pagination.currentPage}
