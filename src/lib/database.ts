@@ -1,8 +1,9 @@
-import { Prisma } from "@/generated/prisma";
-import prisma from "./prisma";
 import { os } from "@orpc/server";
+import { Prisma } from "@prisma/client";
+import prisma from "./prisma";
 import { JobOfferSchema, JobOfferWithAuthorSchema } from "./orpc/route/schema";
 import { authorized } from "./orpc/authorized";
+import { revalidatePath } from "next/cache";
 
 // User operations
 export async function getUserProfile(userId: string) {
@@ -98,7 +99,7 @@ const jobOfferListSelect = {
 
 export type JobOfferListItem = Prisma.JobOfferGetPayload<{
   select: typeof jobOfferListSelect;
-}>;
+}> & { isBookmarked?: boolean };
 
 function buildJobOfferWhere(
   filters: JobOfferQueryParams
@@ -133,7 +134,7 @@ export const createJobOffer = authorized
         authorId: context.user.id,
       },
     });
-
+    revalidatePath("/emplois");
     return jobOffer;
   });
 
@@ -187,7 +188,6 @@ export async function getJobOffersByUser(userId: string) {
 }
 
 export async function getJobOfferById(id: string) {
-  "use cache";
   return await prisma.jobOffer.findUnique({
     where: { id },
     include: {
@@ -317,6 +317,8 @@ export async function getJobOffersOptimized({
   city,
   page = 1,
   limit = 10,
+  userId,
+  bookmarkedOnly = false,
 }: {
   search?: string;
   type?: string;
@@ -324,29 +326,49 @@ export async function getJobOffersOptimized({
   city?: string;
   page?: number;
   limit?: number;
+  userId?: string;
+  bookmarkedOnly?: boolean;
 }) {
   const sanitizedLimit = Math.min(Math.max(limit, 1), 100);
   const normalizedPage = Math.max(page, 1);
 
   const where = buildJobOfferWhere({ search, type, contractType, city });
 
-  const overallCountPromise = prisma.jobOffer.count();
+  if (bookmarkedOnly && userId) {
+    where.bookmarks = {
+      some: {
+        userId: userId,
+      },
+    };
+  }
+
   const filteredCount = await prisma.jobOffer.count({ where });
 
   const totalPages = Math.ceil(filteredCount / sanitizedLimit) || 0;
   const safePage = totalPages > 0 ? Math.min(normalizedPage, totalPages) : 1;
   const skip = (safePage - 1) * sanitizedLimit;
 
-  const [jobOffers, overallCount] = await Promise.all([
-    prisma.jobOffer.findMany({
-      where,
-      select: jobOfferListSelect,
-      orderBy: { createdAt: "desc" },
-      skip,
-      take: sanitizedLimit,
-    }),
-    overallCountPromise,
-  ]);
+  const jobOffersRaw = await prisma.jobOffer.findMany({
+    where,
+    select: {
+      ...jobOfferListSelect,
+      bookmarks: userId
+        ? {
+            where: { userId },
+            select: { id: true },
+          }
+        : false,
+    },
+    orderBy: { createdAt: "desc" },
+    skip,
+    take: sanitizedLimit,
+  });
+
+  const jobOffers = jobOffersRaw.map((job) => ({
+    ...job,
+    isBookmarked: userId ? (job.bookmarks?.length ?? 0) > 0 : false,
+    bookmarks: undefined, // Remove bookmarks array from result
+  }));
 
   return {
     jobOffers,
@@ -358,7 +380,6 @@ export async function getJobOffersOptimized({
       hasNextPage: safePage < totalPages,
       hasPreviousPage: safePage > 1 && totalPages > 0,
     },
-    overallCount,
   };
 }
 export async function getJobOffersStats() {
