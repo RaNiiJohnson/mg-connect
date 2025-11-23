@@ -13,6 +13,7 @@ type EmploisSearchParams = {
   city?: string;
   page?: string;
   limit?: string;
+  bookmarked?: string;
 };
 
 type EmploisPageProps = {
@@ -57,14 +58,17 @@ async function EmploisPageContent({ searchParams }: EmploisPageProps) {
       : undefined;
   const page = parsePositiveInt(resolvedSearchParams.page);
   const limit = parsePositiveInt(resolvedSearchParams.limit);
+  const bookmarkedOnly = resolvedSearchParams.bookmarked === "true";
 
-  const { jobOffers, pagination, overallCount } = await getJobOffersOptimized({
+  const { jobOffers, pagination } = await getJobOffersOptimized({
     search,
     type,
     contractType,
     city,
     page,
     limit,
+    userId: user?.id,
+    bookmarkedOnly,
   });
 
   return (
@@ -87,7 +91,6 @@ async function EmploisPageContent({ searchParams }: EmploisPageProps) {
           <EmploisClientOptimized
             initialJobs={jobOffers}
             initialPagination={pagination}
-            initialOverallCount={overallCount}
             user={user}
           />
         </div>

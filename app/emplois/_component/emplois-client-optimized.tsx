@@ -12,7 +12,6 @@ import { useQueryState, parseAsString, parseAsInteger } from "nuqs";
 interface EmploisClientOptimizedProps {
   initialJobs: JobOfferListItem[];
   initialPagination: PaginationData;
-  initialOverallCount: number;
   user: User | null;
 }
 
@@ -28,7 +27,6 @@ interface PaginationData {
 export function EmploisClientOptimized({
   initialJobs,
   initialPagination,
-  initialOverallCount,
   user,
 }: EmploisClientOptimizedProps) {
   const [jobs, setJobs] = useState(initialJobs);
@@ -36,7 +34,6 @@ export function EmploisClientOptimized({
     ...initialPagination,
     pageSize: initialPagination.pageSize ?? 10,
   });
-  const [overallCount, setOverallCount] = useState(initialOverallCount);
   const [isLoading, setIsLoading] = useState(false);
   const isFirstRender = useRef(true);
 
@@ -53,6 +50,10 @@ export function EmploisClientOptimized({
     "limit",
     parseAsInteger.withDefault(initialPagination.pageSize ?? 10)
   );
+  const [bookmarked] = useQueryState(
+    "bookmarked",
+    parseAsString.withDefault("false")
+  );
 
   // Fonction pour charger les données optimisées via API
   const loadOptimizedData = useCallback(async () => {
@@ -61,6 +62,7 @@ export function EmploisClientOptimized({
     if (selectedType) params.set("type", selectedType);
     if (contractType) params.set("contract", contractType);
     if (city) params.set("city", city);
+    if (bookmarked === "true") params.set("bookmarked", "true");
     params.set("page", Math.max(page, 1).toString());
     params.set("limit", Math.max(limit, 1).toString());
 
@@ -82,16 +84,22 @@ export function EmploisClientOptimized({
           ...data.pagination,
           pageSize: data.pagination?.pageSize ?? Math.max(limit, 1),
         });
-        if (typeof data.overallCount === "number") {
-          setOverallCount(data.overallCount);
-        }
       }
     } catch (error) {
       console.error("Erreur lors du chargement des données:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [search, selectedType, contractType, city, page, limit, setPage]);
+  }, [
+    search,
+    selectedType,
+    contractType,
+    city,
+    page,
+    limit,
+    bookmarked,
+    setPage,
+  ]);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -101,6 +109,15 @@ export function EmploisClientOptimized({
 
     void loadOptimizedData();
   }, [loadOptimizedData]);
+
+  // Sync state with props when they change (e.g. after revalidatePath)
+  useEffect(() => {
+    setJobs(initialJobs);
+    setPagination({
+      ...initialPagination,
+      pageSize: initialPagination.pageSize ?? 10,
+    });
+  }, [initialJobs, initialPagination]);
 
   const handleItemsPerPageChange = useCallback(
     (newLimit: number) => {
@@ -113,10 +130,7 @@ export function EmploisClientOptimized({
   return (
     <div className="space-y-6">
       {/* Filtres */}
-      <EmploisFilters
-        totalJobs={overallCount}
-        filteredJobs={pagination.totalCount}
-      />
+      <EmploisFilters />
 
       {pagination.totalPages > 1 && pagination.currentPage > 1 && (
         <div className={isLoading ? "opacity-50 pointer-events-none" : ""}>

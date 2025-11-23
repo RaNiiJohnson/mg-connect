@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import * as z from "zod";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import {
   Field,
@@ -89,6 +90,7 @@ interface JobOfferFormProps {
 
 export function JobOfferForm({ onSuccess }: JobOfferFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -170,6 +172,7 @@ export function JobOfferForm({ onSuccess }: JobOfferFormProps) {
 
       toast.success("Offre créée avec succès");
       form.reset();
+      router.refresh();
       onSuccess?.();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {

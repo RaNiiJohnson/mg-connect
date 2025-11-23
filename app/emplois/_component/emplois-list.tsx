@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Briefcase, MapPin, Clock } from "lucide-react";
+import { JobBookmarkButton } from "./job-bookmark-button";
 import type { JobOfferListItem } from "@/lib/database";
 import type { User } from "better-auth";
 import { PublishJobDialog } from "@app/emplois/_component/publish-job-dialog";
@@ -93,10 +94,16 @@ export function EmploisList({ jobs, user }: EmploisListProps) {
               </div>
 
               {/* Date */}
-              <div className="shrink-0 text-right">
+              <div className="flex flex-col items-end gap-1">
                 <div className="text-xs text-muted-foreground whitespace-nowrap">
                   {getRelativeTime(job.createdAt)}
                 </div>
+                {user && (
+                  <JobBookmarkButton
+                    jobId={job.id}
+                    initialIsBookmarked={job.isBookmarked}
+                  />
+                )}
               </div>
             </div>
           </div>

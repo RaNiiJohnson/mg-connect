@@ -41,14 +41,7 @@ const CONTRACT_TYPES = [
   { value: "Aprentissage", label: "Aprentissage" },
 ];
 
-interface EmploisFiltersProps {
-  totalJobs: number;
-  filteredJobs: number;
-}
-
-export function EmploisFilters({
-  totalJobs,
-}: EmploisFiltersProps) {
+export function EmploisFilters() {
   const [search, setSearch] = useQueryState(
     "search",
     parseAsString.withDefault("")
@@ -62,6 +55,10 @@ export function EmploisFilters({
     parseAsString.withDefault("")
   );
   const [city, setCity] = useQueryState("city", parseAsString.withDefault(""));
+  const [bookmarked, setBookmarked] = useQueryState(
+    "bookmarked",
+    parseAsString.withDefault("false")
+  );
   const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -83,6 +80,7 @@ export function EmploisFilters({
         setSelectedType("");
       } else {
         setSelectedType(type);
+        setBookmarked("false");
       }
       setPage(1);
     });
@@ -136,16 +134,19 @@ export function EmploisFilters({
       {/* Filtres rapides par type */}
       <div className="flex flex-wrap gap-2">
         <Badge
-          variant={!selectedType ? "default" : "outline"}
+          variant={
+            !selectedType && bookmarked !== "true" ? "default" : "outline"
+          }
           className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
           onClick={() => {
             startTransition(() => {
               setSelectedType("");
+              setBookmarked("false");
               setPage(1);
             });
           }}
         >
-          Toutes ({totalJobs})
+          Toutes
         </Badge>
         {JOB_TYPES.map((type) => (
           <Badge
@@ -157,6 +158,23 @@ export function EmploisFilters({
             {type.label}
           </Badge>
         ))}
+        <Badge
+          variant={bookmarked === "true" ? "default" : "secondary"}
+          className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
+          onClick={() => {
+            startTransition(() => {
+              if (bookmarked === "true") {
+                setBookmarked("false");
+              } else {
+                setBookmarked("true");
+                setSelectedType(""); // Optional: clear type filter when selecting bookmarks
+              }
+              setPage(1);
+            });
+          }}
+        >
+          Favoris
+        </Badge>
       </div>
 
       {/* Filtres avancés */}
