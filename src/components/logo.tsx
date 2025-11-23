@@ -7,14 +7,13 @@ interface LogoProps {
 
 export function Logo({ className }: LogoProps) {
   return (
-    <div className={cn("relative w-8 h-8", className)}>
-      <Image
-        src="/images/hallo-logo.png"
-        alt="Hallo Logo"
-        fill
-        className="object-contain"
-        priority
-      />
-    </div>
+    <Image
+      src="/logo.png"
+      alt="Hallo Logo"
+      width={32}
+      height={32}
+      className={cn("object-contain", className)}
+      priority
+    />
   );
 }
