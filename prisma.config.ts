@@ -1,16 +1,18 @@
-import dotenv from "dotenv";
+import "dotenv/config";
 import { defineConfig, env } from "prisma/config";
 
-// Load environment variables from .env so CLI commands (npx prisma ...) can read DATABASE_URL
-dotenv.config();
-
 export default defineConfig({
+  // the main entry for your schema
   schema: "prisma/schema.prisma",
+  // where migrations should be generated
+  // what script to run for "prisma db seed"
   migrations: {
     path: "prisma/migrations",
   },
-  engine: "classic",
+  // The database URL
   datasource: {
+    // Type Safe env() helper
+    // Does not replace the need for dotenv
     url: env("DATABASE_URL"),
   },
 });
