@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,8 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getAllCommunityMembers } from "@/lib/database";
-import { Briefcase, FileText, MapPin, Users } from "lucide-react";
+import { FileText, Users } from "lucide-react";
 import { Suspense } from "react";
 
 // Données statiques pour les guides
@@ -157,7 +155,7 @@ import { CommunauteFilters } from "./_component/communaute-filters";
 // ... existing imports ...
 
 async function CommunautePageContent() {
-  const membres = await getAllCommunityMembers();
+  // const membres = await getAllCommunityMembers();
 
   return (
     <div className="min-h-screen bg-background pb-12">
@@ -181,7 +179,7 @@ async function CommunautePageContent() {
           {/* Onglet Membres */}
           <TabsContent value="membres" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {membres.map((membre) => (
+              {/* {membres.map((membre) => (
                 <Card
                   key={membre.id}
                   className="hover:shadow-lg transition-shadow p-4"
@@ -257,7 +255,7 @@ async function CommunautePageContent() {
                     </div>
                   </div>
                 </Card>
-              ))}
+              ))} */}
             </div>
           </TabsContent>
 
