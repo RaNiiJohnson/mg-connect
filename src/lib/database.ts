@@ -233,6 +233,7 @@ export async function createRealEstateListing(
 }
 
 export async function getAllRealEstateListings() {
+  "use cache";
   const data = await prisma.realEstateListing.findMany({
     include: {
       author: {
