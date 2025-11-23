@@ -8,15 +8,18 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { ThemeToggle } from "./theme-toggle";
 import { AuthSection } from "./auth-section";
-import { Logo } from "./logo";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   // Header transparent et fixe sur la page d'accueil, sticky sur les autres
-  const isHomePage = pathname === "/";
-  const headerClasses = isHomePage
+  const isFixedHeaderPage =
+    pathname === "/" ||
+    pathname === "/emplois" ||
+    pathname === "/communaute" ||
+    pathname === "/immobilier";
+  const headerClasses = isFixedHeaderPage
     ? "fixed top-0 z-50 w-full bg-transparent backdrop-blur-lg"
     : "sticky top-0 z-50 w-full bg-transparent backdrop-blur-lg";
 
@@ -27,7 +30,6 @@ export default function Header() {
           href="/"
           className="flex items-center gap-2 text-2xl text-primary font-bold hover:opacity-80 transition"
         >
-          <Logo className="w-8 h-8" />
           <span>Hallo</span>
         </Link>
 

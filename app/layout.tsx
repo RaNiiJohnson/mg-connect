@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   description:
     "Plateforme d'échange et de partage pour favoriser l'entraide entre les jeunes expats Malagasy en Allemagne. Emplois, logements, communauté.",
   icons: {
-    icon: "/logo.svg",
+    icon: "/logo.png",
   },
 };
 

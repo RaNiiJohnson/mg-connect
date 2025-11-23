@@ -34,7 +34,7 @@ interface RealEstateListing {
 
 interface ImmobilierContainerProps {
   annonces: RealEstateListing[];
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export function ImmobilierContainer({

@@ -1,6 +1,5 @@
 "use client";
 
-import { EmploisFilters } from "./emplois-filters";
 import { EmploisList } from "./emplois-list";
 import { EmploisPagination } from "./emplois-pagination";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -129,8 +128,7 @@ export function EmploisClientOptimized({
 
   return (
     <div className="space-y-6">
-      {/* Filtres */}
-      <EmploisFilters />
+      {/* Filtres removed from here to be placed in Hero */}
 
       {pagination.totalPages > 1 && pagination.currentPage > 1 && (
         <div className={isLoading ? "opacity-50 pointer-events-none" : ""}>

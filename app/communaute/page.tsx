@@ -8,19 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getUser } from "@/lib/auth-server";
 import { getAllCommunityMembers } from "@/lib/database";
-import {
-  Briefcase,
-  FileText,
-  Filter,
-  MapPin,
-  Plus,
-  Search,
-  Users,
-} from "lucide-react";
+import { Briefcase, FileText, MapPin, Users } from "lucide-react";
 import { Suspense } from "react";
 
 // Données statiques pour les guides
@@ -161,27 +151,25 @@ const communityGroups = [
   { name: "Sport & Fitness", members: 15, category: "Intérêt" },
 ];
 
+import { HeroSection } from "@/components/hero-section";
+import { CommunauteFilters } from "./_component/communaute-filters";
+
+// ... existing imports ...
+
 async function CommunautePageContent() {
-  const user = await getUser();
   const membres = await getAllCommunityMembers();
 
   return (
-    <div className="min-h-screen p-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
-            <div className="flex-1">
-              <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-                Communauté
-              </h1>
-              <p className="text-base sm:text-lg text-muted-foreground">
-                Connectez-vous avec d&apos;autres Malagasy en Allemagne
-              </p>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-background pb-12">
+      <HeroSection
+        title="Communauté"
+        subtitle="Connectez-vous avec d'autres Malagasy en Allemagne"
+        backgroundImage="/images/community-bg.png"
+      >
+        <CommunauteFilters />
+      </HeroSection>
 
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Contenu principal avec onglets */}
         <Tabs defaultValue="membres" className="w-full">
           <TabsList className="grid w-full grid-cols-3">

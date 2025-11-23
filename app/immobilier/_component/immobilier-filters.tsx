@@ -26,27 +26,22 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 
-const JOB_TYPES = [
-  { value: "Au pair", label: "Au pair" },
-  { value: "Formation", label: "Formation" },
-  { value: "Volontariat", label: "Volontariat" },
-  { value: "Stage", label: "Stage" },
-  { value: "Mini-job", label: "Mini-job" },
-  { value: "Emploi", label: "Emploi" },
-  { value: "Bourse d'étude", label: "Bourse d'étude" },
+const LISTING_TYPES = [
+  { value: "Appartement", label: "Appartement" },
+  { value: "Maison", label: "Maison" },
+  { value: "Studio", label: "Studio" },
+  { value: "Colocation", label: "Colocation" },
+  { value: "Chambre", label: "Chambre" },
 ];
 
-const CONTRACT_TYPES = [
-  { value: "CDD", label: "CDD" },
-  { value: "CDI", label: "CDI" },
-  { value: "FSJ/FOJ/BFD", label: "FSJ/FOJ/BFD" },
-  { value: "Temps plein", label: "Temps plein" },
-  { value: "Temps partiel", label: "Temps partiel" },
-  { value: "Freelance", label: "Freelance" },
-  { value: "Aprentissage", label: "Aprentissage" },
+const BEDROOMS_OPTIONS = [
+  { value: "1", label: "1 chambre" },
+  { value: "2", label: "2 chambres" },
+  { value: "3", label: "3 chambres" },
+  { value: "4", label: "4+ chambres" },
 ];
 
-export function EmploisFilters() {
+export function ImmobilierFilters() {
   const [search, setSearch] = useQueryState(
     "search",
     parseAsString.withDefault("")
@@ -55,14 +50,18 @@ export function EmploisFilters() {
     "type",
     parseAsString.withDefault("")
   );
-  const [contractType, setContractType] = useQueryState(
-    "contract",
+  const [city, setCity] = useQueryState("city", parseAsString.withDefault(""));
+  const [bedrooms, setBedrooms] = useQueryState(
+    "bedrooms",
     parseAsString.withDefault("")
   );
-  const [city, setCity] = useQueryState("city", parseAsString.withDefault(""));
-  const [bookmarked, setBookmarked] = useQueryState(
-    "bookmarked",
-    parseAsString.withDefault("false")
+  const [minPrice, setMinPrice] = useQueryState(
+    "minPrice",
+    parseAsString.withDefault("")
+  );
+  const [maxPrice, setMaxPrice] = useQueryState(
+    "maxPrice",
+    parseAsString.withDefault("")
   );
   const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -72,26 +71,28 @@ export function EmploisFilters() {
     startTransition(() => {
       setSearch("");
       setSelectedType("");
-      setContractType("");
       setCity("");
+      setBedrooms("");
+      setMinPrice("");
+      setMaxPrice("");
       setPage(1);
     });
   };
 
-  const selectJobType = (type: string) => {
+  const selectListingType = (type: string) => {
     startTransition(() => {
       // Si on clique sur le type déjà sélectionné, on le désélectionne
       if (selectedType === type) {
         setSelectedType("");
       } else {
         setSelectedType(type);
-        setBookmarked("false");
       }
       setPage(1);
     });
   };
 
-  const hasActiveFilters = search || selectedType || contractType || city;
+  const hasActiveFilters =
+    search || selectedType || city || bedrooms || minPrice || maxPrice;
 
   return (
     <div className="space-y-4">
@@ -99,7 +100,7 @@ export function EmploisFilters() {
       <div className="flex gap-4">
         <InputGroup>
           <InputGroupInput
-            placeholder="Rechercher par titre, ville, entreprise..."
+            placeholder="Rechercher par titre, ville, quartier..."
             className="pl-10"
             value={search}
             disabled={isPending}
@@ -125,8 +126,10 @@ export function EmploisFilters() {
                       className="ml-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
                     >
                       {(selectedType ? 1 : 0) +
-                        (contractType ? 1 : 0) +
-                        (city ? 1 : 0)}
+                        (city ? 1 : 0) +
+                        (bedrooms ? 1 : 0) +
+                        (minPrice ? 1 : 0) +
+                        (maxPrice ? 1 : 0)}
                     </Badge>
                   )}
                 </InputGroupButton>
@@ -151,33 +154,6 @@ export function EmploisFilters() {
                   <div className="space-y-4">
                     <div>
                       <label className="text-sm font-medium mb-2 block">
-                        Type de contrat
-                      </label>
-                      <Select
-                        value={contractType || "all"}
-                        onValueChange={(value) => {
-                          startTransition(() => {
-                            setContractType(value === "all" ? "" : value);
-                            setPage(1);
-                          });
-                        }}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Tous les contrats" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">Tous les contrats</SelectItem>
-                          {CONTRACT_TYPES.map((type) => (
-                            <SelectItem key={type.value} value={type.value}>
-                              {type.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
                         Ville
                       </label>
                       <Input
@@ -191,6 +167,68 @@ export function EmploisFilters() {
                         }}
                       />
                     </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">
+                        Nombre de chambres
+                      </label>
+                      <Select
+                        value={bedrooms || "all"}
+                        onValueChange={(value) => {
+                          startTransition(() => {
+                            setBedrooms(value === "all" ? "" : value);
+                            setPage(1);
+                          });
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Toutes" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">Toutes</SelectItem>
+                          {BEDROOMS_OPTIONS.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">
+                          Prix min (€)
+                        </label>
+                        <Input
+                          type="number"
+                          placeholder="Min"
+                          value={minPrice}
+                          onChange={(e) => {
+                            startTransition(() => {
+                              setMinPrice(e.target.value);
+                              setPage(1);
+                            });
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">
+                          Prix max (€)
+                        </label>
+                        <Input
+                          type="number"
+                          placeholder="Max"
+                          value={maxPrice}
+                          onChange={(e) => {
+                            startTransition(() => {
+                              setMaxPrice(e.target.value);
+                              setPage(1);
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </PopoverContent>
@@ -202,47 +240,27 @@ export function EmploisFilters() {
       {/* Filtres rapides par type */}
       <div className="flex flex-wrap gap-2">
         <Badge
-          variant={
-            !selectedType && bookmarked !== "true" ? "default" : "outline"
-          }
+          variant={!selectedType ? "default" : "outline"}
           className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
           onClick={() => {
             startTransition(() => {
               setSelectedType("");
-              setBookmarked("false");
               setPage(1);
             });
           }}
         >
-          Toutes
+          Tous
         </Badge>
-        {JOB_TYPES.map((type) => (
+        {LISTING_TYPES.map((type) => (
           <Badge
             key={type.value}
             variant={selectedType === type.value ? "default" : "outline"}
             className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-            onClick={() => selectJobType(type.value)}
+            onClick={() => selectListingType(type.value)}
           >
             {type.label}
           </Badge>
         ))}
-        <Badge
-          variant={bookmarked === "true" ? "default" : "secondary"}
-          className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-          onClick={() => {
-            startTransition(() => {
-              if (bookmarked === "true") {
-                setBookmarked("false");
-              } else {
-                setBookmarked("true");
-                setSelectedType(""); // Optional: clear type filter when selecting bookmarks
-              }
-              setPage(1);
-            });
-          }}
-        >
-          Favoris
-        </Badge>
       </div>
     </div>
   );

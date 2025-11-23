@@ -26,43 +26,34 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 
-const JOB_TYPES = [
-  { value: "Au pair", label: "Au pair" },
-  { value: "Formation", label: "Formation" },
-  { value: "Volontariat", label: "Volontariat" },
-  { value: "Stage", label: "Stage" },
-  { value: "Mini-job", label: "Mini-job" },
-  { value: "Emploi", label: "Emploi" },
-  { value: "Bourse d'étude", label: "Bourse d'étude" },
+const STATUS_OPTIONS = [
+  { value: "Étudiant", label: "Étudiant" },
+  { value: "Au Pair", label: "Au Pair" },
+  { value: "Professionnel", label: "Professionnel" },
+  { value: "Autre", label: "Autre" },
 ];
 
-const CONTRACT_TYPES = [
-  { value: "CDD", label: "CDD" },
-  { value: "CDI", label: "CDI" },
-  { value: "FSJ/FOJ/BFD", label: "FSJ/FOJ/BFD" },
-  { value: "Temps plein", label: "Temps plein" },
-  { value: "Temps partiel", label: "Temps partiel" },
-  { value: "Freelance", label: "Freelance" },
-  { value: "Aprentissage", label: "Aprentissage" },
+const CITY_OPTIONS = [
+  { value: "Berlin", label: "Berlin" },
+  { value: "Munich", label: "Munich" },
+  { value: "Hamburg", label: "Hamburg" },
+  { value: "Frankfurt", label: "Frankfurt" },
+  { value: "Cologne", label: "Cologne" },
 ];
 
-export function EmploisFilters() {
+export function CommunauteFilters() {
   const [search, setSearch] = useQueryState(
     "search",
     parseAsString.withDefault("")
   );
-  const [selectedType, setSelectedType] = useQueryState(
-    "type",
-    parseAsString.withDefault("")
-  );
-  const [contractType, setContractType] = useQueryState(
-    "contract",
+  const [selectedStatus, setSelectedStatus] = useQueryState(
+    "status",
     parseAsString.withDefault("")
   );
   const [city, setCity] = useQueryState("city", parseAsString.withDefault(""));
-  const [bookmarked, setBookmarked] = useQueryState(
-    "bookmarked",
-    parseAsString.withDefault("false")
+  const [field, setField] = useQueryState(
+    "field",
+    parseAsString.withDefault("")
   );
   const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -71,27 +62,26 @@ export function EmploisFilters() {
   const clearAllFilters = () => {
     startTransition(() => {
       setSearch("");
-      setSelectedType("");
-      setContractType("");
+      setSelectedStatus("");
       setCity("");
+      setField("");
       setPage(1);
     });
   };
 
-  const selectJobType = (type: string) => {
+  const selectStatus = (status: string) => {
     startTransition(() => {
-      // Si on clique sur le type déjà sélectionné, on le désélectionne
-      if (selectedType === type) {
-        setSelectedType("");
+      // Si on clique sur le statut déjà sélectionné, on le désélectionne
+      if (selectedStatus === status) {
+        setSelectedStatus("");
       } else {
-        setSelectedType(type);
-        setBookmarked("false");
+        setSelectedStatus(status);
       }
       setPage(1);
     });
   };
 
-  const hasActiveFilters = search || selectedType || contractType || city;
+  const hasActiveFilters = search || selectedStatus || city || field;
 
   return (
     <div className="space-y-4">
@@ -99,7 +89,7 @@ export function EmploisFilters() {
       <div className="flex gap-4">
         <InputGroup>
           <InputGroupInput
-            placeholder="Rechercher par titre, ville, entreprise..."
+            placeholder="Rechercher par nom, ville, domaine..."
             className="pl-10"
             value={search}
             disabled={isPending}
@@ -124,9 +114,9 @@ export function EmploisFilters() {
                       variant="secondary"
                       className="ml-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
                     >
-                      {(selectedType ? 1 : 0) +
-                        (contractType ? 1 : 0) +
-                        (city ? 1 : 0)}
+                      {(selectedStatus ? 1 : 0) +
+                        (city ? 1 : 0) +
+                        (field ? 1 : 0)}
                     </Badge>
                   )}
                 </InputGroupButton>
@@ -151,25 +141,25 @@ export function EmploisFilters() {
                   <div className="space-y-4">
                     <div>
                       <label className="text-sm font-medium mb-2 block">
-                        Type de contrat
+                        Ville
                       </label>
                       <Select
-                        value={contractType || "all"}
+                        value={city || "all"}
                         onValueChange={(value) => {
                           startTransition(() => {
-                            setContractType(value === "all" ? "" : value);
+                            setCity(value === "all" ? "" : value);
                             setPage(1);
                           });
                         }}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Tous les contrats" />
+                          <SelectValue placeholder="Toutes" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all">Tous les contrats</SelectItem>
-                          {CONTRACT_TYPES.map((type) => (
-                            <SelectItem key={type.value} value={type.value}>
-                              {type.label}
+                          <SelectItem value="all">Toutes</SelectItem>
+                          {CITY_OPTIONS.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -178,14 +168,14 @@ export function EmploisFilters() {
 
                     <div>
                       <label className="text-sm font-medium mb-2 block">
-                        Ville
+                        Domaine
                       </label>
                       <Input
-                        placeholder="Filtrer par ville..."
-                        value={city}
+                        placeholder="Filtrer par domaine..."
+                        value={field}
                         onChange={(e) => {
                           startTransition(() => {
-                            setCity(e.target.value);
+                            setField(e.target.value);
                             setPage(1);
                           });
                         }}
@@ -199,50 +189,30 @@ export function EmploisFilters() {
         </InputGroup>
       </div>
 
-      {/* Filtres rapides par type */}
+      {/* Filtres rapides par statut */}
       <div className="flex flex-wrap gap-2">
         <Badge
-          variant={
-            !selectedType && bookmarked !== "true" ? "default" : "outline"
-          }
+          variant={!selectedStatus ? "default" : "outline"}
           className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
           onClick={() => {
             startTransition(() => {
-              setSelectedType("");
-              setBookmarked("false");
+              setSelectedStatus("");
               setPage(1);
             });
           }}
         >
-          Toutes
+          Tous
         </Badge>
-        {JOB_TYPES.map((type) => (
+        {STATUS_OPTIONS.map((status) => (
           <Badge
-            key={type.value}
-            variant={selectedType === type.value ? "default" : "outline"}
+            key={status.value}
+            variant={selectedStatus === status.value ? "default" : "outline"}
             className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-            onClick={() => selectJobType(type.value)}
+            onClick={() => selectStatus(status.value)}
           >
-            {type.label}
+            {status.label}
           </Badge>
         ))}
-        <Badge
-          variant={bookmarked === "true" ? "default" : "secondary"}
-          className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-          onClick={() => {
-            startTransition(() => {
-              if (bookmarked === "true") {
-                setBookmarked("false");
-              } else {
-                setBookmarked("true");
-                setSelectedType(""); // Optional: clear type filter when selecting bookmarks
-              }
-              setPage(1);
-            });
-          }}
-        >
-          Favoris
-        </Badge>
       </div>
     </div>
   );
