@@ -48,10 +48,7 @@ export function EmploisClient({ jobs, user }: EmploisClientProps) {
 
   return (
     <>
-      <EmploisFilters
-        totalJobs={jobs.length}
-        filteredJobs={filteredJobs.length}
-      />
+      <EmploisFilters />
       <EmploisClientPagination jobs={filteredJobs} user={user} />
     </>
   );
