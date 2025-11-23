@@ -1,9 +1,13 @@
 import { os } from "@orpc/server";
-import { Prisma } from "@prisma/client";
 import prisma from "./prisma";
 import { JobOfferSchema, JobOfferWithAuthorSchema } from "./orpc/route/schema";
 import { authorized } from "./orpc/authorized";
 import { revalidatePath } from "next/cache";
+import {
+  JobOfferGetPayload,
+  JobOfferSelect,
+  JobOfferWhereInput,
+} from "@/generated/prisma/models";
 
 // User operations
 export async function getUserProfile(userId: string) {
@@ -95,15 +99,13 @@ const jobOfferListSelect = {
       photo: true,
     },
   },
-} satisfies Prisma.JobOfferSelect;
+} satisfies JobOfferSelect;
 
-export type JobOfferListItem = Prisma.JobOfferGetPayload<{
+export type JobOfferListItem = JobOfferGetPayload<{
   select: typeof jobOfferListSelect;
 }> & { isBookmarked?: boolean };
 
-function buildJobOfferWhere(
-  filters: JobOfferQueryParams
-): Prisma.JobOfferWhereInput {
+function buildJobOfferWhere(filters: JobOfferQueryParams): JobOfferWhereInput {
   const search = filters.search?.trim();
   const city = filters.city?.trim();
 
@@ -121,7 +123,7 @@ function buildJobOfferWhere(
     ...(filters.type ? { type: filters.type } : {}),
     ...(filters.contractType ? { contractType: filters.contractType } : {}),
     ...(city ? { city: { contains: city, mode: "insensitive" } } : {}),
-  } satisfies Prisma.JobOfferWhereInput;
+  } satisfies JobOfferWhereInput;
 }
 
 export const createJobOffer = authorized
