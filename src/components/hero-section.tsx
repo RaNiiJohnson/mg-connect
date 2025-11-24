@@ -27,7 +27,7 @@ export function HeroSection({
           className="object-cover opacity-40"
           priority
         />
-        <div className="absolute inset-0 bg-linear-to-b from-background/90 via-background/50 to-background/90 dark:from-background/80 dark:via-background/40 dark:to-background/80" />
+        <div className="absolute inset-0 bg-linear-to-b from-background/70 from-0% via-transparent via-50% to-background to-95%" />
       </div>
 
       {/* Content */}
@@ -35,7 +35,7 @@ export function HeroSection({
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4">
           {title}
         </h1>
-        <p className="text-lg sm:text-xl text-foreground/70 max-w-2xl mb-10">
+        <p className="text-lg sm:text-xl text-foreground/80 max-w-2xl mb-10">
           {subtitle}
         </p>
 

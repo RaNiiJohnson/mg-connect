@@ -93,26 +93,44 @@ function EmploisPageSkeleton() {
     <div className="min-h-screen p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header Skeleton */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
-            <div className="flex-1">
-              <Skeleton className="h-8 sm:h-10 mb-4 w-24 sm:w-32" />
-              <Skeleton className="h-5 sm:h-6 w-full max-w-sm sm:max-w-md" />
+        <div className="relative w-full bg-background text-foreground overflow-hidden">
+          {/* Background Skeleton */}
+          <div className="absolute inset-0 z-0">
+            <Skeleton className="w-full h-full" />
+            <div className="absolute inset-0 bg-linear-to-b from-background/70 from-0% via-transparent via-50% to-background to-95%" />
+          </div>
+
+          {/* Content */}
+          <div className="relative z-10 max-w-6xl mx-auto px-4 pt-32 pb-16 sm:pt-40 sm:pb-24 flex flex-col items-center text-center">
+            {/* Title Skeleton */}
+            <div className="mb-4 space-y-3">
+              <Skeleton className="h-12 sm:h-14 md:h-16 w-[300px] sm:w-[500px] md:w-[600px] mx-auto" />
+              <Skeleton className="h-12 sm:h-14 md:h-16 w-[250px] sm:w-[400px] md:w-[500px] mx-auto" />
             </div>
-            <Skeleton className="h-10 w-full sm:w-48" />
-          </div>
 
-          {/* Search and filters skeleton */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <Skeleton className="h-10 flex-1" />
-            <Skeleton className="h-10 w-full sm:w-24" />
-          </div>
+            {/* Subtitle Skeleton */}
+            <div className="max-w-2xl mb-10 space-y-2">
+              <Skeleton className="h-5 sm:h-6 w-[350px] sm:w-[500px] mx-auto" />
+              <Skeleton className="h-5 sm:h-6 w-[300px] sm:w-[450px] mx-auto" />
+            </div>
 
-          {/* Filter badges skeleton */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <Skeleton key={i} className="h-6 w-12 sm:w-16 rounded-full" />
-            ))}
+            {/* Filters Container Skeleton */}
+            <div className="w-full max-w-4xl bg-background/95 backdrop-blur-sm rounded-lg p-4 shadow-xl">
+              <div className="space-y-4">
+                {/* Filter Row 1 */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Skeleton className="h-10 flex-1" />
+                  <Skeleton className="h-10 flex-1" />
+                  <Skeleton className="h-10 flex-1" />
+                </div>
+
+                {/* Filter Row 2 */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Skeleton className="h-10 flex-1" />
+                  <Skeleton className="h-10 w-full sm:w-32" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
