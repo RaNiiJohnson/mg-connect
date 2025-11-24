@@ -19,7 +19,7 @@ interface EmploisListProps {
 export function EmploisList({ jobs, user }: EmploisListProps) {
   if (jobs.length === 0) {
     return (
-      <div className="text-center py-16 px-4">
+      <div className="text-center px-4">
         <div className="max-w-md mx-auto">
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <Briefcase className="h-8 w-8 text-muted-foreground" />
