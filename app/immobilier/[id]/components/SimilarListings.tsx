@@ -2,16 +2,17 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Euro, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { PriceDisplay } from "../../_component/price";
 
 interface RealEstateListing {
   id: string;
   title: string;
   city: string;
   district: string;
-  price: number;
+  price: string;
   type: string;
   photos: string[];
   coverPhoto: string;
@@ -73,13 +74,7 @@ export function SimilarListings({ properties }: SimilarListingsProps) {
                 <MapPin className="size-3" />
                 {annonce.city} - {annonce.district}
               </div>
-              <div className="flex items-center gap-1 font-bold text-primary">
-                <Euro className="size-4" strokeWidth={3} />
-                {annonce.price.toLocaleString()}
-                <span className="font-light text-xs text-muted-foreground">
-                  / mois
-                </span>
-              </div>
+              <PriceDisplay price={annonce.price} className="text-primary" />
             </div>
           </Link>
         ))}

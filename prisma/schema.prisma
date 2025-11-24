@@ -136,8 +136,8 @@ model RealEstateListing {
   type        String
   city        String
   district    String
-  price       Int
-  deposit     Int
+  price       String
+  deposit     String
   area        Int
   bedrooms    Int
   bathrooms   Int

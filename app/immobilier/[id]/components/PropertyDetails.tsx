@@ -7,7 +7,6 @@ import {
   Bath,
   Bed,
   Calendar,
-  Euro,
   Mail,
   MapPin,
   PawPrint,
@@ -19,14 +18,15 @@ import Image from "next/image";
 import { useState } from "react";
 import { ImageGrid } from "./ImageGrid";
 import { Item, ItemContent, ItemSeparator } from "@/components/ui/item";
+import { PriceDisplay, parsePrice } from "../../_component/price";
 
 interface RealEstateListing {
   id: string;
   title: string;
   city: string;
   district: string;
-  price: number;
-  deposit: number;
+  price: string;
+  deposit: string;
   type: string;
   photos: string[];
   coverPhoto: string;
@@ -93,21 +93,13 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
           </div>
 
           <div className="sm:text-right">
-            <div className="flex items-center gap-2 sm:justify-end">
-              <Euro
-                className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0"
-                strokeWidth={3}
-              />
-              <span className="text-2xl sm:text-4xl font-bold text-primary">
-                {property.price.toLocaleString()}
-              </span>
-              <span className="text-sm sm:text-base text-muted-foreground whitespace-nowrap">
-                / mois
-              </span>
-            </div>
-            {property.deposit > 0 && (
+            <PriceDisplay
+              price={property.price}
+              className="text-2xl sm:text-4xl"
+            />
+            {parsePrice(property.deposit).amount && (
               <div className="text-sm text-muted-foreground mt-1">
-                Caution : {property.deposit.toLocaleString()}€
+                Caution : <PriceDisplay price={property.deposit} />
               </div>
             )}
           </div>

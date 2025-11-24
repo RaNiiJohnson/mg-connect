@@ -19,9 +19,7 @@ async function ImmobilierPageContent() {
       </HeroSection>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <ImmobilierContainer annonces={annonces}>
-          {/* Header removed as it is now in HeroSection */}
-        </ImmobilierContainer>
+        <ImmobilierContainer annonces={annonces} />
       </div>
     </div>
   );

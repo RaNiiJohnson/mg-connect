@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import { ImmobilierGrid } from "./ImmobilierGrid";
 
 interface RealEstateListing {
@@ -8,8 +5,8 @@ interface RealEstateListing {
   title: string;
   city: string;
   district: string;
-  price: number;
-  deposit: number;
+  price: string;
+  deposit: string;
   type: string;
   photos: string[];
   coverPhoto: string;
@@ -41,16 +38,12 @@ export function ImmobilierContainer({
   annonces,
   children,
 }: ImmobilierContainerProps) {
-  const [hasSelection, setHasSelection] = useState(false);
-
   return (
-    <div
-      className={`mx-auto transition-all duration-300 ${hasSelection ? "max-w-7xl" : "max-w-6xl"}`}
-    >
+    <div className="mx-auto transition-all duration-300 max-w-7xl">
       {children}
 
       {/* Grille interactive avec panel de détails */}
-      <ImmobilierGrid annonces={annonces} onSelectionChange={setHasSelection} />
+      <ImmobilierGrid annonces={annonces} />
     </div>
   );
 }

@@ -212,8 +212,8 @@ export async function createRealEstateListing(
     type: string;
     city: string;
     district: string;
-    price: number;
-    deposit: number;
+    price: string;
+    deposit: string;
     area: number;
     bedrooms: number;
     bathrooms: number;

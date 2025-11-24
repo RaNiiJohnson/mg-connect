@@ -1,17 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Euro, ExternalLink, MapPin, X } from "lucide-react";
+import { ExternalLink, MapPin, X } from "lucide-react";
 import Link from "next/link";
 import { ImageCarousel } from "./ImageCarousel";
+import { PriceDisplay, parsePrice } from "../_component/price";
 
 interface RealEstateListing {
   id: string;
   title: string;
   city: string;
   district: string;
-  price: number;
-  deposit: number;
+  price: string;
+  deposit: string;
   type: string;
   photos: string[];
   coverPhoto: string;
@@ -70,29 +71,6 @@ export function AnnonceDetails({
       />
 
       <div className="space-y-4">
-        {/* Prix */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <Euro className="size-5 text-primary" strokeWidth={3} />
-            <span className="text-3xl font-bold text-primary">
-              {annonce.price.toLocaleString()}
-            </span>
-            <span className="text-muted-foreground">/ mois</span>
-          </div>
-          {annonce.deposit > 0 && (
-            <div className="text-sm text-muted-foreground">
-              Caution : {annonce.deposit.toLocaleString()}€
-            </div>
-          )}
-        </div>
-        {/* Localisation */}
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <MapPin className="size-4" />
-          <span>
-            {annonce.city} - {annonce.district}
-          </span>
-        </div>
-
         {/* Bouton vers les détails complets */}
         <Link href={`/immobilier/${annonce.id}`} className="block mt-4">
           <Button className="w-full flex items-center gap-2">
@@ -122,16 +100,13 @@ export function AnnonceDetailsContent({
 
       {/* Prix */}
       <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Euro className="size-5 text-primary" strokeWidth={3} />
-          <span className="text-3xl font-bold text-primary">
-            {annonce.price.toLocaleString()}
-          </span>
-          <span className="text-muted-foreground">/ mois</span>
-        </div>
-        {annonce.deposit > 0 && (
+        <PriceDisplay
+          price={annonce.price}
+          className="text-3xl"
+        />
+        {parsePrice(annonce.deposit).amount && (
           <div className="text-sm text-muted-foreground">
-            Caution : {annonce.deposit.toLocaleString()}€
+            Caution : <PriceDisplay price={annonce.deposit} />
           </div>
         )}
       </div>

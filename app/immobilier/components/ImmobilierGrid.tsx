@@ -9,19 +9,20 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { Briefcase, Euro, MapPin } from "lucide-react";
+import { Briefcase, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnnonceDetails, AnnonceDetailsContent } from "./AnnoneDetails";
+import { PriceDisplay } from "../_component/price";
 
 interface RealEstateListing {
   id: string;
   title: string;
   city: string;
   district: string;
-  price: number;
-  deposit: number;
+  price: string;
+  deposit: string;
   type: string;
   photos: string[];
   coverPhoto: string;
@@ -46,7 +47,6 @@ interface RealEstateListing {
 
 interface ImmobilierGridProps {
   annonces: RealEstateListing[];
-  onSelectionChange?: (hasSelection: boolean) => void;
 }
 
 export function ImmobilierGrid({ annonces }: ImmobilierGridProps) {
@@ -177,12 +177,8 @@ export function ImmobilierGrid({ annonces }: ImmobilierGridProps) {
                 <MapPin className="size-3" />
                 {annonce.city} - {annonce.district}
               </div>
-              <div className="flex items-center gap-1 font-bold text-primary">
-                <Euro className="size-4" strokeWidth={3} />
-                {annonce.price.toLocaleString()}
-                <span className="font-light text-xs text-muted-foreground">
-                  / mois
-                </span>
+              <div className="font-bold">
+                <PriceDisplay price={annonce.price} className="text-primary" />
               </div>
             </div>
           </Link>
