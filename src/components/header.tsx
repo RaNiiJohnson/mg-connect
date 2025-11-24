@@ -26,7 +26,7 @@ export default function Header() {
 
   return (
     <header className={`${headerClasses} + h-16`}>
-      <div className="mx-auto flex sm:gap-10 gap-2 items-center p-4 relative">
+      <div className="mx-auto flex lg:gap-10 gap-2 items-center p-4 relative">
         <Link
           href="/"
           className="flex items-center gap-2 text-2xl text-primary font-bold hover:opacity-80 transition"
@@ -36,7 +36,7 @@ export default function Header() {
         </Link>
 
         {/* Navigation Desktop */}
-        <nav className="hidden md:flex gap-4 relative">
+        <nav className="hidden lg:flex gap-4 relative">
           {/* Accueil */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -177,7 +177,7 @@ export default function Header() {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className="lg:hidden"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <AnimatePresence mode="wait">
