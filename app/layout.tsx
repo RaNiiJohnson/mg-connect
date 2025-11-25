@@ -1,7 +1,7 @@
 import "@/lib/orpc/orpc.server"; // for pre-rendering
 
 import type { Metadata } from "next";
-import { Kantumruy_Pro } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
@@ -11,7 +11,7 @@ import { Toaster } from "sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import HeaderFallback from "@/components/headerFallback";
 
-const kantumruyPro = Kantumruy_Pro({
+const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${kantumruyPro.className} antialiased`}>
+      <body className={`${montserrat.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
