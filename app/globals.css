@@ -92,6 +92,9 @@
   --color-3: oklch(69.6% 0.165 251);
   --color-4: oklch(80.2% 0.134 225);
   --color-5: oklch(90.7% 0.231 133);
+
+  --font-sans: var(--font-kantumruy-pro);
+  --font-mono: var(--font-geist-mono);
 }
 .dark {
   --background: oklch(0.2077 0.0398 265.7549);
@@ -149,6 +152,9 @@
   --shadow-xl:
     2px 2px 10px 4px hsl(0 0% 0% / 0.18), 2px 8px 10px 3px hsl(0 0% 0% / 0.18);
   --shadow-2xl: 2px 2px 10px 4px hsl(0 0% 0% / 0.45);
+
+  --font-sans: var(--font-kantumruy-pro);
+  --font-mono: var(--font-geist-mono);
 }
 @theme inline {
   --color-background: var(--background);
@@ -198,6 +204,9 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+
+  --font-sans: var(--font-kantumruy-pro);
+  --font-mono: var(--font-geist-mono);
 
   --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
   --tracking-tight: calc(var(--tracking-normal) - 0.025em);
