@@ -95,7 +95,6 @@
 
   --font-sans: var(--font-kantumruy-pro), system-ui, sans-serif;
   --font-serif: var(--font-kantumruy-pro), Georgia, serif;
-  --font-mono: var(--font-geist-mono), "Courier New", monospace;
 }
 .dark {
   --background: oklch(0.2077 0.0398 265.7549);
@@ -132,7 +131,6 @@
   --sidebar-ring: oklch(0.7729 0.1535 163.2231);
   --font-sans: var(--font-kantumruy-pro), system-ui, sans-serif;
   --font-serif: var(--font-kantumruy-pro), Georgia, serif;
-  --font-mono: var(--font-geist-mono), "Courier New", monospace;
   --radius: 1.25rem;
   --shadow-x: 2px;
   --shadow-y: 2px;
@@ -156,7 +154,6 @@
 
   --font-sans: var(--font-kantumruy-pro), system-ui, sans-serif;
   --font-serif: var(--font-kantumruy-pro), Georgia, serif;
-  --font-mono: var(--font-geist-mono), "Courier New", monospace;
 }
 @theme inline {
   --color-background: var(--background);
@@ -193,7 +190,6 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --font-sans: var(--font-kantumruy-pro), system-ui, sans-serif;
   --font-serif: var(--font-kantumruy-pro), Georgia, serif;
-  --font-mono: var(--font-geist-mono), "Courier New", monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -206,10 +202,6 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
-
-  --font-sans: var(--font-kantumruy-pro), system-ui, sans-serif;
-  --font-serif: var(--font-kantumruy-pro), Georgia, serif;
-  --font-mono: var(--font-geist-mono), "Courier New", monospace;
 
   --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
   --tracking-tight: calc(var(--tracking-normal) - 0.025em);
