@@ -84,7 +84,7 @@ export function CommunauteFilters() {
   const hasActiveFilters = search || selectedStatus || city || field;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-w-3xl mx-auto">
       {/* Barre de recherche principale */}
       <div className="flex gap-4">
         <InputGroup>

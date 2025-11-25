@@ -10,6 +10,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileText, Users } from "lucide-react";
 import { Suspense } from "react";
+import { HeroSection } from "@/components/hero-section";
+import { CommunauteFilters } from "./_component/communaute-filters";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Données statiques pour les guides
 const guides = [
@@ -149,25 +152,14 @@ const communityGroups = [
   { name: "Sport & Fitness", members: 15, category: "Intérêt" },
 ];
 
-import { HeroSection } from "@/components/hero-section";
-import { CommunauteFilters } from "./_component/communaute-filters";
-
-// ... existing imports ...
-
 async function CommunautePageContent() {
   // const membres = await getAllCommunityMembers();
 
   return (
-    <div className="min-h-screen bg-background pb-12">
-      <HeroSection
-        title="Communauté"
-        subtitle="Connectez-vous avec d'autres Malagasy en Allemagne"
-        backgroundImage="/images/community-bg.png"
-      >
-        <CommunauteFilters />
-      </HeroSection>
+    <>
+      <CommunauteFilters />
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="mt-8">
         {/* Contenu principal avec onglets */}
         <Tabs defaultValue="membres" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
@@ -179,83 +171,7 @@ async function CommunautePageContent() {
           {/* Onglet Membres */}
           <TabsContent value="membres" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {/* {membres.map((membre) => (
-                <Card
-                  key={membre.id}
-                  className="hover:shadow-lg transition-shadow p-4"
-                >
-                  <div className="flex items-start gap-3">
-                    <Avatar className="w-12 h-12 shrink-0">
-                      <AvatarImage
-                        src={membre.photo || undefined}
-                        alt={membre.name || "Member"}
-                        className="object-cover"
-                      />
-                      <AvatarFallback className="text-sm">
-                        {membre.name
-                          ?.split(" ")
-                          .map((n) => n[0])
-                          .join("") || "?"}
-                      </AvatarFallback>
-                    </Avatar>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0 flex-1">
-                          <h3 className="font-semibold text-sm truncate">
-                            {membre.name || "Nom non disponible"}
-                          </h3>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {"Email non disponible"}
-                          </p>
-                        </div>
-                        {!membre.photo && (
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                            <span className="text-xs font-medium text-primary">
-                              {membre.name
-                                ?.split(" ")
-                                .map((n) => n[0])
-                                .join("") || "?"}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="mt-2">
-                        <Badge
-                          variant="secondary"
-                          className="text-xs px-2 py-1"
-                        >
-                          {membre.status || "Statut non défini"}
-                        </Badge>
-                      </div>
-
-                      <div className="mt-2 space-y-1">
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <MapPin className="h-3 w-3 shrink-0" />
-                          <span className="truncate">
-                            {membre.city || "Ville non spécifiée"}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Briefcase className="h-3 w-3 shrink-0" />
-                          <span className="truncate">
-                            {membre.field || "Domaine non spécifié"}
-                          </span>
-                        </div>
-                      </div>
-
-                      <Button
-                        variant="link"
-                        size="sm"
-                        className="h-auto p-0 mt-2 text-xs text-blue-600 hover:text-blue-800"
-                      >
-                        Plus d&apos;options →
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              ))} */}
+              {/* {membres.map((membre) => (...))} */}
             </div>
           </TabsContent>
 
@@ -293,6 +209,7 @@ async function CommunautePageContent() {
               ))}
             </div>
           </TabsContent>
+
           {/* Onglet Guides */}
           <TabsContent value="guides" className="space-y-6">
             <div className="space-y-8">
@@ -354,36 +271,41 @@ async function CommunautePageContent() {
           </TabsContent>
         </Tabs>
       </div>
+    </>
+  );
+}
+
+function CommunauteFiltersSkeleton() {
+  return (
+    <div className="space-y-4 max-w-3xl mx-auto">
+      {/* Barre de recherche skeleton */}
+      <div className="flex gap-4">
+        <Skeleton className="h-10 flex-1" />
+      </div>
+
+      {/* Filtres rapides skeleton */}
+      <div className="flex flex-wrap gap-2">
+        <Skeleton className="h-6 w-16 rounded-full" />
+        <Skeleton className="h-6 w-20 rounded-full" />
+        <Skeleton className="h-6 w-20 rounded-full" />
+        <Skeleton className="h-6 w-28 rounded-full" />
+        <Skeleton className="h-6 w-16 rounded-full" />
+      </div>
     </div>
   );
 }
 
 function CommunautePageSkeleton() {
   return (
-    <div className="min-h-screen p-4 animate-pulse">
-      <div className="max-w-6xl mx-auto">
-        {/* Header Skeleton */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
-            <div className="flex-1">
-              <div className="h-10 bg-muted rounded-lg mb-4 w-64"></div>
-              <div className="h-6 bg-muted rounded w-96"></div>
-            </div>
-            <div className="h-10 bg-muted rounded w-48"></div>
-          </div>
+    <>
+      <CommunauteFiltersSkeleton />
 
-          {/* Search and filters skeleton */}
-          <div className="flex gap-4 mb-6">
-            <div className="h-10 bg-muted rounded flex-1"></div>
-            <div className="h-10 bg-muted rounded w-24"></div>
-          </div>
-
-          {/* Filter badges skeleton */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-6 bg-muted rounded-full w-16"></div>
-            ))}
-          </div>
+      {/* Tabs skeleton */}
+      <div className="mt-8 space-y-6">
+        <div className="flex gap-2">
+          <Skeleton className="h-10 flex-1" />
+          <Skeleton className="h-10 flex-1" />
+          <Skeleton className="h-10 flex-1" />
         </div>
 
         {/* Members grid skeleton */}
@@ -392,57 +314,57 @@ function CommunautePageSkeleton() {
             <Card key={i}>
               <CardHeader className="text-center">
                 <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4"></div>
-                <div className="h-6 bg-muted rounded mb-2 w-32 mx-auto"></div>
-                <div className="h-5 bg-muted rounded-full w-20 mx-auto"></div>
+                <Skeleton className="h-6 w-32 mx-auto mb-2" />
+                <Skeleton className="h-5 w-20 rounded-full mx-auto" />
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2 text-center">
-                  <div className="h-4 bg-muted rounded w-full"></div>
-                  <div className="h-4 bg-muted rounded w-4/5 mx-auto"></div>
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-4/5 mx-auto" />
                 </div>
                 <div className="space-y-2">
                   {[1, 2, 3].map((j) => (
                     <div key={j} className="flex items-center gap-2">
-                      <div className="h-4 w-4 bg-muted rounded"></div>
-                      <div className="h-4 bg-muted rounded flex-1"></div>
+                      <Skeleton className="h-4 w-4" />
+                      <Skeleton className="h-4 flex-1" />
                     </div>
                   ))}
                 </div>
                 <div>
-                  <div className="h-4 bg-muted rounded mb-2 w-16"></div>
+                  <Skeleton className="h-4 w-16 mb-2" />
                   <div className="flex flex-wrap gap-1">
                     {[1, 2, 3].map((k) => (
-                      <div
-                        key={k}
-                        className="h-5 bg-muted rounded-full w-12"
-                      ></div>
+                      <Skeleton key={k} className="h-5 w-12 rounded-full" />
                     ))}
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <div className="h-8 bg-muted rounded flex-1"></div>
-                  <div className="h-8 bg-muted rounded w-16"></div>
+                  <Skeleton className="h-8 flex-1" />
+                  <Skeleton className="h-8 w-16" />
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
-
-        {/* CTA skeleton */}
-        <div className="text-center mt-12 p-8  bg-linear-to-br from-accent to-accent/0 rounded-lg">
-          <div className="h-8 bg-muted rounded mb-4 w-80 mx-auto"></div>
-          <div className="h-4 bg-muted rounded mb-6 w-96 mx-auto"></div>
-          <div className="h-12 bg-muted rounded w-48 mx-auto"></div>
-        </div>
       </div>
-    </div>
+    </>
   );
 }
 
 export default function CommunautePage() {
   return (
-    <Suspense fallback={<CommunautePageSkeleton />}>
-      <CommunautePageContent />
-    </Suspense>
+    <div className="min-h-screen bg-background pb-12">
+      <HeroSection
+        title="Communauté"
+        subtitle="Connectez-vous avec d'autres Malagasy en Allemagne"
+        backgroundImage="/images/community-bg.png"
+      ></HeroSection>
+
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <Suspense fallback={<CommunautePageSkeleton />}>
+          <CommunautePageContent />
+        </Suspense>
+      </div>
+    </div>
   );
 }

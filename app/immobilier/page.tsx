@@ -1,25 +1,40 @@
 import { getAllRealEstateListings } from "@/lib/database";
 import { Suspense } from "react";
 import { ImmobilierContainer } from "./components/ImmobilierContainer";
-
 import { HeroSection } from "@/components/hero-section";
 import { ImmobilierFilters } from "./_component/immobilier-filters";
+import { Skeleton } from "@/components/ui/skeleton";
 
 async function ImmobilierPageContent() {
   const annonces = await getAllRealEstateListings();
 
   return (
-    <div className="min-h-screen bg-background pb-12">
-      <HeroSection
-        title="Immobilier"
-        subtitle="Trouvez votre logement ou partagez le vôtre avec la communauté"
-        backgroundImage="/images/real-estate-bg.png"
-      >
-        <ImmobilierFilters />
-      </HeroSection>
+    <>
+      <ImmobilierFilters />
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="mt-8">
         <ImmobilierContainer annonces={annonces} />
+      </div>
+    </>
+  );
+}
+
+function ImmobilierFiltersSkeleton() {
+  return (
+    <div className="space-y-4 max-w-3xl mx-auto">
+      {/* Barre de recherche skeleton */}
+      <div className="flex gap-4">
+        <Skeleton className="h-10 flex-1" />
+      </div>
+
+      {/* Filtres rapides skeleton */}
+      <div className="flex flex-wrap gap-2">
+        <Skeleton className="h-6 w-16 rounded-full" />
+        <Skeleton className="h-6 w-24 rounded-full" />
+        <Skeleton className="h-6 w-20 rounded-full" />
+        <Skeleton className="h-6 w-24 rounded-full" />
+        <Skeleton className="h-6 w-20 rounded-full" />
+        <Skeleton className="h-6 w-20 rounded-full" />
       </div>
     </div>
   );
@@ -27,61 +42,40 @@ async function ImmobilierPageContent() {
 
 function ImmobilierPageSkeleton() {
   return (
-    <div className="min-h-screen bg-background p-4 animate-pulse">
-      <div className="max-w-6xl mx-auto">
-        {/* Header Skeleton */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
-            <div className="flex-1">
-              <div className="h-10 bg-muted rounded-lg mb-2 w-48"></div>
-              <div className="h-6 bg-muted rounded w-96"></div>
+    <>
+      <ImmobilierFiltersSkeleton />
+
+      {/* Listings grid skeleton */}
+      <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div key={i} className="relative">
+            <div className="h-80 w-full rounded-xl bg-muted"></div>
+            <div className="absolute inset-x-3 bottom-3 p-3 bg-background/95 backdrop-blur-sm rounded-lg border">
+              <Skeleton className="h-5 w-3/4 mb-2" />
+              <Skeleton className="h-4 w-1/2 mb-2" />
+              <Skeleton className="h-6 w-24" />
             </div>
-            <div className="h-10 bg-muted rounded w-48"></div>
           </div>
-
-          {/* Search and filters skeleton */}
-          <div className="flex gap-4 mb-6">
-            <div className="h-10 bg-muted rounded flex-1"></div>
-            <div className="h-10 bg-muted rounded w-24"></div>
-          </div>
-
-          {/* Filter badges skeleton */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-6 bg-muted rounded-full w-20"></div>
-            ))}
-          </div>
-        </div>
-
-        {/* Listings grid skeleton */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="relative">
-              <div className="h-80 w-full rounded-xl bg-muted"></div>
-              <div className="absolute inset-x-3 bottom-3 p-3 bg-background/95 backdrop-blur-sm rounded-lg border">
-                <div className="h-5 bg-muted rounded mb-2 w-3/4"></div>
-                <div className="h-4 bg-muted rounded mb-2 w-1/2"></div>
-                <div className="h-6 bg-muted rounded w-24"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* CTA skeleton */}
-        <div className="text-center mt-12 p-8 bg-linear-to-br from-accent to-accent/0 rounded-lg">
-          <div className="h-8 bg-muted rounded mb-4 w-80 mx-auto"></div>
-          <div className="h-4 bg-muted rounded mb-6 w-96 mx-auto"></div>
-          <div className="h-12 bg-muted rounded w-48 mx-auto"></div>
-        </div>
+        ))}
       </div>
-    </div>
+    </>
   );
 }
 
 export default function ImmobilierPage() {
   return (
-    <Suspense fallback={<ImmobilierPageSkeleton />}>
-      <ImmobilierPageContent />
-    </Suspense>
+    <div className="min-h-screen bg-background pb-12">
+      <HeroSection
+        title="Immobilier"
+        subtitle="Trouvez votre logement ou partagez le vôtre avec la communauté"
+        backgroundImage="/images/real-estate-bg.png"
+      ></HeroSection>
+
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <Suspense fallback={<ImmobilierPageSkeleton />}>
+          <ImmobilierPageContent />
+        </Suspense>
+      </div>
+    </div>
   );
 }

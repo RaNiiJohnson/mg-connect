@@ -94,12 +94,12 @@ export function EmploisFilters() {
   const hasActiveFilters = search || selectedType || contractType || city;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-w-3xl mx-auto">
       {/* Barre de recherche principale */}
       <div className="flex gap-4">
         <InputGroup>
           <InputGroupInput
-            placeholder="Rechercher par titre, ville, entreprise..."
+            placeholder="Rechercher par titre, ville ..."
             className="pl-10"
             value={search}
             disabled={isPending}

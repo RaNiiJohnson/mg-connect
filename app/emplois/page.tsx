@@ -40,26 +40,16 @@ async function EmploisPageContent({ searchParams }: EmploisPageProps) {
   });
 
   return (
-    <div className="min-h-screen bg-background pb-12">
-      <HeroSection
-        title="Votre avenir en Allemagne commence ici"
-        subtitle="Au pair, Formation, Emploi, Volontariat. Trouvez l'opportunité idéale pour votre projet de vie."
-        backgroundImage="/images/jobs-bg.png"
-      >
-        <EmploisFilters />
-      </HeroSection>
+    <>
+      <EmploisFilters />
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
-          <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold">Dernières offres</h2>
-            <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-sm font-medium">
-              {pagination.totalCount}
-            </span>
-          </div>
-          {user && <PublishJobDialog />}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 my-8">
+        <div className="flex items-center gap-2">
+          <h2 className="text-2xl font-bold">Emplois</h2>
         </div>
-
+        <PublishJobDialog />
+      </div>
+      <div className="min-h-screen bg-background pb-12">
         <EmploisClientOptimized
           initialJobs={jobOffers}
           initialPagination={pagination}
@@ -84,102 +74,94 @@ async function EmploisPageContent({ searchParams }: EmploisPageProps) {
           )}
         </div>
       </div>
+    </>
+  );
+}
+
+function EmploisFiltersSkeleton() {
+  return (
+    <div className="space-y-4 max-w-3xl mx-auto">
+      {/* Barre de recherche skeleton */}
+      <div className="flex gap-4">
+        <Skeleton className="h-10 flex-1" />
+      </div>
+
+      {/* Filtres rapides skeleton */}
+      <div className="flex flex-wrap gap-2">
+        <Skeleton className="h-6 w-16 rounded-full" />
+        <Skeleton className="h-6 w-20 rounded-full" />
+        <Skeleton className="h-6 w-24 rounded-full" />
+        <Skeleton className="h-6 w-20 rounded-full" />
+        <Skeleton className="h-6 w-16 rounded-full" />
+        <Skeleton className="h-6 w-24 rounded-full" />
+        <Skeleton className="h-6 w-28 rounded-full" />
+        <Skeleton className="h-6 w-32 rounded-full" />
+      </div>
     </div>
   );
 }
 
 function EmploisPageSkeleton() {
   return (
-    <div className="min-h-screen p-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Header Skeleton */}
-        <div className="relative w-full bg-background text-foreground overflow-hidden">
-          {/* Background Skeleton */}
-          <div className="absolute inset-0 z-0">
-            <Skeleton className="w-full h-full" />
-            <div className="absolute inset-0 bg-linear-to-b from-background/70 from-0% via-transparent via-50% to-background to-95%" />
-          </div>
+    <>
+      <EmploisFiltersSkeleton />
 
-          {/* Content */}
-          <div className="relative z-10 max-w-6xl mx-auto px-4 pt-32 pb-16 sm:pt-40 sm:pb-24 flex flex-col items-center text-center">
-            {/* Title Skeleton */}
-            <div className="mb-4 space-y-3">
-              <Skeleton className="h-12 sm:h-14 md:h-16 w-[300px] sm:w-[500px] md:w-[600px] mx-auto" />
-              <Skeleton className="h-12 sm:h-14 md:h-16 w-[250px] sm:w-[400px] md:w-[500px] mx-auto" />
-            </div>
-
-            {/* Subtitle Skeleton */}
-            <div className="max-w-2xl mb-10 space-y-2">
-              <Skeleton className="h-5 sm:h-6 w-[350px] sm:w-[500px] mx-auto" />
-              <Skeleton className="h-5 sm:h-6 w-[300px] sm:w-[450px] mx-auto" />
-            </div>
-
-            {/* Filters Container Skeleton */}
-            <div className="w-full max-w-4xl bg-background/95 backdrop-blur-sm rounded-lg p-4 shadow-xl">
-              <div className="space-y-4">
-                {/* Filter Row 1 */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Skeleton className="h-10 flex-1" />
-                  <Skeleton className="h-10 flex-1" />
-                  <Skeleton className="h-10 flex-1" />
-                </div>
-
-                {/* Filter Row 2 */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Skeleton className="h-10 flex-1" />
-                  <Skeleton className="h-10 w-full sm:w-32" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Job offers skeleton */}
-        <div className="space-y-4">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="bg-card border border-border rounded-lg p-4"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0 space-y-3">
-                  {/* Title skeleton */}
-                  <Skeleton className="h-6 w-3/4" />
-
-                  {/* Company skeleton */}
-                  <Skeleton className="h-4 w-1/4" />
-
-                  {/* Location, Type & Salary skeleton */}
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                    <Skeleton className="h-4 w-24" />
-                    <Skeleton className="h-4 w-20" />
-                    <Skeleton className="h-4 w-28" />
-                  </div>
-
-                  {/* Badges skeleton */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Skeleton className="h-5 w-16 rounded-full" />
-                    <Skeleton className="h-5 w-20 rounded-full" />
-                  </div>
-                </div>
-
-                {/* Date skeleton */}
-                <div className="shrink-0">
-                  <Skeleton className="h-3 w-16" />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 my-8">
+        <Skeleton className="h-8 w-32" />
+        <Skeleton className="h-10 w-40" />
       </div>
-    </div>
+
+      <div className="space-y-4">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="bg-card border border-border rounded-lg p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1 min-w-0 space-y-3">
+                {/* Title skeleton */}
+                <Skeleton className="h-6 w-3/4" />
+
+                {/* Company skeleton */}
+                <Skeleton className="h-4 w-1/4" />
+
+                {/* Location, Type & Salary skeleton */}
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-28" />
+                </div>
+
+                {/* Badges skeleton */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <Skeleton className="h-5 w-16 rounded-full" />
+                  <Skeleton className="h-5 w-20 rounded-full" />
+                </div>
+              </div>
+
+              {/* Date skeleton */}
+              <div className="shrink-0">
+                <Skeleton className="h-3 w-16" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 
 export default function EmploisPage(props: EmploisPageProps) {
   return (
-    <Suspense fallback={<EmploisPageSkeleton />}>
-      <EmploisPageContent {...props} />
-    </Suspense>
+    <div className="min-h-screen bg-background pb-12">
+      <HeroSection
+        title="Votre avenir en Allemagne commence ici"
+        subtitle="Au pair, Formation, Emploi, Volontariat. Trouvez l'opportunité idéale pour votre projet de vie."
+        backgroundImage="/images/jobs-bg.png"
+      ></HeroSection>
+
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <Suspense fallback={<EmploisPageSkeleton />}>
+          <EmploisPageContent {...props} />
+        </Suspense>
+      </div>
+    </div>
   );
 }

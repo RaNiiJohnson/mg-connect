@@ -24,10 +24,10 @@ export function HeroSection({
           src={backgroundImage}
           alt="Hero background"
           fill
-          className="object-cover opacity-40"
+          className="object-cover opacity-30"
           priority
         />
-        <div className="absolute inset-0 bg-linear-to-b from-background/70 from-0% via-transparent via-50% to-background to-95%" />
+        <div className="absolute inset-0 bg-linear-to-b from-background/75 from-0% via-transparent via-60% to-background to-100%" />
       </div>
 
       {/* Content */}
