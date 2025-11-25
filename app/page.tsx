@@ -1,5 +1,6 @@
 // app/page.tsx
 import Link from "next/link";
+import { righteous } from "@/lib/fonts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
@@ -30,6 +31,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import CTApricing from "@/components/CTA.pricing";
+import Particie from "@/components/Particie";
 
 const reviews = [
   {
@@ -123,11 +125,13 @@ async function HomePageContent() {
     <div className="min-h-screen overflow-hidden flex flex-col">
       {/* Hero Section */}
       <section className="relative min-h-screen sm:min-h-[90vh] md:min-h-screen w-full flex flex-col items-center justify-center gap-4 py-8">
-        <div className="text-center p-4 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold sm:mb-6 mb-3 pt-20">
-            Hallo Hallo
+        <div className="text-center p-4 max-w-5xl mx-auto">
+          <h1
+            className={`text-3xl md:text-5xl font-bold sm:mb-6 mb-3 pt-20 ${righteous.className}`}
+          >
+            Unis en <span className={righteous.className}>Allemagne</span>
           </h1>
-          <p className="md:text-2xl mb-8 text-muted-foreground leading-relaxed">
+          <p className="md:text-xl mb-8 text-muted-foreground leading-relaxed">
             Nous sommes une communauté dédiée aux réseautages entre natif et
             diaspora{" "}
             <Highlighter action="underline" color="#FF9800">
@@ -181,6 +185,7 @@ async function HomePageContent() {
           </div>
         </div>
         <LightRays />
+        <Particie />
       </section>
 
       {/* Services Section */}
