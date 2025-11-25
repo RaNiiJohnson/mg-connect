@@ -1,7 +1,6 @@
 import "@/lib/orpc/orpc.server"; // for pre-rendering
 
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
@@ -10,10 +9,6 @@ import Footer from "@/components/footer";
 import { Toaster } from "sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import HeaderFallback from "@/components/headerFallback";
-
-const montserrat = Montserrat({
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Hallo Hallo - Communauté Malagasy en Allemagne",
@@ -31,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${montserrat.className} antialiased`}>
+      <body className={`antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

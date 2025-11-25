@@ -1,12 +1,22 @@
 // app/page.tsx
 import Link from "next/link";
-import { righteous } from "@/lib/fonts";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item";
 import {
   Users,
-  Briefcase,
-  Home,
   Heart,
   Globe,
   HandHeart,
@@ -16,22 +26,12 @@ import {
 import { getUser } from "@/lib/auth-server";
 import { Suspense } from "react";
 import { cn } from "@/lib/utils";
-import { Marquee } from "@/components/ui/marquee";
-import { ShineBorder } from "@/components/ui/shine-border";
 
-import { LightRays } from "@/components/ui/light-rays";
 import { Highlighter } from "@/components/ui/highlighter";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import CTApricing from "@/components/CTA.pricing";
-import Particie from "@/components/Particie";
 
 const reviews = [
   {
@@ -71,52 +71,52 @@ const reviews = [
   },
 ];
 
-const firstRow = reviews;
+// const firstRow = reviews;
 
-const ReviewCard = ({
-  icon,
-  title,
-  description,
-}: {
-  icon: string;
-  title: string;
-  description: string;
-}) => {
-  const iconMap = {
-    Heart,
-    Globe,
-    HandHeart,
-    Users,
-    Sparkles,
-  };
+// const ReviewCard = ({
+//   icon,
+//   title,
+//   description,
+// }: {
+//   icon: string;
+//   title: string;
+//   description: string;
+// }) => {
+//   const iconMap = {
+//     Heart,
+//     Globe,
+//     HandHeart,
+//     Users,
+//     Sparkles,
+//   };
 
-  const IconComponent = iconMap[icon as keyof typeof iconMap];
+//   const IconComponent = iconMap[icon as keyof typeof iconMap];
 
-  return (
-    <figure
-      className={cn(
-        "relative h-full w-90 max-lg:w-70 cursor-pointer overflow-hidden rounded-xl border p-4",
-        // light styles
-        "border-gray-950/10 bg-gray-950/1 hover:bg-gray-950/5",
-        // dark styles
-        "dark:border-gray-50/10 dark:bg-gray-50/10 dark:hover:bg-gray-50/15"
-      )}
-    >
-      <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} />
-      <div className="flex flex-row items-center gap-3">
-        {IconComponent && <IconComponent className="h-6 w-6 text-primary" />}
-        <div className="flex flex-col">
-          <figcaption className="text-sm font-medium dark:text-white">
-            {title}
-          </figcaption>
-        </div>
-      </div>
-      <blockquote className="mt-3 text-sm leading-relaxed">
-        {description}
-      </blockquote>
-    </figure>
-  );
-};
+//   return (
+//     <figure
+//       className={cn(
+//         "relative h-full w-90 max-lg:w-70 cursor-pointer overflow-hidden rounded-xl border p-4",
+//         // light styles
+//         "border-gray-950/10 bg-gray-950/1 hover:bg-gray-950/5",
+//         // dark styles
+//         "dark:border-gray-50/10 dark:bg-gray-50/10 dark:hover:bg-gray-50/15"
+//       )}
+//     >
+//       <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} />
+//       <div className="flex flex-row items-center gap-3">
+//         {IconComponent && <IconComponent className="h-6 w-6 text-primary" />}
+//         <div className="flex flex-col">
+//           <figcaption className="text-sm font-medium dark:text-white">
+//             {title}
+//           </figcaption>
+//         </div>
+//       </div>
+//       <blockquote className="mt-3 text-sm leading-relaxed">
+//         {description}
+//       </blockquote>
+//     </figure>
+//   );
+// };
 
 async function HomePageContent() {
   const user = await getUser();
@@ -124,21 +124,16 @@ async function HomePageContent() {
   return (
     <div className="min-h-screen overflow-hidden flex flex-col">
       {/* Hero Section */}
-      <section className="relative min-h-screen sm:min-h-[90vh] md:min-h-screen w-full flex flex-col items-center justify-center gap-4 py-8">
-        <div className="text-center p-4 max-w-5xl mx-auto">
-          <h1
-            className={`text-3xl md:text-5xl font-bold sm:mb-6 mb-3 pt-20 ${righteous.className}`}
-          >
-            Unis en <span className={righteous.className}>Allemagne</span>
+      <section className="relative w-full flex flex-col items-center justify-center gap-4 py-20 h-auto">
+        <div className="text-center p-4 max-w-4xl mx-auto">
+          <h1 className={`text-5xl md:text-7xl font-bold sm:mb-6 mb-3 pt-20`}>
+            Hallo Hallo
           </h1>
           <p className="md:text-xl mb-8 text-muted-foreground leading-relaxed">
             Nous sommes une communauté dédiée aux réseautages entre natif et
-            diaspora{" "}
-            <Highlighter action="underline" color="#FF9800">
-              Malagasy en Allemagne
-            </Highlighter>{" "}
-            . Une plateforme d&apos;échange et de partage pour favoriser
-            l&apos;entraide entre les jeunes expats de Madagascar.
+            diaspora Malagasy en Allemagne . Une plateforme d&apos;échange et de
+            partage pour favoriser l&apos;entraide entre les jeunes expats de
+            Madagascar.
           </p>
 
           {user ? (
@@ -173,7 +168,7 @@ async function HomePageContent() {
             </Link>
           )}
         </div>
-        <div className="flex w-full flex-col">
+        {/* <div className="flex w-full flex-col">
           <div className="relative w-full overflow-hidden">
             <Marquee pauseOnHover className="[--duration:40s] py-4">
               {firstRow.map((review) => (
@@ -183,33 +178,49 @@ async function HomePageContent() {
             <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-linear-to-r z-10"></div>
             <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-linear-to-l z-10"></div>
           </div>
-        </div>
-        <LightRays />
-        <Particie />
+        </div> */}
+        {/* <LightRays /> */}
+        {/*   <Particie /> */}
+        {/*   <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+            className="relative block w-full h-[60px] sm:h-[80px] md:h-[100px]"
+          >
+            <path
+              d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
+              className="fill-secondary"
+            />
+          </svg>
+        </div> */}
       </section>
 
       {/* Services Section */}
-      <section className="py-8 sm:py-12 md:py-16 px-4 bg-secondary shrink-0">
+      <section className="py-8 sm:py-12 md:py-16 px-4 shrink-0">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">Nos Services</h2>
-          <div className="grid md:grid-cols-3 gap-12 lg:gap-16">
+          <h2 className="text-4xl text-center mb-12">
+            <Highlighter action="underline" color="#FF9800">
+              Nos Services :
+            </Highlighter>
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
             {/* Communauté */}
-            <div className="text-center space-y-4 group cursor-pointer">
-              <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <Users className="h-8 w-8 text-primary" />
-                </div>
-              </div>
-              <h3 className="text-xl font-semibold">Communauté</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Connectez-vous avec d&apos;autres Malagasy en Allemagne et créez
-                des liens durables au sein de notre communauté.
-              </p>
-              <div className="pt-4">
+            <Card className="flex flex-col h-full">
+              <CardHeader>
+                <CardTitle className="text-xl">Communauté</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Connectez-vous avec d&apos;autres Malagasy en Allemagne et
+                  créez des liens durables au sein de notre communauté.
+                </p>
+              </CardContent>
+              <CardFooter className="mt-auto pt-4 w-full">
                 <Button
                   asChild
                   variant="ghost"
-                  className="group-hover:bg-primary/10"
+                  className="w-full justify-start pl-0 hover:bg-transparent hover:text-primary group"
                 >
                   <Link
                     href="/communaute"
@@ -219,26 +230,25 @@ async function HomePageContent() {
                     <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
-              </div>
-            </div>
+              </CardFooter>
+            </Card>
 
             {/* Emplois */}
-            <div className="text-center space-y-4 group cursor-pointer">
-              <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <Briefcase className="h-8 w-8 text-primary" />
-                </div>
-              </div>
-              <h3 className="text-xl font-semibold">Emplois</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Trouvez des opportunités d&apos;emploi et de formation adaptées
-                à votre profil et vos ambitions professionnelles.
-              </p>
-              <div className="pt-4">
+            <Card className="flex flex-col h-full">
+              <CardHeader>
+                <CardTitle className="text-xl">Emplois</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Trouvez des opportunités d&apos;emploi et de formation
+                  adaptées à votre profil et vos ambitions professionnelles.
+                </p>
+              </CardContent>
+              <CardFooter className="mt-auto pt-4 w-full">
                 <Button
                   asChild
                   variant="ghost"
-                  className="group-hover:bg-primary/10"
+                  className="w-full justify-start pl-0 hover:bg-transparent hover:text-primary group"
                 >
                   <Link
                     href="/emplois"
@@ -248,26 +258,25 @@ async function HomePageContent() {
                     <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
-              </div>
-            </div>
+              </CardFooter>
+            </Card>
 
             {/* Immobilier */}
-            <div className="text-center space-y-4 group cursor-pointer">
-              <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <Home className="h-8 w-8 text-primary" />
-                </div>
-              </div>
-              <h3 className="text-xl font-semibold">Immobilier</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Partagez et trouvez des logements facilement grâce à notre
-                réseau de confiance au sein de la communauté.
-              </p>
-              <div className="pt-4">
+            <Card className="flex flex-col h-full">
+              <CardHeader>
+                <CardTitle className="text-xl">Immobilier</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Partagez et trouvez des logements facilement grâce à notre
+                  réseau de confiance au sein de la communauté.
+                </p>
+              </CardContent>
+              <CardFooter className="mt-auto pt-4 w-full">
                 <Button
                   asChild
                   variant="ghost"
-                  className="group-hover:bg-primary/10"
+                  className="w-full justify-start pl-0 hover:bg-transparent hover:text-primary group"
                 >
                   <Link
                     href="/immobilier"
@@ -277,27 +286,22 @@ async function HomePageContent() {
                     <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
-              </div>
-            </div>
+              </CardFooter>
+            </Card>
           </div>
-
-          {/* Premium CTA Section */}
-          <CTApricing />
         </div>
       </section>
       {/* About Us Section */}
-      <section className="py-8 sm:py-12 md:py-16 px-4 shrink-0">
+      <section className="py-8 sm:py-12  bg-secondary md:py-16 px-4 shrink-0">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">
-            À Propos de Nous
+          <h2 className="text-4xl text-center mb-12">
+            {" "}
+            <Highlighter action="underline" color="#FF9800">
+              À Propos de Nous :
+            </Highlighter>
           </h2>
-          <Accordion
-            type="single"
-            collapsible
-            className="w-full"
-            defaultValue="item-0"
-          >
-            {reviews.map((review, index) => {
+          <div className="grid md:grid-cols-2 gap-6">
+            {reviews.slice(0, 4).map((review) => {
               const iconMap = {
                 Heart,
                 Globe,
@@ -309,23 +313,22 @@ async function HomePageContent() {
                 iconMap[review.icon as keyof typeof iconMap];
 
               return (
-                <AccordionItem key={review.icon} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left">
-                    <div className="flex items-center gap-3">
-                      {IconComponent && (
-                        <IconComponent className="h-5 w-5 text-primary" />
-                      )}
-                      <span>{review.titleAccordion}</span>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="text-balance leading-relaxed">
-                    <p className="ml-8">{review.description}</p>
-                  </AccordionContent>
-                </AccordionItem>
+                <Item key={review.icon} variant="default">
+                  <ItemMedia variant="icon">
+                    {IconComponent && (
+                      <IconComponent className="h-5 w-5 text-primary" />
+                    )}
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemTitle>{review.titleAccordion}</ItemTitle>
+                    <ItemDescription>{review.description}</ItemDescription>
+                  </ItemContent>
+                </Item>
               );
             })}
-          </Accordion>
+          </div>
         </div>
+        <CTApricing />
       </section>
     </div>
   );

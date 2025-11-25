@@ -34,7 +34,7 @@ export function Highlighter({
   strokeWidth = 1.5,
   animationDuration = 600,
   iterations = 5,
-  padding = -1,
+  padding = 1,
   multiline = true,
   isView = false,
 }: HighlighterProps) {
