@@ -5,11 +5,11 @@ import { Briefcase, MapPin, Clock } from "lucide-react";
 import { JobBookmarkButton } from "./job-bookmark-button";
 import type { JobOfferListItem } from "@/lib/database";
 import type { User } from "better-auth";
-import { PublishJobDialog } from "@app/emplois/_component/publish-job-dialog";
+import { PublishJobDialog } from "@app/opportunites/_component/publish-job-dialog";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { getRelativeTime } from "@/lib/date";
-import { SalaryDisplay } from "@app/emplois/_component/salary";
+import { SalaryDisplay } from "@app/opportunites/_component/salary";
 
 interface EmploisListProps {
   jobs: JobOfferListItem[];

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/auth-server";
 import { getJobOffersOptimized } from "@/lib/database";
 import { Suspense } from "react";
-import { PublishJobDialog } from "@app/emplois/_component/publish-job-dialog";
+import { PublishJobDialog } from "@/components/publish-job-dialog";
 import { EmploisClientOptimized } from "./_component/emplois-client-optimized";
 import { Skeleton } from "@/components/ui/skeleton";
 import { HeroSection } from "@/components/hero-section";
@@ -45,7 +45,7 @@ async function EmploisPageContent({ searchParams }: EmploisPageProps) {
 
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 my-8">
         <div className="flex items-center gap-2">
-          <h2 className="text-2xl font-bold">Emplois</h2>
+          <h2 className="text-2xl font-bold">Opportunités</h2>
         </div>
         <PublishJobDialog />
       </div>

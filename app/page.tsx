@@ -233,10 +233,10 @@ async function HomePageContent() {
               </CardFooter>
             </Card>
 
-            {/* Emplois */}
+            {/* Opportunités */}
             <Card className="flex flex-col h-full">
               <CardHeader>
-                <CardTitle className="text-xl">Emplois</CardTitle>
+                <CardTitle className="text-xl">Opportunités</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
@@ -251,7 +251,7 @@ async function HomePageContent() {
                   className="w-full justify-start pl-0 hover:bg-transparent hover:text-primary group"
                 >
                   <Link
-                    href="/emplois"
+                    href="/opportunites"
                     className="inline-flex items-center gap-2"
                   >
                     Explorer

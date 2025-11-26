@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Heart, Mail, MapPin, Phone } from "lucide-react";
+import { Heart, Mail, MapPin } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -16,8 +16,8 @@ export default function Footer() {
             </Link>
             <p className="text-muted-foreground mb-4 max-w-md">
               Nous sommes une communauté dédiée aux réseautages entre natif et
-              diaspora Malagasy en Allemagne. Une plateforme d'échange et de
-              partage pour favoriser l'entraide.
+              diaspora Malagasy en Allemagne. Une plateforme d&apos;échange et
+              de partage pour favoriser l&apos;entraide.
             </p>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>Fait avec</span>
@@ -48,10 +48,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/emplois"
+                  href="/opportunites"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Emplois
+                  Opportunités
                 </Link>
               </li>
               <li>
@@ -60,6 +60,14 @@ export default function Footer() {
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Immobilier
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/faq"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  FAQ
                 </Link>
               </li>
             </ul>

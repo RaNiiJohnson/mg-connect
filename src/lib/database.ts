@@ -136,7 +136,7 @@ export const createJobOffer = authorized
         authorId: context.user.id,
       },
     });
-    revalidatePath("/emplois");
+    revalidatePath("/opportunites");
     return jobOffer;
   });
 

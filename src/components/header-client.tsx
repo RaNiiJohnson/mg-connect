@@ -88,7 +88,7 @@ export function HeaderClient({ user }: HeaderClientProps) {
             )}
           </motion.div>
 
-          {/* Emplois */}
+          {/* Opportunités */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -96,16 +96,16 @@ export function HeaderClient({ user }: HeaderClientProps) {
             className="relative"
           >
             <Link
-              href="/emplois"
+              href="/opportunites"
               className={`text-accent-foreground/60 font-medium transition-colors relative z-10 ${
-                pathname === "/emplois"
+                pathname === "/opportunites"
                   ? "text-foreground"
                   : "hover:text-foreground"
               }`}
             >
-              Emplois
+              Opportunités
             </Link>
-            {pathname === "/emplois" && (
+            {pathname === "/opportunites" && (
               <motion.div
                 className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
                 layoutId="activeTab"
@@ -299,7 +299,7 @@ export function HeaderClient({ user }: HeaderClientProps) {
                 )}
               </motion.div>
 
-              {/* Emplois Mobile */}
+              {/* Opportunités Mobile */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -307,17 +307,17 @@ export function HeaderClient({ user }: HeaderClientProps) {
                 className="relative"
               >
                 <Link
-                  href="/emplois"
+                  href="/opportunites"
                   className={`text-accent-foreground/60 font-medium transition-colors p-2 rounded-md block relative z-10 ${
-                    pathname === "/emplois"
+                    pathname === "/opportunites"
                       ? "text-foreground bg-accent"
                       : "hover:text-foreground hover:bg-accent"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Emplois
+                  Opportunités
                 </Link>
-                {pathname === "/emplois" && (
+                {pathname === "/opportunites" && (
                   <motion.div
                     className="absolute left-0 top-0 bottom-0 w-1 rounded-r-lg bg-primary"
                     layoutId="activeMobileTab"

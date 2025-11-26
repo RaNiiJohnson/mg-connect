@@ -17,7 +17,7 @@ export default function NotFound() {
           <p className="text-muted-foreground">
             Cette offre d&apos;emploi n&apos;existe pas ou a été supprimée.
           </p>
-          <Link href="/emplois">
+          <Link href="/opportunites">
             <Button className="w-full">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Retour aux offres

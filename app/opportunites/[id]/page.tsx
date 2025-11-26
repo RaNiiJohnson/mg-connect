@@ -13,7 +13,7 @@ import {
   Bookmark,
   ChevronRight,
 } from "lucide-react";
-import { SalaryDisplay } from "@app/emplois/_component/salary";
+import { SalaryDisplay } from "@app/opportunites/_component/salary";
 import { getJobOfferById } from "@/lib/database";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -42,10 +42,10 @@ async function JobDetailsContent(props: Pageprops) {
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 sm:mb-8">
             <Link
-              href="/emplois"
+              href="/opportunites"
               className="hover:text-foreground transition-colors"
             >
-              Emplois
+              Opportunités
             </Link>
             <span>
               <ChevronRight className="w-4 h-4" />
@@ -377,7 +377,7 @@ async function JobDetailsContent(props: Pageprops) {
         {/* Back to jobs link */}
         <div className="mt-12 text-center">
           <Button variant="outline" asChild>
-            <Link href="/emplois" className="gap-2">
+            <Link href="/opportunites" className="gap-2">
               <ArrowLeft className="w-4 h-4" />
               Retour aux offres
             </Link>

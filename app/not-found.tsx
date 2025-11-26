@@ -56,8 +56,8 @@ export default function NotFound() {
             <Link href="/communaute" className="text-primary hover:underline">
               Communauté
             </Link>
-            <Link href="/emplois" className="text-primary hover:underline">
-              Emplois
+            <Link href="/opportunites" className="text-primary hover:underline">
+              Opportunités
             </Link>
             <Link href="/immobilier" className="text-primary hover:underline">
               Immobilier

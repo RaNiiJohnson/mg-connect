@@ -92,7 +92,7 @@ export default function Header() {
             )}
           </motion.div>
 
-          {/* Emplois */}
+          {/* Opportunités */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,16 +100,16 @@ export default function Header() {
             className="relative"
           >
             <Link
-              href="/emplois"
+              href="/opportunites"
               className={`text-accent-foreground/60 font-medium transition-colors relative z-10 ${
-                pathname === "/emplois"
+                pathname === "/opportunites"
                   ? "text-foreground"
                   : "hover:text-foreground"
               }`}
             >
-              Emplois
+              Opportunités
             </Link>
-            {pathname === "/emplois" && (
+            {pathname === "/opportunites" && (
               <motion.div
                 className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
                 layoutId="activeTab"
@@ -235,7 +235,7 @@ export default function Header() {
               {[
                 { href: "/", label: "Accueil" },
                 { href: "/communaute", label: "Communauté" },
-                { href: "/emplois", label: "Emplois" },
+                { href: "/opportunites", label: "Opportunités" },
                 { href: "/immobilier", label: "Immobilier" },
                 { href: "/pricing", label: "Passer au Premium" },
               ].map((item, index) => (

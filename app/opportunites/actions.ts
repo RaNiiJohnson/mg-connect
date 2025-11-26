@@ -35,6 +35,6 @@ export async function toggleJobBookmark(jobId: string) {
     });
   }
 
-  revalidatePath("/emplois");
+  revalidatePath("/opportunites");
   return !existingBookmark;
 }
