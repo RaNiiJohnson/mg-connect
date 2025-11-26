@@ -1,8 +1,4 @@
-import { os } from "@orpc/server";
 import prisma from "./prisma";
-import { JobOfferSchema, JobOfferWithAuthorSchema } from "./orpc/route/schema";
-import { authorized } from "./orpc/authorized";
-import { revalidatePath } from "next/cache";
 import {
   JobOfferGetPayload,
   JobOfferSelect,
@@ -125,37 +121,6 @@ function buildJobOfferWhere(filters: JobOfferQueryParams): JobOfferWhereInput {
     ...(city ? { city: { contains: city, mode: "insensitive" } } : {}),
   } satisfies JobOfferWhereInput;
 }
-
-export const createJobOffer = authorized
-  .input(JobOfferSchema.omit({ id: true, authorId: true }))
-  .output(JobOfferSchema)
-  .handler(async ({ context, input }) => {
-    const jobOffer = await prisma.jobOffer.create({
-      data: {
-        ...input,
-        authorId: context.user.id,
-      },
-    });
-    revalidatePath("/opportunites");
-    return jobOffer;
-  });
-
-export const getAllJobOffers = os
-  .output(JobOfferWithAuthorSchema.array())
-  .handler(async () => {
-    return await prisma.jobOffer.findMany({
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            photo: true,
-          },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    });
-  });
 
 export async function getJobOffersWithPagination({
   page = 1,

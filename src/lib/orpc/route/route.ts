@@ -1,8 +1,11 @@
-import { createJobOffer, getAllJobOffers } from "@/lib/database";
+import {
+  createJobOffer,
+  toggleJobBookmark,
+} from "@app/opportunites/_actions/job";
 
 export const router = {
   jobOffer: {
-    createJobOffer: createJobOffer,
-    getJobOffers: getAllJobOffers,
+    createJobOffer,
+    toggleJobBookmark,
   },
 };

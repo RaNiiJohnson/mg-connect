@@ -21,6 +21,9 @@ import { Suspense } from "react";
 import { getRelativeTime, formatDateLong } from "@/lib/date";
 import { Separator } from "@/components/ui/separator";
 import { ButtonGroup } from "@/components/ui/button-group";
+import { getUser } from "@/lib/auth-server";
+import { EditJobTitle } from "@app/opportunites/_component/edit-job-title";
+import { EditJobDialog } from "@app/opportunites/_component/edit-job-dialog";
 
 type Pageprops = {
   params: Promise<{ id: string }>;
@@ -33,6 +36,10 @@ async function JobDetailsContent(props: Pageprops) {
   if (!jobOffer) {
     notFound();
   }
+
+  // Get current user to check if they're the author
+  const user = await getUser();
+  const isAuthor = user?.id === jobOffer.authorId;
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -63,9 +70,18 @@ async function JobDetailsContent(props: Pageprops) {
             </div>
 
             {/* Job Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              {jobOffer.title}
-            </h1>
+            <div className="mb-4 flex justify-center">
+              {isAuthor ? (
+                <EditJobTitle
+                  jobId={jobOffer.id}
+                  initialTitle={jobOffer.title}
+                />
+              ) : (
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+                  {jobOffer.title}
+                </h1>
+              )}
+            </div>
 
             {/* Posted by */}
             <p className="text-sm sm:text-base text-muted-foreground mb-6">
@@ -100,25 +116,49 @@ async function JobDetailsContent(props: Pageprops) {
                 </div>
               </div>
 
-              {/* Company Links */}
+              {/* Company Links / Edit Button */}
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <ButtonGroup>
-                  <Button variant="default" size="sm" className="gap-2" asChild>
-                    <a href={`mailto:${jobOffer.contact}`}>
-                      <Mail className="w-4 h-4" />
-                      Postuler
-                    </a>
-                  </Button>
+                {isAuthor ? (
+                  <EditJobDialog
+                    jobOffer={{
+                      id: jobOffer.id,
+                      title: jobOffer.title,
+                      company: jobOffer.company,
+                      type: jobOffer.type,
+                      contractType: jobOffer.contractType,
+                      city: jobOffer.city,
+                      duration: jobOffer.duration,
+                      salary: jobOffer.salary,
+                      description: jobOffer.description,
+                      contact: jobOffer.contact,
+                      startDate: jobOffer.startDate,
+                      certificates: jobOffer.certificates,
+                    }}
+                  />
+                ) : (
+                  <ButtonGroup>
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="gap-2"
+                      asChild
+                    >
+                      <a href={`mailto:${jobOffer.contact}`}>
+                        <Mail className="w-4 h-4" />
+                        Postuler
+                      </a>
+                    </Button>
 
-                  <Button variant="outline" size="sm" className="gap-2">
-                    <Share2 className="w-4 h-4" />
-                    Partager
-                  </Button>
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Share2 className="w-4 h-4" />
+                      Partager
+                    </Button>
 
-                  <Button variant="outline" size="sm">
-                    <Bookmark className="w-4 h-4" />
-                  </Button>
-                </ButtonGroup>
+                    <Button variant="outline" size="sm">
+                      <Bookmark className="w-4 h-4" />
+                    </Button>
+                  </ButtonGroup>
+                )}
               </div>
             </div>
           </div>

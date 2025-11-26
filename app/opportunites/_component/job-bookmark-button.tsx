@@ -36,6 +36,7 @@ export function JobBookmarkButton({
         toast.success(
           newState ? "Offre enregistrée" : "Offre retirée des favoris"
         );
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         setOptimisticIsBookmarked(!newState);
         toast.error("Une erreur est survenue");
