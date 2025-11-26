@@ -261,19 +261,6 @@ export default function Header() {
                   >
                     {item.label}
                   </Link>
-                  {pathname === item.href && (
-                    <motion.div
-                      className="absolute left-0 top-0 bottom-0 w-1 rounded-r-lg bg-primary"
-                      layoutId="activeMobileTab"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 500,
-                        damping: 30,
-                      }}
-                    />
-                  )}
                 </motion.div>
               ))}
             </motion.nav>
