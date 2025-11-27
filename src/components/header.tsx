@@ -18,7 +18,7 @@ export default function Header() {
   // Header transparent et fixe sur la page d'accueil, sticky sur les autres
   const isFixedHeaderPage =
     pathname === "/" ||
-    pathname === "/emplois" ||
+    pathname === "/opportunites" ||
     pathname === "/communaute" ||
     pathname === "/immobilier";
   const headerClasses = isFixedHeaderPage
