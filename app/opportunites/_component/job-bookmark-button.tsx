@@ -1,7 +1,7 @@
 "use client";
 
 import { Bookmark, BookmarkCheck } from "lucide-react";
-import { useOptimistic, useTransition } from "react";
+import { useOptimistic, useState, useTransition } from "react";
 import { toggleJobBookmark } from "../actions";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,27 +18,31 @@ export function JobBookmarkButton({
   initialIsBookmarked = false,
   className,
 }: JobBookmarkButtonProps) {
-  const [isBookmarked, setOptimisticIsBookmarked] = useOptimistic(
-    initialIsBookmarked,
+  const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
+  const [optimisticIsBookmarked, setOptimisticIsBookmarked] = useOptimistic(
+    isBookmarked, // État réel, pas initialIsBookmarked
     (state, newState: boolean) => newState
   );
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
+    const newState = !isBookmarked;
+
     startTransition(async () => {
-      const newState = !isBookmarked;
-      setOptimisticIsBookmarked(newState);
+      setOptimisticIsBookmarked(newState); // Mise à jour optimiste
+
       try {
         await toggleJobBookmark(jobId);
+        setIsBookmarked(newState); // Mise à jour de l'état réel
         toast.success(
           newState ? "Offre enregistrée" : "Offre retirée des favoris"
         );
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        setOptimisticIsBookmarked(!newState);
+        // L'état optimiste reviendra automatiquement à isBookmarked
         toast.error("Une erreur est survenue");
       }
     });
@@ -50,19 +54,18 @@ export function JobBookmarkButton({
       size="icon"
       className={cn(
         "h-8 w-8 hover:bg-transparent p-0",
-        isBookmarked ? "text-primary" : "text-muted-foreground",
+        optimisticIsBookmarked ? "text-primary" : "text-muted-foreground",
         className
       )}
       onClick={handleToggle}
-      disabled={isPending}
     >
-      {isBookmarked ? (
+      {optimisticIsBookmarked ? (
         <BookmarkCheck className="h-5 w-5 fill-current" />
       ) : (
         <Bookmark className="h-5 w-5" />
       )}
       <span className="sr-only">
-        {isBookmarked ? "Retirer des favoris" : "Ajouter aux favoris"}
+        {optimisticIsBookmarked ? "Retirer des favoris" : "Ajouter aux favoris"}
       </span>
     </Button>
   );
