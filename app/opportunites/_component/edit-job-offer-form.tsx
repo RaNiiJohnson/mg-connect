@@ -1,9 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useTransition } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import * as z from "zod";
-import { useState, useTransition } from "react";
 
 import {
   Field,
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/input-group";
 
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -34,10 +35,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { client } from "@/lib/orpc/orpc";
 import { ChevronLeft, ChevronRight, XIcon } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { updateJobOffer } from "@app/opportunites/_actions/job-actions";
 
 const jobTypes = [
   "Au pair",
@@ -107,6 +108,7 @@ export function EditJobOfferForm({
 }: EditJobOfferFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -191,8 +193,12 @@ export function EditJobOfferForm({
     startTransition(async () => {
       // Call server action with optimistic update
       try {
-        await updateJobOffer(jobOffer.id, updatedData);
+        await client.jobOffer.updateJobOffer({
+          jobId: jobOffer.id,
+          ...updatedData,
+        });
         toast.success("Offre mise à jour avec succès");
+        router.refresh();
         onSuccess?.();
       } catch {
         toast.error("Erreur lors de la mise à jour");

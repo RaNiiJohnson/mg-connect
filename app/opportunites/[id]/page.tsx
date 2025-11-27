@@ -22,8 +22,8 @@ import { getRelativeTime, formatDateLong } from "@/lib/date";
 import { Separator } from "@/components/ui/separator";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { getUser } from "@/lib/auth-server";
-import { EditJobTitle } from "@app/opportunites/_component/edit-job-title";
 import { EditJobDialog } from "@app/opportunites/_component/edit-job-dialog";
+import DeleteJobDialog from "../_component/delete-job-dialog";
 
 type Pageprops = {
   params: Promise<{ id: string }>;
@@ -71,16 +71,9 @@ async function JobDetailsContent(props: Pageprops) {
 
             {/* Job Title */}
             <div className="mb-4 flex justify-center">
-              {isAuthor ? (
-                <EditJobTitle
-                  jobId={jobOffer.id}
-                  initialTitle={jobOffer.title}
-                />
-              ) : (
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-                  {jobOffer.title}
-                </h1>
-              )}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+                {jobOffer.title}
+              </h1>
             </div>
 
             {/* Posted by */}
@@ -119,22 +112,25 @@ async function JobDetailsContent(props: Pageprops) {
               {/* Company Links / Edit Button */}
               <div className="flex flex-wrap items-center justify-center gap-3">
                 {isAuthor ? (
-                  <EditJobDialog
-                    jobOffer={{
-                      id: jobOffer.id,
-                      title: jobOffer.title,
-                      company: jobOffer.company,
-                      type: jobOffer.type,
-                      contractType: jobOffer.contractType,
-                      city: jobOffer.city,
-                      duration: jobOffer.duration,
-                      salary: jobOffer.salary,
-                      description: jobOffer.description,
-                      contact: jobOffer.contact,
-                      startDate: jobOffer.startDate,
-                      certificates: jobOffer.certificates,
-                    }}
-                  />
+                  <>
+                    <DeleteJobDialog jobId={jobOffer.id} />
+                    <EditJobDialog
+                      jobOffer={{
+                        id: jobOffer.id,
+                        title: jobOffer.title,
+                        company: jobOffer.company,
+                        type: jobOffer.type,
+                        contractType: jobOffer.contractType,
+                        city: jobOffer.city,
+                        duration: jobOffer.duration,
+                        salary: jobOffer.salary,
+                        description: jobOffer.description,
+                        contact: jobOffer.contact,
+                        startDate: jobOffer.startDate,
+                        certificates: jobOffer.certificates,
+                      }}
+                    />
+                  </>
                 ) : (
                   <ButtonGroup>
                     <Button

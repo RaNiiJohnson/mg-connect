@@ -2,10 +2,10 @@
 
 import { Bookmark, BookmarkCheck } from "lucide-react";
 import { useOptimistic, useState, useTransition } from "react";
-import { toggleJobBookmark } from "../actions";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { client } from "@/lib/orpc/orpc";
 
 interface JobBookmarkButtonProps {
   jobId: string;
@@ -21,7 +21,7 @@ export function JobBookmarkButton({
   const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
   const [optimisticIsBookmarked, setOptimisticIsBookmarked] = useOptimistic(
     isBookmarked, // État réel, pas initialIsBookmarked
-    (state, newState: boolean) => newState
+    (_, newState: boolean) => newState
   );
   const [, startTransition] = useTransition();
 
@@ -35,7 +35,7 @@ export function JobBookmarkButton({
       setOptimisticIsBookmarked(newState); // Mise à jour optimiste
 
       try {
-        await toggleJobBookmark(jobId);
+        await client.jobOffer.toggleJobBookmark({ jobId });
         setIsBookmarked(newState); // Mise à jour de l'état réel
         toast.success(
           newState ? "Offre enregistrée" : "Offre retirée des favoris"

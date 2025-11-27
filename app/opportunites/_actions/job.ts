@@ -46,6 +46,42 @@ export const toggleJobBookmark = authorized
       });
     }
 
-    revalidatePath("/opportunites");
+    revalidatePath(`/opportunites/${input.jobId}`);
+    revalidatePath(`/opportunites`);
     return !existingBookmark;
+  });
+
+export const updateJobOffer = authorized
+  .input(
+    JobOfferSchema.omit({ id: true, authorId: true }).extend({
+      jobId: z.string(),
+    })
+  )
+  .output(JobOfferSchema)
+  .handler(async ({ input }) => {
+    const { jobId, ...data } = input;
+    const jobOffer = await prisma.jobOffer.update({
+      where: {
+        id: jobId,
+      },
+      data: {
+        ...data,
+      },
+    });
+    revalidatePath(`/opportunites/${jobId}`);
+    revalidatePath(`/opportunites`);
+    return jobOffer;
+  });
+
+export const deleteJobOffer = authorized
+  .input(z.object({ jobId: z.string() }))
+  .output(z.boolean())
+  .handler(async ({ input }) => {
+    await prisma.jobOffer.delete({
+      where: {
+        id: input.jobId,
+      },
+    });
+    revalidatePath(`/opportunites`);
+    return true;
   });
