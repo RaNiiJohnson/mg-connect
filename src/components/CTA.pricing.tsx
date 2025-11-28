@@ -9,7 +9,7 @@ import Link from "next/link";
 export default function CTApricing() {
   const { theme } = useTheme();
   return (
-    <div className="mt-16 text-center">
+    <div className="mt-16 text-center max-w-6xl mx-auto">
       <MagicCard
         gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"}
         className="relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm p-6"

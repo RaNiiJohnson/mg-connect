@@ -295,7 +295,6 @@ async function HomePageContent() {
       <section className="py-8 sm:py-12  bg-secondary md:py-16 px-4 shrink-0">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl text-center mb-12">
-            {" "}
             <Highlighter action="underline" color="#FF9800">
               À Propos de Nous :
             </Highlighter>
