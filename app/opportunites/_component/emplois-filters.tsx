@@ -1,6 +1,5 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Filter, X } from "lucide-react";
@@ -17,7 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 
 import {
   InputGroup,
@@ -51,6 +50,8 @@ export function EmploisFilters() {
     "search",
     parseAsString.withDefault("")
   );
+  const [localSearch, setLocalSearch] = useState(search);
+
   const [selectedType, setSelectedType] = useQueryState(
     "type",
     parseAsString.withDefault("")
@@ -67,6 +68,23 @@ export function EmploisFilters() {
   const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    setLocalSearch(search);
+  }, [search]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      startTransition(() => {
+        if (localSearch !== search) {
+          setSearch(localSearch);
+          setPage(1);
+        }
+      });
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [localSearch, setSearch, setPage, search]);
 
   const clearAllFilters = () => {
     startTransition(() => {
@@ -101,13 +119,9 @@ export function EmploisFilters() {
           <InputGroupInput
             placeholder="Rechercher par titre, ville ..."
             className="pl-10"
-            value={search}
-            disabled={isPending}
+            value={localSearch}
             onChange={(e) => {
-              startTransition(() => {
-                setSearch(e.target.value);
-                setPage(1);
-              });
+              setLocalSearch(e.target.value);
             }}
           />
           <InputGroupAddon>
@@ -134,7 +148,7 @@ export function EmploisFilters() {
               <PopoverContent className="w-[400px] p-4" align="end">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-medium">Filtres avancés</h3>
+                    <h3 className="font-medium">Filtres</h3>
                     {hasActiveFilters && (
                       <Button
                         variant="ghost"
@@ -174,22 +188,6 @@ export function EmploisFilters() {
                           ))}
                         </SelectContent>
                       </Select>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
-                        Ville
-                      </label>
-                      <Input
-                        placeholder="Filtrer par ville..."
-                        value={city}
-                        onChange={(e) => {
-                          startTransition(() => {
-                            setCity(e.target.value);
-                            setPage(1);
-                          });
-                        }}
-                      />
                     </div>
                   </div>
                 </div>
