@@ -1,9 +1,9 @@
-import { getAllRealEstateListings } from "@/lib/database";
 import { Suspense } from "react";
 import { ImmobilierContainer } from "./components/ImmobilierContainer";
 import { HeroSection } from "@/components/hero-section";
 import { ImmobilierFilters } from "./_component/immobilier-filters";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getAllRealEstateListings } from "@/lib/database";
 
 async function ImmobilierPageContent() {
   const annonces = await getAllRealEstateListings();

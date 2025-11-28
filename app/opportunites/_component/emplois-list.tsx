@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Briefcase, MapPin, Clock } from "lucide-react";
 import { JobBookmarkButton } from "./job-bookmark-button";
-import type { JobOfferListItem } from "@/lib/database";
+import type { JobOfferListItem } from "@app/opportunites/_actions/job.action";
 import type { User } from "better-auth";
 import { PublishJobDialog } from "@app/opportunites/_component/publish-job-dialog";
 import { Badge } from "@/components/ui/badge";

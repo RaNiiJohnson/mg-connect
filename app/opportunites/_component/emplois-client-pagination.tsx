@@ -4,7 +4,7 @@ import { useMemo, useEffect } from "react";
 import { useQueryState, parseAsInteger } from "nuqs";
 import { EmploisList } from "./emplois-list";
 import { EmploisPagination } from "./emplois-pagination";
-import type { JobOfferListItem } from "@/lib/database";
+import type { JobOfferListItem } from "@app/opportunites/_actions/job.action";
 import type { User } from "better-auth";
 
 interface EmploisClientPaginationProps {

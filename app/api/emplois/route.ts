@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getJobOffersOptimized } from "@/lib/database";
+import { getJobOffersOptimized } from "@app/opportunites/_actions/job.action";
 import { getUser } from "@/lib/auth-server";
 
 export async function GET(request: NextRequest) {

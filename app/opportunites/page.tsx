@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/auth-server";
-import { getJobOffersOptimized } from "@/lib/database";
 import { Suspense } from "react";
 import { PublishJobDialog } from "@/components/publish-job-dialog";
 import { EmploisClientOptimized } from "./_component/emplois-client-optimized";
 import { Skeleton } from "@/components/ui/skeleton";
 import { HeroSection } from "@/components/hero-section";
 import { EmploisFilters } from "./_component/emplois-filters";
+import { getJobOffersOptimized } from "./_actions/job.action";
 
 type EmploisSearchParams = {
   search?: string;

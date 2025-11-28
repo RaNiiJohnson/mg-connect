@@ -3,7 +3,7 @@
 import { EmploisList } from "./emplois-list";
 import { EmploisPagination } from "./emplois-pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { JobOfferListItem } from "@/lib/database";
+import type { JobOfferListItem } from "@app/opportunites/_actions/job.action";
 import type { User } from "better-auth";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useQueryState, parseAsString, parseAsInteger } from "nuqs";

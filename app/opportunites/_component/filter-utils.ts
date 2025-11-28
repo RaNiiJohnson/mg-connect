@@ -1,4 +1,4 @@
-import type { JobOfferListItem } from "@/lib/database";
+import type { JobOfferListItem } from "@app/opportunites/_actions/job.action";
 
 export interface JobFilters {
   search: string;

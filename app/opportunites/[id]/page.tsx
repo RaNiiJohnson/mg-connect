@@ -14,7 +14,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { SalaryDisplay } from "@app/opportunites/_component/salary";
-import { getJobOfferById } from "@/lib/database";
+import { getJobOfferById } from "@app/opportunites/_actions/job.action";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
