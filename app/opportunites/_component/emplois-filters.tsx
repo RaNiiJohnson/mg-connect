@@ -117,7 +117,7 @@ export function EmploisFilters() {
       <div className="flex gap-4">
         <InputGroup>
           <InputGroupInput
-            placeholder="Rechercher par titre, ville ..."
+            placeholder="Rechercher par titre, ville, type..."
             className="pl-10"
             value={localSearch}
             onChange={(e) => {
