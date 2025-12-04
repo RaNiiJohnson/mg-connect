@@ -3,7 +3,7 @@ import { getUser } from "@/lib/auth-server";
 import { Suspense } from "react";
 import { PublishJobDialog } from "@/components/publish-job-dialog";
 import { EmploisClientOptimized } from "./_component/emplois-client-optimized";
-import { Skeleton } from "@/components/ui/skeleton";
+import { EmploisPageSkeleton } from "./_component/skeleton";
 import { HeroSection } from "@/components/hero-section";
 import { EmploisFilters } from "./_component/emplois-filters";
 import { getJobOffersOptimized } from "./_actions/job.action";
@@ -73,76 +73,6 @@ async function EmploisPageContent({ searchParams }: EmploisPageProps) {
             <Button size="lg">S&apos;inscrire pour publier</Button>
           )}
         </div>
-      </div>
-    </>
-  );
-}
-
-function EmploisFiltersSkeleton() {
-  return (
-    <div className="space-y-4 max-w-3xl mx-auto">
-      {/* Barre de recherche skeleton */}
-      <div className="flex gap-4">
-        <Skeleton className="h-10 flex-1" />
-      </div>
-
-      {/* Filtres rapides skeleton */}
-      <div className="flex flex-wrap gap-2">
-        <Skeleton className="h-6 w-16 rounded-full" />
-        <Skeleton className="h-6 w-20 rounded-full" />
-        <Skeleton className="h-6 w-24 rounded-full" />
-        <Skeleton className="h-6 w-20 rounded-full" />
-        <Skeleton className="h-6 w-16 rounded-full" />
-        <Skeleton className="h-6 w-24 rounded-full" />
-        <Skeleton className="h-6 w-28 rounded-full" />
-        <Skeleton className="h-6 w-32 rounded-full" />
-      </div>
-    </div>
-  );
-}
-
-function EmploisPageSkeleton() {
-  return (
-    <>
-      <EmploisFiltersSkeleton />
-
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 my-8">
-        <Skeleton className="h-8 w-32" />
-        <Skeleton className="h-10 w-40" />
-      </div>
-
-      <div className="space-y-4">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-card border border-border rounded-lg p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1 min-w-0 space-y-3">
-                {/* Title skeleton */}
-                <Skeleton className="h-6 w-3/4" />
-
-                {/* Company skeleton */}
-                <Skeleton className="h-4 w-1/4" />
-
-                {/* Location, Type & Salary skeleton */}
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                  <Skeleton className="h-4 w-24" />
-                  <Skeleton className="h-4 w-20" />
-                  <Skeleton className="h-4 w-28" />
-                </div>
-
-                {/* Badges skeleton */}
-                <div className="flex flex-wrap items-center gap-2">
-                  <Skeleton className="h-5 w-16 rounded-full" />
-                  <Skeleton className="h-5 w-20 rounded-full" />
-                </div>
-              </div>
-
-              {/* Date skeleton */}
-              <div className="shrink-0">
-                <Skeleton className="h-3 w-16" />
-              </div>
-            </div>
-          </div>
-        ))}
       </div>
     </>
   );
