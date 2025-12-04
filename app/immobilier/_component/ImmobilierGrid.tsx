@@ -14,7 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnnonceDetails, AnnonceDetailsContent } from "./AnnoneDetails";
-import { PriceDisplay } from "../_component/price";
+import { PriceDisplay } from "./price";
 
 interface RealEstateListing {
   id: string;

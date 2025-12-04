@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, MapPin, X } from "lucide-react";
 import Link from "next/link";
 import { ImageCarousel } from "./ImageCarousel";
-import { PriceDisplay, parsePrice } from "../_component/price";
+import { PriceDisplay, parsePrice } from "./price";
 
 interface RealEstateListing {
   id: string;
@@ -100,10 +100,7 @@ export function AnnonceDetailsContent({
 
       {/* Prix */}
       <div className="space-y-2">
-        <PriceDisplay
-          price={annonce.price}
-          className="text-3xl"
-        />
+        <PriceDisplay price={annonce.price} className="text-3xl" />
         {parsePrice(annonce.deposit).amount && (
           <div className="text-sm text-muted-foreground">
             Caution : <PriceDisplay price={annonce.deposit} />
