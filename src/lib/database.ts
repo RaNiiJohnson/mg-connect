@@ -63,35 +63,7 @@ export async function getAllCommunityMembers() {
   });
 }
 
-// Real estate operations
-export async function createRealEstateListing(
-  authorId: string,
-  data: {
-    title: string;
-    type: string;
-    city: string;
-    district: string;
-    price: string;
-    deposit: string;
-    area: number;
-    bedrooms: number;
-    bathrooms: number;
-    floor: number;
-    pets: boolean;
-    photos: string[];
-    coverPhoto: string;
-    description: string;
-    extras: string[];
-    available: Date | null;
-  }
-) {
-  return await prisma.realEstateListing.create({
-    data: {
-      ...data,
-      authorId,
-    },
-  });
-}
+// Real estate operation
 
 export async function getAllRealEstateListings() {
   "use cache";
@@ -116,7 +88,6 @@ export async function getAllRealEstateListings() {
 
   return data;
 }
-
 
 export async function getRealEstateListingsByUser(userId: string) {
   return await prisma.realEstateListing.findMany({
