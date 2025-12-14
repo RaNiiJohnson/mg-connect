@@ -55,11 +55,7 @@ async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
   );
 }
 
-export default async function ImmobilierPage(props: {
-  searchParams: Promise<ImmobilierSearchParams>;
-}) {
-  const searchParams = await props.searchParams;
-
+export default async function ImmobilierPage() {
   return (
     <div className="min-h-screen bg-background pb-12">
       <HeroSection
@@ -70,7 +66,7 @@ export default async function ImmobilierPage(props: {
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <Suspense fallback={<ImmobilierPageSkeleton />}>
-          <ImmobilierPageContent searchParams={searchParams} />
+          <ImmobilierPageContent />
         </Suspense>
       </div>
     </div>
