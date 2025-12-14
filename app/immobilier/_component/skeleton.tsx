@@ -2,7 +2,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function ImmobilierFiltersSkeleton() {
   return (
-    <div className="space-y-4 max-w-3xl mx-auto">
+<div>
+      <div className="space-y-4 max-w-3xl mx-auto">
       {/* Barre de recherche skeleton */}
       <div className="flex gap-4">
         <Skeleton className="h-10 flex-1" />
@@ -17,18 +18,20 @@ export function ImmobilierFiltersSkeleton() {
         <Skeleton className="h-6 w-20 rounded-full" />
         <Skeleton className="h-6 w-20 rounded-full" />
       </div>
+   
     </div>
+       <div className="col-span-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 my-8">
+        <Skeleton className="h-8 w-32" />
+        <Skeleton className="h-10 w-40" />
+      </div>
+</div>
   );
 }
 
 export function ImmobilierListSkeleton() {
   return (
     <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div className="col-span-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 my-8">
-        <Skeleton className="h-8 w-32" />
-        <Skeleton className="h-10 w-40" />
-      </div>
-      {[1, 2, 3, 4, 5, 6].map((i) => (
+      {[1, 2, 3].map((i) => (
         <div key={i} className="relative">
           <div className="h-80 w-full rounded-xl bg-muted"></div>
           <div className="absolute inset-x-3 bottom-3 p-3 bg-background/95 backdrop-blur-sm rounded-lg border">
