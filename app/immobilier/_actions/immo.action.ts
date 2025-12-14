@@ -135,7 +135,7 @@ export async function getAllRealEstateListings({
     price,
     minPrice: minPrice ? parseInt(minPrice) : undefined,
     maxPrice: maxPrice ? parseInt(maxPrice) : undefined,
-    bedrooms,
+    bedrooms: bedrooms ? Number(bedrooms) : undefined,
     bathrooms,
     pets,
   });
