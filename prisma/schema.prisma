@@ -36,6 +36,7 @@ model User {
   jobOffers          JobOffer[]          @relation("JobOffers")
   realEstateListings RealEstateListing[] @relation("RealEstateListings")
   bookmarks          JobBookmark[]
+  realEstateBookmarks RealEstateBookmark[]
 
   @@map("user")
 }
@@ -130,13 +131,26 @@ model JobBookmark {
   @@map("job_bookmark")
 }
 
+model RealEstateBookmark {
+  id        String            @id @default(cuid())
+  userId    String
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listingId String
+  listing   RealEstateListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime          @default(now())
+
+  @@unique([userId, listingId])
+  @@map("real_estate_bookmark")
+}
+
 model RealEstateListing {
-  id          String       @id @default(cuid())
+  id          String            @id @default(cuid())
   title       String
   type        String
   city        String
   district    String
-  price       String
+  price        String
+  priceNumeric Int?
   deposit     String
   area        Int
   bedrooms    Int
@@ -153,6 +167,7 @@ model RealEstateListing {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   ContactInfo ContactInfo?
+  bookmarks   RealEstateBookmark[]
 
   @@map("real_estate_listing")
 }

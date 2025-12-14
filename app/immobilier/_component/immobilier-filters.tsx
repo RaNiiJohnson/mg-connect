@@ -1,6 +1,5 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Filter, X } from "lucide-react";
@@ -25,6 +24,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { Input } from "@/components/ui/input";
 
 const LISTING_TYPES = [
   { value: "Appartement", label: "Appartement" },
@@ -66,6 +66,10 @@ export function ImmobilierFilters() {
     "maxPrice",
     parseAsString.withDefault("")
   );
+
+  const [localMinPrice, setLocalMinPrice] = useState(minPrice);
+  const [localMaxPrice, setLocalMaxPrice] = useState(maxPrice);
+
   const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -73,6 +77,14 @@ export function ImmobilierFilters() {
   useEffect(() => {
     setLocalSearch(search);
   }, [search]);
+
+  useEffect(() => {
+    setLocalMinPrice(minPrice);
+  }, [minPrice]);
+
+  useEffect(() => {
+    setLocalMaxPrice(maxPrice);
+  }, [maxPrice]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -86,6 +98,32 @@ export function ImmobilierFilters() {
 
     return () => clearTimeout(timer);
   }, [localSearch, setSearch, setPage, search]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      startTransition(() => {
+        if (localMinPrice !== minPrice) {
+          setMinPrice(localMinPrice);
+          setPage(1);
+        }
+      });
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [localMinPrice, minPrice, setMinPrice, setPage]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      startTransition(() => {
+        if (localMaxPrice !== maxPrice) {
+          setMaxPrice(localMaxPrice);
+          setPage(1);
+        }
+      });
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [localMaxPrice, maxPrice, setMaxPrice, setPage]);
 
   const clearAllFilters = () => {
     startTransition(() => {
@@ -124,9 +162,7 @@ export function ImmobilierFilters() {
             className="pl-10"
             value={localSearch}
             onChange={(e) => {
-              startTransition(() => {
-                setLocalSearch(e.target.value);
-              });
+              setLocalSearch(e.target.value);
             }}
           />
           <InputGroupAddon>
@@ -205,13 +241,8 @@ export function ImmobilierFilters() {
                         <Input
                           type="number"
                           placeholder="Min"
-                          value={minPrice}
-                          onChange={(e) => {
-                            startTransition(() => {
-                              setMinPrice(e.target.value);
-                              setPage(1);
-                            });
-                          }}
+                          value={localMinPrice}
+                          onChange={(e) => setLocalMinPrice(e.target.value)}
                         />
                       </div>
                       <div>
@@ -221,13 +252,8 @@ export function ImmobilierFilters() {
                         <Input
                           type="number"
                           placeholder="Max"
-                          value={maxPrice}
-                          onChange={(e) => {
-                            startTransition(() => {
-                              setMaxPrice(e.target.value);
-                              setPage(1);
-                            });
-                          }}
+                          value={localMaxPrice}
+                          onChange={(e) => setLocalMaxPrice(e.target.value)}
                         />
                       </div>
                     </div>

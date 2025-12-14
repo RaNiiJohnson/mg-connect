@@ -41,6 +41,8 @@ function buildRealEstateListingWhere(filters: {
   city?: string;
   district?: string;
   price?: string;
+  minPrice?: number;
+  maxPrice?: number;
   bedrooms?: number;
   bathrooms?: number;
   pets?: boolean;
@@ -66,6 +68,14 @@ function buildRealEstateListingWhere(filters: {
     ...(filters.price
       ? { price: { contains: filters.price, mode: "insensitive" } }
       : {}),
+    ...(filters.minPrice || filters.maxPrice
+      ? {
+          priceNumeric: {
+            ...(filters.minPrice ? { gte: filters.minPrice } : {}),
+            ...(filters.maxPrice ? { lte: filters.maxPrice } : {}),
+          },
+        }
+      : {}),
     ...(filters.bedrooms ? { bedrooms: filters.bedrooms } : {}),
     ...(filters.bathrooms ? { bathrooms: filters.bathrooms } : {}),
     ...(filters.pets ? { pets: filters.pets } : {}),
@@ -78,6 +88,8 @@ export async function getAllRealEstateListings({
   city,
   district,
   price,
+  minPrice,
+  maxPrice,
   bedrooms,
   bathrooms,
   pets,
@@ -91,6 +103,8 @@ export async function getAllRealEstateListings({
   city?: string;
   district?: string;
   price?: string;
+  minPrice?: string;
+  maxPrice?: string;
   bedrooms?: number;
   bathrooms?: number;
   pets?: boolean;
@@ -99,7 +113,16 @@ export async function getAllRealEstateListings({
   bookmarkedOnly?: boolean;
   userId?: string;
 }) {
-  "use cache";
+  // "use cache";
+
+  console.log("getAllRealEstateListings params:", {
+    search,
+    type,
+    city,
+    minPrice,
+    maxPrice,
+    bedrooms,
+  });
 
   const sanitizedLimit = Math.min(Math.max(limit, 1), 100);
   const normalizedPage = Math.max(page, 1);
@@ -110,10 +133,17 @@ export async function getAllRealEstateListings({
     city,
     district,
     price,
+    minPrice: minPrice ? parseInt(minPrice) : undefined,
+    maxPrice: maxPrice ? parseInt(maxPrice) : undefined,
     bedrooms,
     bathrooms,
     pets,
   });
+
+  console.log(
+    "getAllRealEstateListings where:",
+    JSON.stringify(where, null, 2)
+  );
 
   const filteredCount = await prisma.realEstateListing.count({ where });
 

@@ -14,7 +14,9 @@ type ImmobilierSearchParams = {
   city?: string;
   district?: string;
   price?: string;
-  bedrooms?: number;
+  minPrice?: string;
+  maxPrice?: string;
+  bedrooms?: string;
   bathrooms?: number;
   pets?: boolean;
   page?: string;
@@ -32,7 +34,11 @@ async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
     city: resolvedParams.city,
     district: resolvedParams.district,
     price: resolvedParams.price,
-    bedrooms: resolvedParams.bedrooms,
+    minPrice: resolvedParams.minPrice,
+    maxPrice: resolvedParams.maxPrice,
+    bedrooms: resolvedParams.bedrooms
+      ? parseInt(resolvedParams.bedrooms)
+      : undefined,
     bathrooms: resolvedParams.bathrooms,
     pets: resolvedParams.pets,
     page:
@@ -65,7 +71,7 @@ async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
   );
 }
 
-export default async function ImmobilierPage() {
+export default async function ImmobilierPage(props: ImmobilierSearchProps) {
   return (
     <div className="min-h-screen bg-background pb-12">
       <HeroSection
@@ -76,7 +82,7 @@ export default async function ImmobilierPage() {
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <Suspense fallback={<ImmobilierPageSkeleton />}>
-          <ImmobilierPageContent />
+          <ImmobilierPageContent {...props} />
         </Suspense>
       </div>
     </div>
