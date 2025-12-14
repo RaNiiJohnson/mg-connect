@@ -16,8 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useEffect, useState, useTransition } from "react";
-
+import { useState, useTransition, useCallback } from "react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -25,6 +24,35 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Input } from "@/components/ui/input";
+
+// Hook personnalisé pour gérer le debounce avec query state
+function useDebouncedQueryState(
+  key: string,
+  parser: ReturnType<typeof parseAsString.withDefault>,
+  delay: number = 500
+) {
+  const [queryValue, setQueryValue] = useQueryState(key, parser);
+  const [localValue, setLocalValue] = useState(queryValue);
+  const [, startTransition] = useTransition();
+
+  // Utiliser useCallback pour éviter de recréer la fonction à chaque render
+  const setDebouncedValue = useCallback(
+    (value: string) => {
+      setLocalValue(value);
+
+      const timer = setTimeout(() => {
+        startTransition(() => {
+          setQueryValue(value);
+        });
+      }, delay);
+
+      return () => clearTimeout(timer);
+    },
+    [delay, setQueryValue]
+  );
+
+  return [localValue, setDebouncedValue, queryValue] as const;
+}
 
 const LISTING_TYPES = [
   { value: "Appartement", label: "Appartement" },
@@ -42,13 +70,29 @@ const BEDROOMS_OPTIONS = [
 ];
 
 export function ImmobilierFilters() {
-  const [search, setSearch] = useQueryState(
+  const [, startTransition] = useTransition();
+  const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
+
+  // Query states avec debounce
+  const [localSearch, setLocalSearch] = useDebouncedQueryState(
     "search",
-    parseAsString.withDefault("")
+    parseAsString.withDefault(""),
+    500
   );
 
-  const [localSearch, setLocalSearch] = useState(search);
+  const [localMinPrice, setLocalMinPrice] = useDebouncedQueryState(
+    "minPrice",
+    parseAsString.withDefault(""),
+    500
+  );
 
+  const [localMaxPrice, setLocalMaxPrice] = useDebouncedQueryState(
+    "maxPrice",
+    parseAsString.withDefault(""),
+    500
+  );
+
+  // Query states sans debounce (changement immédiat)
   const [selectedType, setSelectedType] = useQueryState(
     "type",
     parseAsString.withDefault("")
@@ -58,99 +102,49 @@ export function ImmobilierFilters() {
     "bedrooms",
     parseAsString.withDefault("")
   );
-  const [minPrice, setMinPrice] = useQueryState(
-    "minPrice",
-    parseAsString.withDefault("")
-  );
-  const [maxPrice, setMaxPrice] = useQueryState(
-    "maxPrice",
-    parseAsString.withDefault("")
-  );
 
-  const [localMinPrice, setLocalMinPrice] = useState(minPrice);
-  const [localMaxPrice, setLocalMaxPrice] = useState(maxPrice);
-
-  const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    setLocalSearch(search);
-  }, [search]);
-
-  useEffect(() => {
-    setLocalMinPrice(minPrice);
-  }, [minPrice]);
-
-  useEffect(() => {
-    setLocalMaxPrice(maxPrice);
-  }, [maxPrice]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      startTransition(() => {
-        if (localSearch !== search) {
-          setSearch(localSearch);
-          setPage(1);
-        }
-      });
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [localSearch, setSearch, setPage, search]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      startTransition(() => {
-        if (localMinPrice !== minPrice) {
-          setMinPrice(localMinPrice);
-          setPage(1);
-        }
-      });
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [localMinPrice, minPrice, setMinPrice, setPage]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      startTransition(() => {
-        if (localMaxPrice !== maxPrice) {
-          setMaxPrice(localMaxPrice);
-          setPage(1);
-        }
-      });
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [localMaxPrice, maxPrice, setMaxPrice, setPage]);
 
   const clearAllFilters = () => {
     startTransition(() => {
-      setSearch("");
+      setLocalSearch("");
       setSelectedType("");
       setCity("");
       setBedrooms("");
-      setMinPrice("");
-      setMaxPrice("");
+      setLocalMinPrice("");
+      setLocalMaxPrice("");
       setPage(1);
     });
   };
 
   const selectListingType = (type: string) => {
     startTransition(() => {
-      // Si on clique sur le type déjà sélectionné, on le désélectionne
-      if (selectedType === type) {
-        setSelectedType("");
-      } else {
-        setSelectedType(type);
-      }
+      setSelectedType(selectedType === type ? "" : type);
+      setPage(1);
+    });
+  };
+
+  const updateBedrooms = (value: string) => {
+    startTransition(() => {
+      setBedrooms(value === "all" ? "" : value);
       setPage(1);
     });
   };
 
   const hasActiveFilters =
-    search || selectedType || city || bedrooms || minPrice || maxPrice;
+    localSearch ||
+    selectedType ||
+    city ||
+    bedrooms ||
+    localMinPrice ||
+    localMaxPrice;
+
+  const activeFiltersCount =
+    (selectedType ? 1 : 0) +
+    (city ? 1 : 0) +
+    (bedrooms ? 1 : 0) +
+    (localMinPrice ? 1 : 0) +
+    (localMaxPrice ? 1 : 0);
 
   return (
     <div className="space-y-4 max-w-3xl mx-auto">
@@ -161,9 +155,7 @@ export function ImmobilierFilters() {
             placeholder="Rechercher par titre, ville, quartier..."
             className="pl-10"
             value={localSearch}
-            onChange={(e) => {
-              setLocalSearch(e.target.value);
-            }}
+            onChange={(e) => setLocalSearch(e.target.value)}
           />
           <InputGroupAddon>
             <Search />
@@ -171,7 +163,7 @@ export function ImmobilierFilters() {
           <InputGroupAddon align="inline-end">
             <Popover open={showAdvanced} onOpenChange={setShowAdvanced}>
               <PopoverTrigger asChild>
-                <InputGroupButton variant="outline" disabled={isPending}>
+                <InputGroupButton variant="outline">
                   <Filter className="h-4 w-4" />
                   <span className="hidden sm:inline">Filtres</span>
                   {hasActiveFilters && (
@@ -179,11 +171,7 @@ export function ImmobilierFilters() {
                       variant="secondary"
                       className="ml-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
                     >
-                      {(selectedType ? 1 : 0) +
-                        (city ? 1 : 0) +
-                        (bedrooms ? 1 : 0) +
-                        (minPrice ? 1 : 0) +
-                        (maxPrice ? 1 : 0)}
+                      {activeFiltersCount}
                     </Badge>
                   )}
                 </InputGroupButton>
@@ -212,12 +200,7 @@ export function ImmobilierFilters() {
                       </label>
                       <Select
                         value={bedrooms || "all"}
-                        onValueChange={(value) => {
-                          startTransition(() => {
-                            setBedrooms(value === "all" ? "" : value);
-                            setPage(1);
-                          });
-                        }}
+                        onValueChange={updateBedrooms}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Toutes" />
