@@ -16,14 +16,41 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState, useTransition, useEffect } from "react";
-
+import { useState, useTransition, useCallback } from "react";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+
+// Hook personnalisé pour gérer le debounce avec query state
+function useDebouncedQueryState(
+  key: string,
+  parser: ReturnType<typeof parseAsString.withDefault>,
+  delay: number = 500
+) {
+  const [queryValue, setQueryValue] = useQueryState(key, parser);
+  const [localValue, setLocalValue] = useState(queryValue);
+  const [, startTransition] = useTransition();
+
+  const setDebouncedValue = useCallback(
+    (value: string) => {
+      setLocalValue(value);
+
+      const timer = setTimeout(() => {
+        startTransition(() => {
+          setQueryValue(value);
+        });
+      }, delay);
+
+      return () => clearTimeout(timer);
+    },
+    [delay, setQueryValue]
+  );
+
+  return [localValue, setDebouncedValue, queryValue] as const;
+}
 
 const JOB_TYPES = [
   { value: "Au pair", label: "Au pair" },
@@ -46,12 +73,17 @@ const CONTRACT_TYPES = [
 ];
 
 export function EmploisFilters() {
-  const [search, setSearch] = useQueryState(
-    "search",
-    parseAsString.withDefault("")
-  );
-  const [localSearch, setLocalSearch] = useState(search);
+  const [, startTransition] = useTransition();
+  const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
 
+  // Query state avec debounce
+  const [localSearch, setLocalSearch] = useDebouncedQueryState(
+    "search",
+    parseAsString.withDefault(""),
+    500
+  );
+
+  // Query states sans debounce
   const [selectedType, setSelectedType] = useQueryState(
     "type",
     parseAsString.withDefault("")
@@ -65,30 +97,12 @@ export function EmploisFilters() {
     "bookmarked",
     parseAsString.withDefault("false")
   );
-  const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
+
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    setLocalSearch(search);
-  }, [search]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      startTransition(() => {
-        if (localSearch !== search) {
-          setSearch(localSearch);
-          setPage(1);
-        }
-      });
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [localSearch, setSearch, setPage, search]);
 
   const clearAllFilters = () => {
     startTransition(() => {
-      setSearch("");
+      setLocalSearch("");
       setSelectedType("");
       setContractType("");
       setCity("");
@@ -98,18 +112,38 @@ export function EmploisFilters() {
 
   const selectJobType = (type: string) => {
     startTransition(() => {
-      // Si on clique sur le type déjà sélectionné, on le désélectionne
-      if (selectedType === type) {
-        setSelectedType("");
-      } else {
-        setSelectedType(type);
-        setBookmarked("false");
-      }
+      setSelectedType(selectedType === type ? "" : type);
+      setBookmarked("false");
       setPage(1);
     });
   };
 
-  const hasActiveFilters = search || selectedType || contractType || city;
+  const toggleBookmarked = () => {
+    startTransition(() => {
+      setBookmarked(bookmarked === "true" ? "false" : "true");
+      setSelectedType("");
+      setPage(1);
+    });
+  };
+
+  const updateContractType = (value: string) => {
+    startTransition(() => {
+      setContractType(value === "all" ? "" : value);
+      setPage(1);
+    });
+  };
+
+  const resetFilters = () => {
+    startTransition(() => {
+      setSelectedType("");
+      setBookmarked("false");
+      setPage(1);
+    });
+  };
+
+  const hasActiveFilters = localSearch || selectedType || contractType || city;
+  const activeFiltersCount =
+    (selectedType ? 1 : 0) + (contractType ? 1 : 0) + (city ? 1 : 0);
 
   return (
     <div className="space-y-4 max-w-3xl mx-auto">
@@ -120,9 +154,7 @@ export function EmploisFilters() {
             placeholder="Rechercher par titre, ville, type..."
             className="pl-10"
             value={localSearch}
-            onChange={(e) => {
-              setLocalSearch(e.target.value);
-            }}
+            onChange={(e) => setLocalSearch(e.target.value)}
           />
           <InputGroupAddon>
             <Search />
@@ -130,7 +162,7 @@ export function EmploisFilters() {
           <InputGroupAddon align="inline-end">
             <Popover open={showAdvanced} onOpenChange={setShowAdvanced}>
               <PopoverTrigger asChild>
-                <InputGroupButton variant="outline" disabled={isPending}>
+                <InputGroupButton variant="outline">
                   <Filter className="h-4 w-4" />
                   <span className="hidden sm:inline">Filtres</span>
                   {hasActiveFilters && (
@@ -138,9 +170,7 @@ export function EmploisFilters() {
                       variant="secondary"
                       className="ml-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
                     >
-                      {(selectedType ? 1 : 0) +
-                        (contractType ? 1 : 0) +
-                        (city ? 1 : 0)}
+                      {activeFiltersCount}
                     </Badge>
                   )}
                 </InputGroupButton>
@@ -169,12 +199,7 @@ export function EmploisFilters() {
                       </label>
                       <Select
                         value={contractType || "all"}
-                        onValueChange={(value) => {
-                          startTransition(() => {
-                            setContractType(value === "all" ? "" : value);
-                            setPage(1);
-                          });
-                        }}
+                        onValueChange={updateContractType}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Tous les contrats" />
@@ -204,13 +229,7 @@ export function EmploisFilters() {
             !selectedType && bookmarked !== "true" ? "default" : "outline"
           }
           className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-          onClick={() => {
-            startTransition(() => {
-              setSelectedType("");
-              setBookmarked("false");
-              setPage(1);
-            });
-          }}
+          onClick={resetFilters}
         >
           Toutes
         </Badge>
@@ -227,17 +246,7 @@ export function EmploisFilters() {
         <Badge
           variant={bookmarked === "true" ? "default" : "secondary"}
           className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-          onClick={() => {
-            startTransition(() => {
-              if (bookmarked === "true") {
-                setBookmarked("false");
-              } else {
-                setBookmarked("true");
-                setSelectedType(""); // Optional: clear type filter when selecting bookmarks
-              }
-              setPage(1);
-            });
-          }}
+          onClick={toggleBookmarked}
         >
           Favoris
         </Badge>
