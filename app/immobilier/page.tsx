@@ -5,6 +5,8 @@ import { ImmobilierFilters } from "./_component/immobilier-filters";
 
 import { ImmobilierPageSkeleton } from "./_component/skeleton";
 import { getAllRealEstateListings } from "./_actions/immo.action";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 type ImmobilierSearchParams = {
   search?: string;
@@ -43,7 +45,15 @@ async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
   return (
     <>
       <ImmobilierFilters />
-
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 my-8">
+        <div className="flex items-center gap-2">
+          <h2 className="text-2xl font-bold">Immobilier</h2>
+        </div>
+        <Button className="flex items-center gap-2">
+          <Plus className="h-4 w-4" />
+          <span>Publier une annonce</span>
+        </Button>
+      </div>
       <div className="mt-8">
         <ImmobilierContainer
           key={JSON.stringify(resolvedParams)}

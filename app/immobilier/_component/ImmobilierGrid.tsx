@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { Briefcase, MapPin } from "lucide-react";
+import { Briefcase, Heart, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -160,12 +160,9 @@ export function ImmobilierGrid({ annonces }: ImmobilierGridProps) {
                 {annonce.type}
               </Badge>
 
-              {/* Indicateur de photos multiples */}
-              {annonce.photos.length > 0 && (
-                <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-md z-10">
-                  +{annonce.photos.length + 1} photos
-                </div>
-              )}
+              <div className="absolute top-2 right-2 p-1.5 rounded-md z-10 bg-white/70 backdrop-blur-sm text-red-500 transition-all group-hover:scale-110">
+                <Heart className="size-4" />
+              </div>
 
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
