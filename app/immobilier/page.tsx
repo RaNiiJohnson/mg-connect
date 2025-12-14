@@ -15,6 +15,7 @@ type ImmobilierSearchParams = {
   bedrooms?: number;
   bathrooms?: number;
   pets?: boolean;
+  page?: string;
 };
 
 type ImmobilierSearchProps = {
@@ -23,7 +24,7 @@ type ImmobilierSearchProps = {
 
 async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
   const resolvedParams = (await searchParams) || {};
-  const { realEstateListings } = await getAllRealEstateListings({
+  const { realEstateListings, pagination } = await getAllRealEstateListings({
     search: resolvedParams.search,
     type: resolvedParams.type,
     city: resolvedParams.city,
@@ -32,8 +33,11 @@ async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
     bedrooms: resolvedParams.bedrooms,
     bathrooms: resolvedParams.bathrooms,
     pets: resolvedParams.pets,
-    // page: typeof resolvedParams.page === "string" ? parseInt(resolvedParams.page) : 1,
-    // limit: 10,
+    page:
+      typeof resolvedParams.page === "string"
+        ? parseInt(resolvedParams.page)
+        : 1,
+    limit: 10,
   });
 
   return (
@@ -41,7 +45,11 @@ async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
       <ImmobilierFilters />
 
       <div className="mt-8">
-        <ImmobilierContainer annonces={realEstateListings} />
+        <ImmobilierContainer
+          key={JSON.stringify(resolvedParams)}
+          annonces={realEstateListings}
+          initialPagination={pagination}
+        />
       </div>
     </>
   );
