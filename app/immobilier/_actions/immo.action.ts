@@ -113,17 +113,6 @@ export async function getAllRealEstateListings({
   bookmarkedOnly?: boolean;
   userId?: string;
 }) {
-  // "use cache";
-
-  console.log("getAllRealEstateListings params:", {
-    search,
-    type,
-    city,
-    minPrice,
-    maxPrice,
-    bedrooms,
-  });
-
   const sanitizedLimit = Math.min(Math.max(limit, 1), 100);
   const normalizedPage = Math.max(page, 1);
 
