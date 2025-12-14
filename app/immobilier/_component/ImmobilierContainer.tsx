@@ -117,6 +117,8 @@ export function ImmobilierContainer({
               city,
               district,
               price,
+              minPrice: minPrice ?? undefined,
+              maxPrice: maxPrice ?? undefined,
               bedrooms: bedrooms ?? undefined,
               bathrooms: bathrooms ?? undefined,
               pets: pets ?? undefined,
