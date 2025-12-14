@@ -17,7 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 import {
   InputGroup,
@@ -46,6 +46,9 @@ export function ImmobilierFilters() {
     "search",
     parseAsString.withDefault("")
   );
+
+  const [localSearch, setLocalSearch] = useState(search);
+
   const [selectedType, setSelectedType] = useQueryState(
     "type",
     parseAsString.withDefault("")
@@ -66,6 +69,23 @@ export function ImmobilierFilters() {
   const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    setLocalSearch(search);
+  }, [search]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      startTransition(() => {
+        if (localSearch !== search) {
+          setSearch(localSearch);
+          setPage(1);
+        }
+      });
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [localSearch, setSearch, setPage, search]);
 
   const clearAllFilters = () => {
     startTransition(() => {
@@ -102,12 +122,10 @@ export function ImmobilierFilters() {
           <InputGroupInput
             placeholder="Rechercher par titre, ville, quartier..."
             className="pl-10"
-            value={search}
-            disabled={isPending}
+            value={localSearch}
             onChange={(e) => {
               startTransition(() => {
-                setSearch(e.target.value);
-                setPage(1);
+                setLocalSearch(e.target.value);
               });
             }}
           />
