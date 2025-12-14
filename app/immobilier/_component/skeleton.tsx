@@ -21,24 +21,32 @@ export function ImmobilierFiltersSkeleton() {
   );
 }
 
+export function ImmobilierListSkeleton() {
+  return (
+    <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="col-span-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 my-8">
+        <Skeleton className="h-8 w-32" />
+        <Skeleton className="h-10 w-40" />
+      </div>
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <div key={i} className="relative">
+          <div className="h-80 w-full rounded-xl bg-muted"></div>
+          <div className="absolute inset-x-3 bottom-3 p-3 bg-background/95 backdrop-blur-sm rounded-lg border">
+            <Skeleton className="h-5 w-3/4 mb-2" />
+            <Skeleton className="h-4 w-1/2 mb-2" />
+            <Skeleton className="h-6 w-24" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function ImmobilierPageSkeleton() {
   return (
     <>
       <ImmobilierFiltersSkeleton />
-
-      {/* Listings grid skeleton */}
-      <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="relative">
-            <div className="h-80 w-full rounded-xl bg-muted"></div>
-            <div className="absolute inset-x-3 bottom-3 p-3 bg-background/95 backdrop-blur-sm rounded-lg border">
-              <Skeleton className="h-5 w-3/4 mb-2" />
-              <Skeleton className="h-4 w-1/2 mb-2" />
-              <Skeleton className="h-6 w-24" />
-            </div>
-          </div>
-        ))}
-      </div>
+      <ImmobilierListSkeleton />
     </>
   );
 }

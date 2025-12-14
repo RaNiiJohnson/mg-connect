@@ -9,8 +9,8 @@ import {
   parseAsInteger,
   parseAsBoolean,
 } from "nuqs";
-import { Loader2 } from "lucide-react";
 import { ImmobilierPagination } from "./immobilier-pagination";
+import { ImmobilierListSkeleton } from "./skeleton";
 
 // Re-using the interface from ImmobilierGrid (or we could export it)
 interface RealEstateListing {
@@ -153,14 +153,11 @@ export function ImmobilierContainer({
       {children}
 
       <div className="relative min-h-[200px]">
-        {isPending && (
-          <div className="absolute inset-0 z-10 bg-background/50 backdrop-blur-sm flex items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
+        {isPending ? (
+          <ImmobilierListSkeleton />
+        ) : (
+          <ImmobilierGrid annonces={annonces} />
         )}
-
-        {/* Grille interactive avec panel de détails */}
-        <ImmobilierGrid annonces={annonces} />
 
         {/* Pagination */}
         {pagination.totalPages > 1 && (
