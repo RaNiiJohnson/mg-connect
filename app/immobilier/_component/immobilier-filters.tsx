@@ -153,7 +153,7 @@ export function ImmobilierFilters() {
                 </InputGroupButton>
               </PopoverTrigger>
               <PopoverContent className="w-[400px] p-4" align="end">
-                <div className="space-y-4">
+                <div className="space-y-4" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center justify-between">
                     <h3 className="font-medium">Filtres avancés</h3>
                     {hasActiveFilters && (
@@ -170,22 +170,6 @@ export function ImmobilierFilters() {
                   </div>
 
                   <div className="space-y-4">
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
-                        Ville
-                      </label>
-                      <Input
-                        placeholder="Filtrer par ville..."
-                        value={city}
-                        onChange={(e) => {
-                          startTransition(() => {
-                            setCity(e.target.value);
-                            setPage(1);
-                          });
-                        }}
-                      />
-                    </div>
-
                     <div>
                       <label className="text-sm font-medium mb-2 block">
                         Nombre de chambres
