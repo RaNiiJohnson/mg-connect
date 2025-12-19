@@ -20,6 +20,7 @@ import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth-client";
 import { PasswordInput } from "@/components/ui/password-input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const SignInFormSchema = z.object({
   email: z.email({
@@ -28,6 +29,7 @@ const SignInFormSchema = z.object({
   password: z.string().min(8, {
     message: "Le mot de passe doit contenir au moins 8 caractères.",
   }),
+  rememberMe: z.boolean().optional(),
 });
 
 export function SigninForm() {
@@ -38,6 +40,7 @@ export function SigninForm() {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: false,
     },
   });
   const {
@@ -49,6 +52,7 @@ export function SigninForm() {
       {
         email: values.email,
         password: values.password,
+        rememberMe: values.rememberMe,
       },
       {
         onSuccess: () => {
@@ -113,6 +117,22 @@ export function SigninForm() {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="rememberMe"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>Se souvenir de moi</FormLabel>
+              </FormItem>
+            )}
+          />
+
           <Button type="submit" className="w-full h-11" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
