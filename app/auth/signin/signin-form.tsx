@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth-client";
+import { PasswordInput } from "@/components/ui/password-input";
 
 const SignInFormSchema = z.object({
   email: z.email({
@@ -101,8 +102,8 @@ export function SigninForm() {
                   </Link>
                 </div>
                 <FormControl>
-                  <Input
-                    type="password"
+                  <PasswordInput
+                    autoComplete="current-password"
                     placeholder="Entrez votre mot de passe"
                     className="h-11"
                     {...field}

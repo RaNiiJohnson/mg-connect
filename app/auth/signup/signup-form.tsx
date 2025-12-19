@@ -18,18 +18,27 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
+import { PasswordInput } from "@/components/ui/password-input";
 
-const SignupFormSchema = z.object({
-  name: z.string().min(2, {
-    message: "Le nom doit contenir au moins 2 caractères.",
-  }),
-  email: z.email({
-    message: "Adresse email invalide.",
-  }),
-  password: z.string().min(8, {
-    message: "Le mot de passe doit contenir au moins 8 caractères.",
-  }),
-});
+const SignupFormSchema = z
+  .object({
+    name: z.string().min(2, {
+      message: "Le nom doit contenir au moins 2 caractères.",
+    }),
+    email: z.email({
+      message: "Adresse email invalide.",
+    }),
+    password: z.string().min(8, {
+      message: "Le mot de passe doit contenir au moins 8 caractères.",
+    }),
+    passwordConfirmation: z
+      .string()
+      .min(1, { message: "Le mot de passe de confirmation est requis." }),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "Les mots de passe ne correspondent pas.",
+    path: ["passwordConfirmation"],
+  });
 
 export function SignupForm() {
   const router = useRouter();
@@ -39,6 +48,7 @@ export function SignupForm() {
       name: "",
       email: "",
       password: "",
+      passwordConfirmation: "",
     },
   });
   const {
@@ -122,9 +132,27 @@ export function SignupForm() {
               <FormItem>
                 <FormLabel>Mot de passe</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
+                  <PasswordInput
+                    autoComplete="new-password"
                     placeholder="Entrez votre mot de passe"
+                    className="h-11"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="passwordConfirmation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirmer le mot de passe</FormLabel>
+                <FormControl>
+                  <PasswordInput
+                    autoComplete="new-password"
+                    placeholder="Confirmer votre mot de passe"
                     className="h-11"
                     {...field}
                   />
