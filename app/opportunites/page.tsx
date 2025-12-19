@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/auth-server";
 import { Suspense } from "react";
 import { PublishJobDialog } from "@/components/publish-job-dialog";
-import { EmploisClientOptimized } from "./_component/emplois-client-optimized";
 import { EmploisPageSkeleton } from "./_component/skeleton";
 import { HeroSection } from "@/components/hero-section";
 import { EmploisFilters } from "./_component/emplois-filters";
 import { getJobOffersOptimized } from "./_actions/job.action";
+import { EmploisClientOptimized } from "./_component/emplois-client-optimized";
 
 type EmploisSearchParams = {
   search?: string;
