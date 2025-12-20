@@ -5,7 +5,7 @@ import { Briefcase, MapPin, Clock } from "lucide-react";
 import { JobBookmarkButton } from "./job-bookmark-button";
 import type { JobOfferListItem } from "@app/opportunites/_actions/job.action";
 import type { User } from "better-auth";
-import { PublishJobDialog } from "@app/opportunites/_component/publish-job-dialog";
+import { PublishJobDialog } from "@app/opportunites/_component/dialogs/publish-job-dialog";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { getRelativeTime } from "@/lib/date";

@@ -1,7 +1,7 @@
 "use client";
 
-import { EmploisList } from "./emplois-list";
-import { EmploisPagination } from "./emplois-pagination";
+import { EmploisList } from "./list/emplois-list";
+import { EmploisPagination } from "./list/emplois-pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { JobOfferListItem } from "@app/opportunites/_actions/job.action";
 import type { User } from "better-auth";

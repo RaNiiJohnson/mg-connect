@@ -22,8 +22,8 @@ import { getRelativeTime, formatDateLong } from "@/lib/date";
 import { Separator } from "@/components/ui/separator";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { getUser } from "@/lib/auth-server";
-import { EditJobDialog } from "@app/opportunites/_component/edit-job-dialog";
-import DeleteJobDialog from "../_component/delete-job-dialog";
+import { EditJobDialog } from "@app/opportunites/_component/dialogs/edit-job-dialog";
+import DeleteJobDialog from "../_component/dialogs/delete-job-dialog";
 
 type Pageprops = {
   params: Promise<{ id: string }>;

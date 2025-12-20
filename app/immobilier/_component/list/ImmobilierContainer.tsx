@@ -1,7 +1,7 @@
 "use client";
 
 import { ImmobilierGrid } from "./ImmobilierGrid";
-import { getAllRealEstateListings } from "../_actions/immo.action";
+import { getAllRealEstateListings } from "../../_actions/immo.action";
 import { useEffect, useState, useTransition, useRef } from "react";
 import {
   useQueryState,
@@ -10,7 +10,7 @@ import {
   parseAsBoolean,
 } from "nuqs";
 import { ImmobilierPagination } from "./immobilier-pagination";
-import { ImmobilierListSkeleton } from "./skeleton";
+import { ImmobilierListSkeleton } from "../skeleton";
 
 // Re-using the interface from ImmobilierGrid (or we could export it)
 interface RealEstateListing {

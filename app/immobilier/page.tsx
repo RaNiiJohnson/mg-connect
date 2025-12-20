@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { ImmobilierContainer } from "./_component/ImmobilierContainer";
+import { ImmobilierContainer } from "./_component/list/ImmobilierContainer";
 import { HeroSection } from "@/components/hero-section";
 import { ImmobilierFilters } from "./_component/immobilier-filters";
 

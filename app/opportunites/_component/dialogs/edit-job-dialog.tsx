@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
-import { EditJobOfferForm } from "./edit-job-offer-form";
+import { EditJobOfferForm } from "../forms/edit-job-offer-form";
 
 interface EditJobDialogProps {
   jobOffer: {

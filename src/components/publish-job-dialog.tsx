@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { JobOfferForm } from "../../app/opportunites/_component/job-offer-form";
+import { JobOfferForm } from "../../app/opportunites/_component/forms/job-offer-form";
 
 interface PublishJobDialogProps {
   trigger?: React.ReactNode;
