@@ -1,3 +1,4 @@
+import { toggleRealEstateBookmark } from "@app/immobilier/_actions/action";
 import {
   createJobOffer,
   toggleJobBookmark,
@@ -11,5 +12,8 @@ export const router = {
     toggleJobBookmark,
     updateJobOffer,
     deleteJobOffer,
+  },
+  realEstate: {
+    toggleRealEstateBookmark,
   },
 };

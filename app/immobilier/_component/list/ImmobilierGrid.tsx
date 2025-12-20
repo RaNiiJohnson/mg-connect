@@ -9,12 +9,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { Briefcase, Heart, MapPin } from "lucide-react";
+import { Briefcase, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnnonceDetails, AnnonceDetailsContent } from "../AnnoneDetails";
 import { PriceDisplay } from "../price";
+import { BookmarkButton } from "./bookmark-button";
 
 interface RealEstateListing {
   id: string;
@@ -160,9 +161,7 @@ export function ImmobilierGrid({ annonces }: ImmobilierGridProps) {
                 {annonce.type}
               </Badge>
 
-              <div className="absolute top-2 right-2 p-1.5 rounded-md z-10 bg-white/70 backdrop-blur-sm text-red-500 transition-all group-hover:scale-110">
-                <Heart className="size-4" />
-              </div>
+              <BookmarkButton listingId={annonce.id} />
 
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
