@@ -1,7 +1,10 @@
 "use client";
 
 import { ImmobilierGrid } from "./ImmobilierGrid";
-import { getAllRealEstateListings } from "../../_actions/immo.action";
+import {
+  getAllRealEstateListings,
+  RealEstateListingListItem,
+} from "../../_actions/immo.action";
 import { useEffect, useState, useTransition, useRef } from "react";
 import {
   useQueryState,
@@ -11,36 +14,6 @@ import {
 } from "nuqs";
 import { ImmobilierPagination } from "./immobilier-pagination";
 import { ImmobilierListSkeleton } from "../skeleton";
-
-// Re-using the interface from ImmobilierGrid (or we could export it)
-interface RealEstateListing {
-  id: string;
-  title: string;
-  city: string;
-  district: string;
-  price: string;
-  deposit: string;
-  type: string;
-  photos: string[];
-  coverPhoto: string;
-  bedrooms: number;
-  bathrooms: number;
-  area: number;
-  floor: number;
-  pets: boolean;
-  available: Date | null;
-  description: string;
-  extras: string[];
-  author: {
-    id: string;
-    name: string | null;
-    photo: string | null;
-  };
-  ContactInfo?: {
-    phone: string | null;
-    email: string | null;
-  } | null;
-}
 
 interface PaginationData {
   currentPage: number;
@@ -52,18 +25,20 @@ interface PaginationData {
 }
 
 interface ImmobilierContainerProps {
-  annonces: RealEstateListing[];
+  annonces: RealEstateListingListItem[];
   initialPagination: PaginationData; // Add this
   children?: React.ReactNode;
+  userId?: string;
 }
 
 export function ImmobilierContainer({
   annonces: initialAnnonces,
   initialPagination,
   children,
+  userId,
 }: ImmobilierContainerProps) {
   const [annonces, setAnnonces] =
-    useState<RealEstateListing[]>(initialAnnonces);
+    useState<RealEstateListingListItem[]>(initialAnnonces);
   const [pagination, setPagination] =
     useState<PaginationData>(initialPagination);
   const [isPending, startTransition] = useTransition();
@@ -99,6 +74,10 @@ export function ImmobilierContainer({
   const [minPrice] = useQueryState("minPrice", parseAsString);
   const [maxPrice] = useQueryState("maxPrice", parseAsString);
   const [page] = useQueryState("page", parseAsInteger.withDefault(1)); // Add page state
+  const [bookmarked] = useQueryState(
+    "bookmarked",
+    parseAsBoolean.withDefault(false)
+  );
 
   // Effect to fetch data when filters change
   useEffect(() => {
@@ -124,6 +103,8 @@ export function ImmobilierContainer({
               pets: pets ?? undefined,
               page, // Pass page
               limit: 10, // Default limit
+              bookmarkedOnly: bookmarked,
+              userId,
             });
           setAnnonces(realEstateListings);
           setPagination(newPagination);
@@ -146,6 +127,8 @@ export function ImmobilierContainer({
     minPrice,
     maxPrice,
     page,
+    bookmarked,
+    userId,
   ]);
 
   return (

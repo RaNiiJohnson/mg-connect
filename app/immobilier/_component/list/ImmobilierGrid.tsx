@@ -16,46 +16,17 @@ import { useEffect, useState } from "react";
 import { AnnonceDetails, AnnonceDetailsContent } from "../AnnoneDetails";
 import { PriceDisplay } from "../price";
 import { BookmarkButton } from "./bookmark-button";
-
-interface RealEstateListing {
-  id: string;
-  title: string;
-  city: string;
-  district: string;
-  price: string;
-  deposit: string;
-  type: string;
-  photos: string[];
-  coverPhoto: string;
-  bedrooms: number;
-  bathrooms: number;
-  area: number;
-  floor: number;
-  pets: boolean;
-  available: Date | null;
-  description: string;
-  extras: string[];
-  author: {
-    id: string;
-    name: string | null;
-    photo: string | null;
-  };
-  ContactInfo?: {
-    phone: string | null;
-    email: string | null;
-  } | null;
-}
+import { RealEstateListingListItem } from "@app/immobilier/_actions/immo.action";
 
 interface ImmobilierGridProps {
-  annonces: RealEstateListing[];
+  annonces: RealEstateListingListItem[];
 }
 
 export function ImmobilierGrid({ annonces }: ImmobilierGridProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dialogAnnonce, setDialogAnnonce] = useState<RealEstateListing | null>(
-    null
-  );
+  const [dialogAnnonce, setDialogAnnonce] =
+    useState<RealEstateListingListItem | null>(null);
   const [isLargeScreen, setIsLargeScreen] = useState(false);
 
   const selectedAnnonce = annonces.find((a) => a.id === selectedId);
@@ -161,7 +132,10 @@ export function ImmobilierGrid({ annonces }: ImmobilierGridProps) {
                 {annonce.type}
               </Badge>
 
-              <BookmarkButton listingId={annonce.id} />
+              <BookmarkButton
+                listingId={annonce.id}
+                initialBookmark={annonce.isBookmarked}
+              />
 
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>

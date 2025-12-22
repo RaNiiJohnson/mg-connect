@@ -3,7 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Filter, X } from "lucide-react";
-import { useQueryState, parseAsString, parseAsInteger } from "nuqs";
+import {
+  useQueryState,
+  parseAsString,
+  parseAsInteger,
+  parseAsBoolean,
+} from "nuqs";
 import {
   Select,
   SelectContent,
@@ -103,6 +108,11 @@ export function ImmobilierFilters() {
     parseAsString.withDefault("")
   );
 
+  const [bookmarked, setBookmarked] = useQueryState(
+    "bookmarked",
+    parseAsBoolean.withDefault(false)
+  );
+
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const clearAllFilters = () => {
@@ -113,6 +123,7 @@ export function ImmobilierFilters() {
       setBedrooms("");
       setLocalMinPrice("");
       setLocalMaxPrice("");
+      setBookmarked(false);
       setPage(1);
     });
   };
@@ -120,6 +131,7 @@ export function ImmobilierFilters() {
   const selectListingType = (type: string) => {
     startTransition(() => {
       setSelectedType(selectedType === type ? "" : type);
+      setBookmarked(false);
       setPage(1);
     });
   };
@@ -127,6 +139,15 @@ export function ImmobilierFilters() {
   const updateBedrooms = (value: string) => {
     startTransition(() => {
       setBedrooms(value === "all" ? "" : value);
+      setBookmarked(false);
+      setPage(1);
+    });
+  };
+
+  const toggleBookmarked = () => {
+    startTransition(() => {
+      setBookmarked(!bookmarked);
+      setSelectedType("");
       setPage(1);
     });
   };
@@ -272,6 +293,13 @@ export function ImmobilierFilters() {
             {type.label}
           </Badge>
         ))}
+        <Badge
+          variant={bookmarked ? "default" : "secondary"}
+          className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
+          onClick={() => toggleBookmarked()}
+        >
+          Favoris
+        </Badge>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  RealEstateListingGetPayload,
   RealEstateListingSelect,
   RealEstateListingWhereInput,
 } from "@/generated/prisma/models";
@@ -34,6 +35,10 @@ const realEstateListingSelect = {
     },
   },
 } satisfies RealEstateListingSelect;
+
+export type RealEstateListingListItem = RealEstateListingGetPayload<{
+  select: typeof realEstateListingSelect;
+}> & { isBookmarked?: boolean };
 
 function buildRealEstateListingWhere(filters: {
   search?: string;
@@ -95,8 +100,8 @@ export async function getAllRealEstateListings({
   pets,
   page = 1,
   limit = 10,
-  // bookmarkedOnly = false,
-  // userId,
+  bookmarkedOnly = false,
+  userId,
 }: {
   search?: string;
   type?: string;
@@ -129,6 +134,15 @@ export async function getAllRealEstateListings({
     pets,
   });
 
+  // Add bookmarkedOnly filter if enabled and userId is provided
+  if (bookmarkedOnly && userId) {
+    where.bookmarks = {
+      some: {
+        userId: userId,
+      },
+    };
+  }
+
   console.log(
     "getAllRealEstateListings where:",
     JSON.stringify(where, null, 2)
@@ -140,15 +154,29 @@ export async function getAllRealEstateListings({
   const safePage = totalPages > 0 ? Math.min(normalizedPage, totalPages) : 1;
   const skip = (safePage - 1) * sanitizedLimit;
 
-  const realEstateListings = await prisma.realEstateListing.findMany({
+  const realEstateListingsRaw = await prisma.realEstateListing.findMany({
     orderBy: { createdAt: "desc" },
     where,
     select: {
       ...realEstateListingSelect,
+      // Fetch user's bookmarks if userId is provided
+      bookmarks: userId
+        ? {
+            where: { userId },
+            select: { id: true },
+          }
+        : false,
     },
     skip,
     take: sanitizedLimit,
   });
+
+  // Map to include isBookmarked and remove bookmarks array
+  const realEstateListings = realEstateListingsRaw.map((listing) => ({
+    ...listing,
+    isBookmarked: userId ? (listing.bookmarks?.length ?? 0) > 0 : false,
+    bookmarks: undefined, // Remove bookmarks array from result
+  }));
 
   return {
     realEstateListings,

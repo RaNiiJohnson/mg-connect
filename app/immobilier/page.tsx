@@ -7,6 +7,7 @@ import { ImmobilierPageSkeleton } from "./_component/skeleton";
 import { getAllRealEstateListings } from "./_actions/immo.action";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { getUser } from "@/lib/auth-server";
 
 type ImmobilierSearchParams = {
   search?: string;
@@ -20,6 +21,7 @@ type ImmobilierSearchParams = {
   bathrooms?: number;
   pets?: boolean;
   page?: string;
+  bookmarked?: string;
 };
 
 type ImmobilierSearchProps = {
@@ -27,6 +29,7 @@ type ImmobilierSearchProps = {
 };
 
 async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
+  const user = await getUser();
   const resolvedParams = (await searchParams) || {};
   const { realEstateListings, pagination } = await getAllRealEstateListings({
     search: resolvedParams.search,
@@ -46,6 +49,8 @@ async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
         ? parseInt(resolvedParams.page)
         : 1,
     limit: 10,
+    bookmarkedOnly: resolvedParams.bookmarked === "true",
+    userId: user?.id,
   });
 
   return (
@@ -65,6 +70,7 @@ async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
           key={JSON.stringify(resolvedParams)}
           annonces={realEstateListings}
           initialPagination={pagination}
+          userId={user?.id}
         />
       </div>
     </>
