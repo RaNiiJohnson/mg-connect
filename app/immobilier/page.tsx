@@ -55,7 +55,7 @@ async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
 
   return (
     <>
-      <ImmobilierFilters />
+      <ImmobilierFilters user={user} />
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 my-8">
         <div className="flex items-center gap-2">
           <h2 className="text-2xl font-bold">Immobilier</h2>
@@ -70,7 +70,7 @@ async function ImmobilierPageContent({ searchParams }: ImmobilierSearchProps) {
           key={JSON.stringify(resolvedParams)}
           annonces={realEstateListings}
           initialPagination={pagination}
-          userId={user?.id}
+          user={user ?? undefined}
         />
       </div>
     </>

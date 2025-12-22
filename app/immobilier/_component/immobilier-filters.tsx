@@ -29,6 +29,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Input } from "@/components/ui/input";
+import { User } from "better-auth";
 
 // Hook personnalisé pour gérer le debounce avec query state
 function useDebouncedQueryState(
@@ -74,7 +75,7 @@ const BEDROOMS_OPTIONS = [
   { value: "4", label: "4+ chambres" },
 ];
 
-export function ImmobilierFilters() {
+export function ImmobilierFilters({ user }: { user: User | null }) {
   const [, startTransition] = useTransition();
   const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
 
@@ -293,13 +294,15 @@ export function ImmobilierFilters() {
             {type.label}
           </Badge>
         ))}
-        <Badge
-          variant={bookmarked ? "default" : "secondary"}
-          className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-          onClick={() => toggleBookmarked()}
-        >
-          Favoris
-        </Badge>
+        {user && (
+          <Badge
+            variant={bookmarked ? "default" : "secondary"}
+            className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
+            onClick={() => toggleBookmarked()}
+          >
+            Favoris
+          </Badge>
+        )}
       </div>
     </div>
   );

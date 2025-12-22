@@ -14,6 +14,7 @@ import {
 } from "nuqs";
 import { ImmobilierPagination } from "./immobilier-pagination";
 import { ImmobilierListSkeleton } from "../skeleton";
+import { User } from "better-auth";
 
 interface PaginationData {
   currentPage: number;
@@ -28,14 +29,14 @@ interface ImmobilierContainerProps {
   annonces: RealEstateListingListItem[];
   initialPagination: PaginationData; // Add this
   children?: React.ReactNode;
-  userId?: string;
+  user?: User;
 }
 
 export function ImmobilierContainer({
   annonces: initialAnnonces,
   initialPagination,
   children,
-  userId,
+  user,
 }: ImmobilierContainerProps) {
   const [annonces, setAnnonces] =
     useState<RealEstateListingListItem[]>(initialAnnonces);
@@ -104,7 +105,7 @@ export function ImmobilierContainer({
               page, // Pass page
               limit: 10, // Default limit
               bookmarkedOnly: bookmarked,
-              userId,
+              userId: user?.id,
             });
           setAnnonces(realEstateListings);
           setPagination(newPagination);
@@ -128,7 +129,7 @@ export function ImmobilierContainer({
     maxPrice,
     page,
     bookmarked,
-    userId,
+    user?.id,
   ]);
 
   return (
@@ -139,7 +140,7 @@ export function ImmobilierContainer({
         {isPending ? (
           <ImmobilierListSkeleton />
         ) : (
-          <ImmobilierGrid annonces={annonces} />
+          <ImmobilierGrid user={user} annonces={annonces} />
         )}
 
         {/* Pagination */}

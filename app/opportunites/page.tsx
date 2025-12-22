@@ -41,7 +41,7 @@ async function EmploisPageContent({ searchParams }: EmploisPageProps) {
 
   return (
     <>
-      <EmploisFilters />
+      <EmploisFilters user={user} />
 
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 my-8">
         <div className="flex items-center gap-2">

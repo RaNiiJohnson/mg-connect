@@ -28,6 +28,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { User } from "better-auth";
 
 // Hook personnalisé pour gérer le debounce avec query state
 function useDebouncedQueryState(
@@ -77,7 +78,7 @@ const CONTRACT_TYPES = [
   { value: "Aprentissage", label: "Aprentissage" },
 ];
 
-export function EmploisFilters() {
+export function EmploisFilters({ user }: { user: User | null }) {
   const [, startTransition] = useTransition();
   const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
 
@@ -246,13 +247,15 @@ export function EmploisFilters() {
             {type.label}
           </Badge>
         ))}
-        <Badge
-          variant={bookmarked === true ? "default" : "secondary"}
-          className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-          onClick={toggleBookmarked}
-        >
-          Favoris
-        </Badge>
+        {user && (
+          <Badge
+            variant={bookmarked === true ? "default" : "secondary"}
+            className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
+            onClick={toggleBookmarked}
+          >
+            Favoris
+          </Badge>
+        )}
       </div>
     </div>
   );

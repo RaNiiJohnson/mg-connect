@@ -17,12 +17,14 @@ import { AnnonceDetails, AnnonceDetailsContent } from "../AnnoneDetails";
 import { PriceDisplay } from "../price";
 import { BookmarkButton } from "./bookmark-button";
 import { RealEstateListingListItem } from "@app/immobilier/_actions/immo.action";
+import { User } from "better-auth";
 
 interface ImmobilierGridProps {
   annonces: RealEstateListingListItem[];
+  user?: User | null;
 }
 
-export function ImmobilierGrid({ annonces }: ImmobilierGridProps) {
+export function ImmobilierGrid({ annonces, user }: ImmobilierGridProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogAnnonce, setDialogAnnonce] =
@@ -132,10 +134,12 @@ export function ImmobilierGrid({ annonces }: ImmobilierGridProps) {
                 {annonce.type}
               </Badge>
 
-              <BookmarkButton
-                listingId={annonce.id}
-                initialBookmark={annonce.isBookmarked}
-              />
+              {user && (
+                <BookmarkButton
+                  listingId={annonce.id}
+                  initialBookmark={annonce.isBookmarked}
+                />
+              )}
 
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
