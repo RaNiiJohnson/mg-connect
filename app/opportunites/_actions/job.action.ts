@@ -1,3 +1,5 @@
+"use server";
+
 import {
   JobOfferGetPayload,
   JobOfferSelect,
@@ -77,8 +79,6 @@ export async function getJobOffersOptimized({
   userId?: string;
   bookmarkedOnly?: boolean;
 }) {
-  "use cache";
-
   const sanitizedLimit = Math.min(Math.max(limit, 1), 100);
   const normalizedPage = Math.max(page, 1);
 
@@ -134,8 +134,6 @@ export async function getJobOffersOptimized({
 }
 
 export async function getJobOfferById(id: string) {
-  "use cache";
-
   return await prisma.jobOffer.findUnique({
     where: { id },
     include: {
@@ -151,8 +149,6 @@ export async function getJobOfferById(id: string) {
 }
 
 export async function getJobOffersByUser(userId: string) {
-  "use cache";
-
   return await prisma.jobOffer.findMany({
     where: { authorId: userId },
     orderBy: { createdAt: "desc" },

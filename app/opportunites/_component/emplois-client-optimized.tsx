@@ -3,10 +3,18 @@
 import { EmploisList } from "./list/emplois-list";
 import { EmploisPagination } from "./list/emplois-pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { JobOfferListItem } from "@app/opportunites/_actions/job.action";
+import {
+  getJobOffersOptimized,
+  type JobOfferListItem,
+} from "@app/opportunites/_actions/job.action";
 import type { User } from "better-auth";
-import { useEffect, useState, useCallback, useRef } from "react";
-import { useQueryState, parseAsString, parseAsInteger } from "nuqs";
+import { useEffect, useState, useTransition, useRef, useCallback } from "react";
+import {
+  useQueryState,
+  parseAsString,
+  parseAsInteger,
+  parseAsBoolean,
+} from "nuqs";
 
 interface EmploisClientOptimizedProps {
   initialJobs: JobOfferListItem[];
@@ -33,7 +41,7 @@ export function EmploisClientOptimized({
     ...initialPagination,
     pageSize: initialPagination.pageSize ?? 10,
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const isFirstRender = useRef(true);
 
   // Filtres avec nuqs
@@ -51,44 +59,42 @@ export function EmploisClientOptimized({
   );
   const [bookmarked] = useQueryState(
     "bookmarked",
-    parseAsString.withDefault("false")
+    parseAsBoolean.withDefault(false)
   );
 
-  // Fonction pour charger les données optimisées via API
-  const loadOptimizedData = useCallback(async () => {
-    const params = new URLSearchParams();
-    if (search) params.set("search", search);
-    if (selectedType) params.set("type", selectedType);
-    if (contractType) params.set("contract", contractType);
-    if (city) params.set("city", city);
-    if (bookmarked === "true") params.set("bookmarked", "true");
-    params.set("page", Math.max(page, 1).toString());
-    params.set("limit", Math.max(limit, 1).toString());
-
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/emplois?${params.toString()}`, {
-        cache: "no-store",
-      });
-      if (response.ok) {
-        const data = await response.json();
-        if (
-          typeof data.pagination?.currentPage === "number" &&
-          data.pagination.currentPage !== page
-        ) {
-          setPage(data.pagination.currentPage);
-        }
-        setJobs(data.jobOffers);
-        setPagination({
-          ...data.pagination,
-          pageSize: data.pagination?.pageSize ?? Math.max(limit, 1),
-        });
-      }
-    } catch (error) {
-      console.error("Erreur lors du chargement des données:", error);
-    } finally {
-      setIsLoading(false);
+  // Effect to fetch data when filters change
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
+
+    const fetchJobs = () => {
+      startTransition(async () => {
+        try {
+          const { jobOffers, pagination: newPagination } =
+            await getJobOffersOptimized({
+              search,
+              type: selectedType,
+              contractType,
+              city,
+              page: Math.max(page, 1),
+              limit: Math.max(limit, 1),
+              userId: user?.id,
+              bookmarkedOnly: bookmarked,
+            });
+          setJobs(jobOffers);
+          setPagination({
+            ...newPagination,
+            pageSize: newPagination.pageSize ?? Math.max(limit, 1),
+          });
+        } catch (error) {
+          console.error("Erreur lors du chargement des données:", error);
+        }
+      });
+    };
+
+    fetchJobs();
   }, [
     search,
     selectedType,
@@ -97,26 +103,8 @@ export function EmploisClientOptimized({
     page,
     limit,
     bookmarked,
-    setPage,
+    user?.id,
   ]);
-
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-
-    void loadOptimizedData();
-  }, [loadOptimizedData]);
-
-  // Sync state with props when they change (e.g. after revalidatePath)
-  useEffect(() => {
-    setJobs(initialJobs);
-    setPagination({
-      ...initialPagination,
-      pageSize: initialPagination.pageSize ?? 10,
-    });
-  }, [initialJobs, initialPagination]);
 
   const handleItemsPerPageChange = useCallback(
     (newLimit: number) => {
@@ -131,7 +119,7 @@ export function EmploisClientOptimized({
       {/* Filtres removed from here to be placed in Hero */}
 
       {pagination.totalPages > 1 && pagination.currentPage > 1 && (
-        <div className={isLoading ? "opacity-50 pointer-events-none" : ""}>
+        <div className={isPending ? "opacity-50 pointer-events-none" : ""}>
           <EmploisPagination
             currentPage={pagination.currentPage}
             totalPages={pagination.totalPages}
@@ -143,13 +131,13 @@ export function EmploisClientOptimized({
       )}
 
       {/* Loading state avec skeleton */}
-      {isLoading && <EmploisListSkeleton />}
+      {isPending && <EmploisListSkeleton />}
 
       {/* Liste des emplois */}
-      {!isLoading && <EmploisList jobs={jobs} user={user} />}
+      {!isPending && <EmploisList jobs={jobs} user={user} />}
 
       {/* Pagination du bas */}
-      {!isLoading && pagination.totalPages > 1 && (
+      {!isPending && pagination.totalPages > 1 && (
         <EmploisPagination
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}

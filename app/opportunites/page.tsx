@@ -13,9 +13,9 @@ type EmploisSearchParams = {
   type?: string;
   contract?: string;
   city?: string;
+  bookmarked?: string;
   page?: string;
   limit?: string;
-  bookmarked?: string;
 };
 
 type EmploisPageProps = {
@@ -51,6 +51,7 @@ async function EmploisPageContent({ searchParams }: EmploisPageProps) {
       </div>
       <div className="min-h-screen bg-background pb-12">
         <EmploisClientOptimized
+          key={JSON.stringify(resolvedParams)}
           initialJobs={jobOffers}
           initialPagination={pagination}
           user={user}
