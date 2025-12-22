@@ -3,7 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Filter, X } from "lucide-react";
-import { useQueryState, parseAsString, parseAsInteger } from "nuqs";
+import {
+  useQueryState,
+  parseAsString,
+  parseAsInteger,
+  parseAsBoolean,
+} from "nuqs";
 import {
   Select,
   SelectContent,
@@ -95,7 +100,7 @@ export function EmploisFilters() {
   const [city, setCity] = useQueryState("city", parseAsString.withDefault(""));
   const [bookmarked, setBookmarked] = useQueryState(
     "bookmarked",
-    parseAsString.withDefault("false")
+    parseAsBoolean.withDefault(false)
   );
 
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -113,14 +118,14 @@ export function EmploisFilters() {
   const selectJobType = (type: string) => {
     startTransition(() => {
       setSelectedType(selectedType === type ? "" : type);
-      setBookmarked("false");
+      setBookmarked(false);
       setPage(1);
     });
   };
 
   const toggleBookmarked = () => {
     startTransition(() => {
-      setBookmarked(bookmarked === "true" ? "false" : "true");
+      setBookmarked(bookmarked === true ? false : true);
       setSelectedType("");
       setPage(1);
     });
@@ -136,7 +141,7 @@ export function EmploisFilters() {
   const resetFilters = () => {
     startTransition(() => {
       setSelectedType("");
-      setBookmarked("false");
+      setBookmarked(false);
       setPage(1);
     });
   };
@@ -225,9 +230,7 @@ export function EmploisFilters() {
       {/* Filtres rapides par type */}
       <div className="flex flex-wrap gap-2">
         <Badge
-          variant={
-            !selectedType && bookmarked !== "true" ? "default" : "outline"
-          }
+          variant={!selectedType && bookmarked !== true ? "default" : "outline"}
           className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
           onClick={resetFilters}
         >
@@ -244,7 +247,7 @@ export function EmploisFilters() {
           </Badge>
         ))}
         <Badge
-          variant={bookmarked === "true" ? "default" : "secondary"}
+          variant={bookmarked === true ? "default" : "secondary"}
           className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
           onClick={toggleBookmarked}
         >
