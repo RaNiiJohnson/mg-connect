@@ -33,10 +33,12 @@ model User {
   field              String?
   company            String?
   journey            String[]
+  roles              String[]  @default(["MEMBER"])
   jobOffers          JobOffer[]          @relation("JobOffers")
   realEstateListings RealEstateListing[] @relation("RealEstateListings")
   bookmarks          JobBookmark[]
   realEstateBookmarks RealEstateBookmark[]
+  serviceProvider    ServiceProvider?
 
   @@map("user")
 }
@@ -178,4 +180,21 @@ model ContactInfo {
   email     String?
   listingId String            @unique
   listing   RealEstateListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model ServiceProvider {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  serviceType String
+  description String?
+  experience  String?
+  tarif       String?
+  available   Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("service_provider")
 }

@@ -41,6 +41,13 @@ const CITY_OPTIONS = [
   { value: "Cologne", label: "Cologne" },
 ];
 
+const ROLE_OPTIONS = [
+  { value: "RECRUITER", label: "Recruteur" },
+  { value: "PROPERTY_OWNER", label: "Propriétaire" },
+  { value: "SERVICE_PROVIDER", label: "Prestataire" },
+  { value: "MEMBER", label: "Membre" },
+];
+
 export function CommunauteFilters() {
   const [search, setSearch] = useQueryState(
     "search",
@@ -55,6 +62,7 @@ export function CommunauteFilters() {
     "field",
     parseAsString.withDefault("")
   );
+  const [role, setRole] = useQueryState("role", parseAsString.withDefault(""));
   const [, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -65,6 +73,7 @@ export function CommunauteFilters() {
       setSelectedStatus("");
       setCity("");
       setField("");
+      setRole("");
       setPage(1);
     });
   };
@@ -81,7 +90,7 @@ export function CommunauteFilters() {
     });
   };
 
-  const hasActiveFilters = search || selectedStatus || city || field;
+  const hasActiveFilters = search || selectedStatus || city || field || role;
 
   return (
     <div className="space-y-4 max-w-3xl mx-auto">
@@ -116,7 +125,8 @@ export function CommunauteFilters() {
                     >
                       {(selectedStatus ? 1 : 0) +
                         (city ? 1 : 0) +
-                        (field ? 1 : 0)}
+                        (field ? 1 : 0) +
+                        (role ? 1 : 0)}
                     </Badge>
                   )}
                 </InputGroupButton>
@@ -158,6 +168,33 @@ export function CommunauteFilters() {
                         <SelectContent>
                           <SelectItem value="all">Toutes</SelectItem>
                           {CITY_OPTIONS.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">
+                        Rôle dans la communauté
+                      </label>
+                      <Select
+                        value={role || "all"}
+                        onValueChange={(value) => {
+                          startTransition(() => {
+                            setRole(value === "all" ? "" : value);
+                            setPage(1);
+                          });
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Tous les rôles" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">Tous les rôles</SelectItem>
+                          {ROLE_OPTIONS.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
                               {option.label}
                             </SelectItem>
