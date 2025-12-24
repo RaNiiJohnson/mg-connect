@@ -11,7 +11,6 @@ import {
 } from "./_actions/community.action";
 import { MembersList } from "./_component/list/members-list";
 import { ServiceProvidersList } from "./_component/list/service-providers-list";
-import { GuidesTab } from "./_component/guides-tab";
 
 type CommunauteSearchParams = {
   search?: string;
@@ -68,7 +67,7 @@ async function CommunauteContent({
         <TabsList>
           <TabsTrigger value="members">Tous les membres</TabsTrigger>
           <TabsTrigger value="providers">Prestataires</TabsTrigger>
-          <TabsTrigger value="guides">Infos pratiques</TabsTrigger>
+          {/* <TabsTrigger value="guides">Infos pratiques</TabsTrigger> */}
         </TabsList>
       </div>
 
@@ -92,9 +91,9 @@ async function CommunauteContent({
         />
       </TabsContent>
 
-      <TabsContent value="guides">
+      {/* <TabsContent value="guides">
         <GuidesTab />
-      </TabsContent>
+      </TabsContent> */}
     </Tabs>
   );
 }
