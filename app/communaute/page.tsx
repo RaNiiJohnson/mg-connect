@@ -1,7 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Suspense } from "react";
-import { HeroSection } from "@/components/hero-section";
-import { CommunauteFilters } from "./_component/communaute-filters";
 import { CommunautePageSkeleton } from "./_component/skeleton";
 import { getUser } from "@/lib/auth-server";
 import {
@@ -72,7 +70,7 @@ async function CommunauteContent({
       </div>
 
       <TabsContent value="members" className="space-y-6">
-        <CommunauteFilters />
+        {/* <CommunauteFilters /> */}
         <MembersList
           members={members}
           currentPage={membersCurrentPage}
@@ -81,7 +79,7 @@ async function CommunauteContent({
       </TabsContent>
 
       <TabsContent value="providers" className="space-y-6">
-        <CommunauteFilters />
+        {/* <CommunauteFilters /> */}
         <ServiceProvidersList
           providers={providers}
           user={user}
@@ -105,13 +103,13 @@ export default function CommunautePage({
 }) {
   return (
     <div className="min-h-screen bg-background pb-12">
-      <HeroSection
+      {/* <HeroSection
         title="Communauté"
         subtitle="Connectez-vous avec d'autres Malagasy en Allemagne"
         backgroundImage="/images/community-bg.png"
-      />
+      /> */}
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-20">
         <Suspense fallback={<CommunautePageSkeleton />}>
           <CommunauteContent searchParams={searchParams} />
         </Suspense>
