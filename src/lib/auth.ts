@@ -22,6 +22,8 @@ export const auth = betterAuth({
       field: { type: "string", required: false },
       company: { type: "string", required: false },
       journey: { type: "string[]", required: false },
+      role: { type: "string", required: false },
+      serviceType: { type: "string", required: false },
     },
   },
   // emailVerification: {
