@@ -19,6 +19,7 @@ import { useState } from "react";
 import { ImageGrid } from "./ImageGrid";
 import { Item, ItemContent, ItemSeparator } from "@/components/ui/item";
 import { PriceDisplay, parsePrice } from "../../_component/price";
+import { truncateText } from "@/lib/utils";
 
 interface RealEstateListing {
   id: string;
@@ -301,7 +302,7 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
                   {property.ContactInfo.email && (
                     <div className="text-sm text-muted-foreground">
                       <span className="font-medium">Email :</span>{" "}
-                      {property.ContactInfo.email}
+                      {truncateText(property.ContactInfo.email, 20)}
                     </div>
                   )}
                 </div>
