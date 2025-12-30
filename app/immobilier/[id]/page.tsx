@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import { SimilarListings } from "./components/SimilarListings";
 import { PropertyDetails } from "./components/PropertyDetails";
 import { PropertyPageSkeleton } from "../_component/skeleton";
+import { ButtonGroup } from "@/components/ui/button-group";
 
 interface PageProps {
   params: Promise<{
@@ -43,22 +44,24 @@ async function PropertyPageContent({ params }: PageProps) {
         </Link>
 
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-2"
-          >
-            <Share2 className="h-4 w-4" />
-            <span className="max-sm:hidden">Partager</span>
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-2"
-          >
-            <Heart className="h-4 w-4" />
-            <span className="max-sm:hidden">Favoris</span>
-          </Button>
+          <ButtonGroup>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Share2 className="h-4 w-4" />
+              <span className="max-sm:hidden">Partager</span>
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Heart className="h-4 w-4" />
+              <span className="max-sm:hidden">Favoris</span>
+            </Button>
+          </ButtonGroup>
         </div>
       </div>
 
