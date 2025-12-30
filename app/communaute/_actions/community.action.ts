@@ -240,7 +240,10 @@ export async function createServiceProvider({
 
   await prisma.user.update({
     where: { id: userId },
-    data: { roles: newRoles },
+    data: {
+      roles: newRoles,
+      isServiceProvider: true,
+    },
   });
 
   const provider = await prisma.serviceProvider.create({
@@ -303,7 +306,10 @@ export async function deleteServiceProvider(userId: string) {
 
   await prisma.user.update({
     where: { id: userId },
-    data: { roles: newRoles.length > 0 ? newRoles : ["MEMBER"] },
+    data: {
+      roles: newRoles.length > 0 ? newRoles : ["MEMBER"],
+      isServiceProvider: false,
+    },
   });
 
   await prisma.serviceProvider.delete({
